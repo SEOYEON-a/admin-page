@@ -87,7 +87,7 @@ public class AdminController {
 			   MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<List<signInVO>> getMList() {
 		
-		log.info("굿즈 리스트 전체 출력 : " );
+		log.info("회원 리스트 전체 출력 : " );
 		return new ResponseEntity<List<signInVO>>(mservice.getMList(), HttpStatus.OK);
 	}
 }

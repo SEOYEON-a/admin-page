@@ -30,7 +30,8 @@ function GoodsLists(goods) {
     goods.forEach(store => {
         const gsList = document.createElement('p');
         
-        const formattedDate = store.sellDate ? new Date(store.sellDate).toLocaleDateString('ko-KR') : '날짜 없음';
+        const formattedDate = store.sellDate ? 
+        		new Date(store.sellDate).toLocaleDateString('ko-KR') : '날짜 없음';
         
         gsList.textContent = `${store.gno} ${store.gname} ${formattedDate} ${store.gprice}`;
         list.appendChild(gsList);
