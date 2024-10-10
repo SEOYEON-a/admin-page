@@ -1,9 +1,8 @@
 package org.hype.mapper;
 
-
 import java.util.List;
 
-import org.hype.domain.popStoreVO;
+import org.hype.domain.signInVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +14,17 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @RunWith(SpringJUnit4ClassRunner.class )
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml") 
-public class PopUpMapperTest {
-	
+public class MemberMapperTest {
+
 	@Autowired
-	PopUpMapper mapper;
+	private MemberMapper mMapper;
 	
 	@Test
 	public void testGetList() {
-		List<popStoreVO> list = mapper.getList();
+		List<signInVO> list = mMapper.getMList();
 		
-		for (popStoreVO vo : list) {
-			log.info(vo);  // 화면 출력
+		for (signInVO vo : list) {
+			log.info(vo);
 		}
 	}
-
 }

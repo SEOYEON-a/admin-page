@@ -1,9 +1,10 @@
-package org.hype.service;
+package org.hype.mapper;
 
 import java.util.List;
 
 import org.hype.domain.signInVO;
 
-public interface MemberService {
+
+public interface MemberMapper {
 	public List<signInVO> getMList();
 }

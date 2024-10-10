@@ -1,9 +1,9 @@
-package org.hype.service;
+package org.hype.mapper;
 
 import java.util.List;
 
 import org.hype.domain.goodsVO;
 
-public interface GoodsService {
+public interface GoodsMapper {
 	public List<goodsVO> getGList();
 }

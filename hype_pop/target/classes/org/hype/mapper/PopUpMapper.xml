@@ -22,7 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         ORDER BY LIKECOUNT DESC
     ]]>
-</select>
+  </select>
 
+	<select id="getList" resultType="org.hype.domain.popStoreVO">
+		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl
+	</select> 
 
 </mapper>
