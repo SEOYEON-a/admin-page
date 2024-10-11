@@ -9,11 +9,11 @@
 <body>
 	<div class="adminHeader"> 
       <span id="popUpManage">팝업스토어 관리하기</span> 
-      <span id="storeManage">쇼핑몰 관리 탭</span>
-      <span id="memberManage">회원 관리 탭</span> 
+      <span id="storeManage">쇼핑몰 관리하기</span>
+      <span id="memberManage">회원 관리하기</span> 
       <br>
 		<input type="text" id="adminSearchBox"> <span id="searchBTN">검색</span>
 	</div>
-<div class="adminMain">
+<div class="adminMain">  
 </body>
 </html>

@@ -5,27 +5,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="org.hype.mapper.PopUpMapper"> <!-- 정확한 Mapper 인터페이스 경로 -->
 
-  <select id="getPopularPopUps" resultType="org.hype.domain.popStoreVO">
-    <![CDATA[
-        SELECT * 
-        FROM pop_main_tbl 
-        WHERE PSNO IN (
-            SELECT PSNO 
-            FROM (
-                SELECT PSNO 
-                FROM pop_main_tbl 
-                WHERE PSSTARTDATE <= SYSDATE 
-                  AND PSENDDATE >= SYSDATE 
-                ORDER BY LIKECOUNT DESC
-            ) 
-            WHERE ROWNUM <= 8
-        )
-        ORDER BY LIKECOUNT DESC
-    ]]>
-  </select>
+    <select id="getPopularPopUps" resultType="org.hype.domain.popStoreVO">
+      <![CDATA[
+          SELECT * 
+          FROM pop_main_tbl 
+          WHERE PSNO IN (
+             SELECT PSNO 
+             FROM (
+                 SELECT PSNO 
+                 FROM pop_main_tbl 
+                 WHERE PSSTARTDATE <= SYSDATE 
+                   AND PSENDDATE >= SYSDATE 
+                 ORDER BY LIKECOUNT DESC
+             ) 
+             WHERE ROWNUM <= 8
+          )
+          ORDER BY LIKECOUNT DESC
+      ]]>
+  	</select>
 
 	<select id="getList" resultType="org.hype.domain.popStoreVO">
 		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl
 	</select> 
+	
+	<select id="getListBySearchPs" parameterType="String" resultType="org.hype.domain.popStoreVO">
+    	SELECT * FROM pop_main_tbl WHERE psName LIKE '%' || #{searchPs} || '%'
+	</select>
+	
+	<select id="getPopStoreById" parameterType="int" resultType="org.hype.domain.popStoreVO">
+   		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
+	</select>
 
 </mapper>

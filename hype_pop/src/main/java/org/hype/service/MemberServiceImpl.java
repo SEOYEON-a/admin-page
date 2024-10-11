@@ -20,5 +20,16 @@ public class MemberServiceImpl implements MemberService{
 	public List<signInVO> getMList() {
 		return mMapper.getMList();
 	}
+
+	@Override
+	public List<signInVO> getListBySearchMs(String searchMs) {
+		return mMapper.getListBySearchMs(searchMs);
+	}
+
+	@Override
+	public signInVO getMembersById(String userId) {
+		return mMapper.getMembersById(userId);
+	}	
+	
 	
 }

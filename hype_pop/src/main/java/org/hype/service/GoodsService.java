@@ -5,5 +5,7 @@ import java.util.List;
 import org.hype.domain.goodsVO;
 
 public interface GoodsService {
-	public List<goodsVO> getGList();
+	public List<goodsVO> getGList();  // 관리자 상품 리스트 가져오기
+	public List<goodsVO> getListBySearchGs(String searchGs);  // 관리자 검색 기능 추가
+	public goodsVO getGoodsById (int gNo);  // 특정 굿즈(상품) 조회
 }

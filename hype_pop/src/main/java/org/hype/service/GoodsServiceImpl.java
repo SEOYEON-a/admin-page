@@ -21,5 +21,16 @@ public class GoodsServiceImpl implements GoodsService{
 	public List<goodsVO> getGList() {
 		return mapper.getGList();
 	}
+
+	@Override
+	public List<goodsVO> getListBySearchGs(String searchGs) {
+		return mapper.getListBySearchGs(searchGs);
+	}
+
+	@Override
+	public goodsVO getGoodsById(int gNo) {
+		return mapper.getGoodsById(gNo);
+	}	
+	
 		
 }

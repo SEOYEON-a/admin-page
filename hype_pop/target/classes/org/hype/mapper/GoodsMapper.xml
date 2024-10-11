@@ -12,4 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             sellDate
         FROM goods_info_tbl
     </select>
+    
+   	<select id="getListBySearchGs" parameterType="String" resultType="org.hype.domain.goodsVO">
+    	SELECT * FROM goods_info_tbl WHERE gName LIKE '%' || #{searchGs} || '%'
+	</select>
+	
+	<select id="getGoodsById" parameterType="int" resultType="org.hype.domain.goodsVO">
+   		SELECT gNo, gName, gPrice, sellDate FROM goods_info_tbl WHERE gNo = #{gNo}
+	</select>
 </mapper>

@@ -14,4 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             auth
         FROM sign_in_info_tbl
     </select>
+    
+    <select id="getListBySearchMs" parameterType="String" resultType="org.hype.domain.signInVO">
+    	SELECT * FROM sign_in_info_tbl WHERE userId LIKE '%' || #{searchMs} || '%'
+	</select>
+	
+	<select id="getMembersById" parameterType="String" resultType="org.hype.domain.signInVO">
+   		SELECT userNo, userId, userEmail, lastLoginDate, enabled, auth FROM sign_in_info_tbl WHERE userNo = #{userNo}
+	</select>
 </mapper>
