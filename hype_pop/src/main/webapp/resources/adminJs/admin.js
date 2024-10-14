@@ -1,11 +1,30 @@
 // 활성화된 탭을 추적하기 위한 변수
 let activeTab = 'popUp';
 
-// 탭 클릭 시 해당 기능 활성화
-document.getElementById('popUpManage').addEventListener('click', activatePopUpTab);
-document.getElementById('storeManage').addEventListener('click', activateStoreTab);
-document.getElementById('memberManage').addEventListener('click', activateMemberTab);
+//form 객체 가져오기
+const f = document.forms[0];
 
+// **** 관리자 Header 영역 (공통) ****
+// 탭 클릭 시 해당 기능 활성화
+document.getElementById('popUpManage').addEventListener('click', function() {
+    activeTab = 'popUp'; // 현재 활성화된 탭 업데이트
+    localStorage.setItem('activeTab', activeTab);  // 상태 저장
+    activatePopUpTab(); // 팝업 관리 기능 활성화
+    document.getElementById('registerBtn').style.visibility = 'visible'; // 등록 버튼 보이기
+});
+document.getElementById('storeManage').addEventListener('click', function() {
+    activeTab = 'store'; // 현재 활성화된 탭 업데이트
+    localStorage.setItem('activeTab', activeTab);  // 상태 저장
+    activateStoreTab(); // 쇼핑몰 관리 기능 활성화
+    document.getElementById('registerBtn').style.visibility = 'visible'; // 등록 버튼 보이기
+});
+document.getElementById('memberManage').addEventListener('click', function() {
+    activeTab = 'member'; // 현재 활성화된 탭 업데이트
+    localStorage.setItem('activeTab', activeTab);  // 상태 저장
+    activateMemberTab(); // 회원 관리 기능 활성화
+});
+
+// **** 관리자 페이지 영역 ****
 // **** 팝업스토어 영역 ****
 // 팝업스토어 관리하기  활성화
 function activatePopUpTab() {
@@ -128,11 +147,11 @@ function GoodsLists(goods) {
 		
 		// 굿즈(상품) 이름 클릭 시 굿즈 정보 수정 페이지로 이동
         const link = document.createElement('a');
-        link.href = `goodsUpdate?gNo=${store.gno}`; 
+        link.href = `goodsUpdate?gNo=${store.gno}`;
         link.textContent = store.gname; // 굿즈(상품) 이름에만 링크 걸리게 설정
         link.style.color = 'black'; // 링크 색상 변경
         link.style.textDecoration = 'none'; // 밑줄 제거
-        
+       
         gsList.appendChild(document.createTextNode(` ${store.gno} `));
         gsList.appendChild(link); // p 태그에 a 태그 추가
         gsList.appendChild(document.createTextNode(`${store.sellDate} ${store.gprice}`));
@@ -174,6 +193,7 @@ function searchGoods() {
 // 회원 관리하기 활성화
 function activateMemberTab() {
     activeTab = 'member'; // 현재 활성화된 탭 업데이트
+    document.getElementById('registerBtn').style.visibility = 'hidden';  // 회원 관리 탭에서 등록 버튼 숨기기
     // 회원 관리 탭에서는 팝업스토어, 쇼핑 리스트 검색 불가능
     fetch('/admin/mList/')
 	    .then(response => {
@@ -188,7 +208,7 @@ function activateMemberTab() {
 	    .catch(err => {
 	    	console.error(err);
 	    });
-    
+   
     // 검색 기능 연결
     document.getElementById('searchBTN').onclick = searchMembers;
 }
@@ -208,21 +228,21 @@ function MemberLists(members) {
 
     members.forEach(member => {
         const mList = document.createElement('p');
-        
+       
     	// 회원아이디 클릭 시 회원 정보 수정 페이지로 이동
         const link = document.createElement('a');
-        link.href = `memberUpdate?userId=${member.userNo}`; 
+        link.href = `memberUpdate?userId=${member.userNo}`;
         link.textContent = member.userId; // 회원 아이디에만 링크 걸리게 설정
         link.style.color = 'black'; // 링크 색상 변경	
         link.style.textDecoration = 'none'; // 밑줄 제거
-        
+       
         const formattedDate = member.lastLoginDate ?
         		new Date(member.lastLoginDate).toLocaleDateString('ko-KR') : '날짜 없음';
         		
         mList.appendChild(document.createTextNode(` ${member.userNo} `));
         mList.appendChild(link); // p 태그에 a 태그 추가
         mList.appendChild(document.createTextNode(` ${member.userEmail} ${formattedDate} ${member.enabled} ${member.auth}`));
-        
+       
         list.appendChild(mList);
     });
 
@@ -269,39 +289,82 @@ document.getElementById('searchBTN').addEventListener('click', function() {
 
 //**** footer 영역 ****
 // 문의 리스트 확인 버튼 클릭 시 문의 리스트 확인 페이지로 이동
-document.querySelector('#askList').addEventListener('click', checkAskList);
+document.querySelector('#askList').addEventListener('click', function() {
+    location.href = '/admin/askListCheck'; // JSP 페이지로 이동
+});
 
-function checkAskList() {
-    fetch('/admin/askListCheck')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('서버 오류: ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(url => {
-            window.location.href = url; // 페이지 이동
-        })
-        .catch(err => {
-            console.error(err);
-        });
-}
 
-//상품 상태 조회 버튼 클릭 시 상품 상태 조회 페이지로 이동
-document.querySelector('#goodsCondition').addEventListener('click', checkGoodsState);
+//function checkAskList() {
+//    fetch('/admin/askListCheck')
+//        .then(response => {
+//            if (!response.ok) {
+//                throw new Error('서버 오류: ' + response.statusText);
+//            }
+//            return response.text();
+//        })
+//        .then(url => {
+//      	console.log("받은 URL: ", url);
+//            window.location.href = url; // 페이지 이동
+//        })
+//        .catch(err => {
+//            console.error(err);
+//        });
+//}
+//function checkAskList() {
+//fetch('/admin/askListCheck')
+//  .then(response => {
+//      if (!response.ok) {
+//          throw new Error('서버 오류: ' + response.statusText);
+//      }
+//      return response.json();
+//  })
+//  .then(data => {
+//      console.log("받은 URL: ", data.redirectUrl);
+//      if (data.redirectUrl) {
+//          window.location.href = data.redirectUrl;
+//      } else {
+//          alert('유효한 URL을 받지 못했습니다.');
+//      }
+//  })
+//  .catch(err => {
+//      console.error(err);
+//      alert('문제가 발생했습니다: ' + err.message);
+//  });
+//}
+
+// 상품 상태 조회 버튼 클릭 시 상품 상태 조회 페이지로 이동
+document.querySelector('#goodsState').addEventListener('click', checkGoodsState);
 
 function checkGoodsState() {
-    fetch('/admin/goodsState')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('서버 오류: ' + response.statusText);
-            }
-            return response.text();
-        })
-        .then(url => {
-            window.location.href = url; // 페이지 이동
-        })
-        .catch(err => {
-            console.error(err);
-        });
+	window.location.href = '/admin/goodsState'; // JSP 페이지로 이동
 }
+//function checkGoodsState() {
+//    fetch('/admin/goodsState')
+//        .then(response => {
+//            if (!response.ok) {
+//                throw new Error('서버 오류: ' + response.statusText);
+//            }
+//            return response.text();
+//        })
+//        .then(url => {
+//            window.location.href = url; // 페이지 이동
+//        })
+//        .catch(err => {
+//            console.error(err);
+//        });
+//}
+
+
+// 등록하기 버튼 클릭 시 페이지 이동 함수
+function goToPage(url) {
+	window.location.href = url;
+}
+
+// 등록하기 버튼 클릭 시 이동
+document.getElementById('registerBtn').addEventListener('click', function() {
+	if (activeTab === 'popUp') {
+		goToPage('/admin/popUpRegister'); // 팝업스토어 관리 탭에서 버튼 클릭 시 팝업 스토어 등록 페이지로 이동
+	} else if (activeTab === 'store') {
+		goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동
+	}	
+});

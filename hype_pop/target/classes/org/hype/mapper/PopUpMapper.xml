@@ -35,5 +35,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="getPopStoreById" parameterType="int" resultType="org.hype.domain.popStoreVO">
    		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
 	</select>
-
+	
+	
 </mapper>

@@ -29,14 +29,4 @@ public class GoodsMapperTest {
 			log.info(vo);  // 화면 출력
 		}
 	}
-	
-//	@Test
-//	public void testGetList() {
-//		List<Map<String, Object>> list = mapper.getGList();
-//		
-//		for (Map<String, Object> vo : list) {
-//			log.info(vo);  // 화면 출력
-//		}
-//	}
-
 }

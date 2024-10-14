@@ -8,22 +8,31 @@
 </head>
 <body>
 	<jsp:include page="layout/adminHeader.jsp"/>
-	
-	<div id="popUpimg">팝업스토어 이미지</div> &nbsp; 
-	<div id="latitude">위도</div>
-	<div id="longitude">경도</div>
-	
-	<div id="storeName">팝업스토어 이름</div>
-	<div id="storeCat">팝업스토어 카테고리</div>
-	<div id="startDate">시작일</div>
-	<div id="endDate">종료일</div>
-	<div id="psAddress">주소</div>
-	<div id="snsAddress">SNS 주소</div>
-	<div id="comInfo">주최사 정보</div>
-	<div id="transInfo">교통편</div>
-	<div id="parkingInfo">주차장 정보</div>
-	<div id="storeExp">설명글</div>
+	<form method="POST">
+		<div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
+		<input type="file" id="fileInput" style="display: none;" multiple>
+		<div id="uploadedImages"></div>
+				
+		<div id="latitude">위도 <input type="text" name="psLatitude" value="${vo.latitude}"></div>
+		<div id="longitude">경도 <input type="text" name="psLongitude" value="${vo.longitude}"></div>
+		
+		<div id="psName">팝업스토어 이름 <input type="text" name="storeName" value="${vo.psName}"></div>
+		<div id="psCat">팝업스토어 카테고리 <input type="text" name="storeCat" value="${vo.psCat}"></div> 
+		<div id="psStartDate">시작일 <input type="text" name="startDate" value="${vo.psStartDate}"></div>
+		<div id="psEndDate">종료일 <input type="text" name="endDate" value="${vo.psEndDate}"></div>
+		<div id="psAddress">주소 <input type="text" name="address" value="${vo.psAddress}"></div>
+		<div id="snsAd">SNS 주소 <input type="text" name="snsAddress" value="${vo.snsAd}"></div>
+		<div id="comInfo">주최사 정보 <input type="text" name="company" value="${vo.comInfo}"></div>
+		<div id="transInfo">교통편 <input type="text" name="transfer" value="${vo.transInfo}"></div>
+		<div id="parkingInfo">주차장 정보 <input type="text" name="parking" value="${vo.parkinginfo}"></div>
+		<div id="psExp">설명글 <input type="text" name="storeExp" value="${vo.psExp}">
+	</form>
 	
 	<div id="psRegister">등록하기</div>	
+	
+	<jsp:include page="layout/adminFooter.jsp"/>
+<script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
+<script type="text/javascript" src="/resources/adminJs/admiPopUp.js"></script>  
+  
 </body>
 </html>
