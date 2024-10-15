@@ -36,5 +36,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
 	</select>
 	
+    <insert id="psInsert" parameterType="org.hype.domain.popStoreVO">
+        INSERT INTO pop_main_tbl 
+            (psNo ,psName, psStartDate, psEndDate, psAddress, latitude, longitude, psExp, snsAd, comInfo, transInfo, parkinginfo)
+        VALUES 
+            (POPMAIN_SEQ.NEXTVAL  ,#{psName}, #{psStartDate}, #{psEndDate}, 
+             #{psAddress}, #{latitude}, #{longitude}, 
+             #{psExp}, #{snsAd}, #{comInfo}, 
+             #{transInfo}, #{parkinginfo})
+    </insert>
+	
+    <insert id="catInsert" parameterType="org.hype.domain.pCatVO">
+        INSERT INTO pop_cat_tbl 
+        VALUES (#{psNo}, #{userNo}, 
+            #{healthBeauty}, 
+            #{game}, 
+            #{culture}, 
+            #{shopping}, 
+            #{supply}, 
+            #{kids}, 
+            #{design}, 
+            #{foods}, 
+            #{interior}, 
+            #{policy}, 
+            #{character}, 
+            #{experience}, 
+            #{collaboration},
+            #{entertainment})
+    </insert>
+
+    <insert id="imgInsert" parameterType="org.hype.domain.pImgVO">
+        INSERT INTO pop_img_tbl (psNo, uuid, uploadPath, filename)
+        VALUES (#{psNo}, #{uuid}, #{uploadPath}, #{filename})
+    </insert>
 	
 </mapper>

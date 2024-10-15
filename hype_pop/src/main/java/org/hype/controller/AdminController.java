@@ -4,10 +4,13 @@ import java.io.File;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.hype.domain.goodsVO;
+import org.hype.domain.pCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.popStoreVO;
 import org.hype.domain.signInVO;
@@ -21,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,6 +65,7 @@ public class AdminController {
 		return "/admin/askListCheck";
 	}
 	
+	// 관리자 페이지 영역
 	// 팝업스토어 리스트 출력
 	@GetMapping(value ="/psList",
 			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -217,7 +222,8 @@ public class AdminController {
         return "admin/goodsRegister"; 
     }
     
-    // 팝업스토어 등록하기 	
+    // 팝업스토어 등록 페이지 영역
+    // 이미지 파일 등록
  	// 비동기 통신 : @ResponseBody
     @ResponseBody
     @PostMapping(value = "/uploadAsyncAction", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -265,91 +271,192 @@ public class AdminController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    
-// 	@ResponseBody
-// 	@PostMapping(value = "/uploadAsyncAction",
-// 				produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-// 	public ResponseEntity<List<pImgVO>> uploadAsyncPost(MultipartFile[] uploadFile, Model model) {
-// 		
-// 		List<pImgVO> list = new ArrayList<pImgVO>();
-// 		
-// 		log.info("upload Async post...");
-// 		
-// 		String uploadFolder = "C:\\upload";
-// 		
-// 		// make folder -----
-// 		File uploadPath = new File(uploadFolder, getFolder());
-// 		log.info("uploadPath : " + uploadPath);
-// 		
-// 		// 없으면
-// 		if(!uploadPath.exists()) {
-// 			// 생성하기
-// 			uploadPath.mkdirs();
-// 		}
-// 		
-// 		for(MultipartFile multipartFile : uploadFile) {
-// 			log.info("-----------------------");
-// 			log.info("Upload File Name : " + multipartFile.getOriginalFilename());
-// 			log.info("Upload File Size : " + multipartFile.getSize());
-// 			
-// 			String uploadFileName = multipartFile.getOriginalFilename();
-// 			
-// 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
-// 			
-// 			log.info("only file name : " + uploadFileName);
-// 			
-// 			// 유효 아이디
-// 			// 57d04ee8-90c7-4e89-97a5-f3254082d765_BoardMapperTests.java 명으로 나옴
-// 			UUID uuid = UUID.randomUUID();
-// 			uploadFileName = uuid.toString() + "_" + uploadFileName;
-// 			
-// 			try {
-// 				File saveFile = new File(uploadPath, uploadFileName);
-// 				multipartFile.transferTo(saveFile);
-// 				
-// 				// 파일 그 자체
-// 				pImgVO attachDto = new pImgVO();
-// 				// 파일을 set해서
-// 				attachDto.setUuid(uuid.toString());
-// 				attachDto.setUploadPath(getFolder());
-// 				// 파일명
-// 				// 유효아이디 코드 전에는 그냥 uploadFileName를 쓰면 되지만
-// 				// 유효아이디가 적용된 이후이므로 getOriginalFilename를 사용
-// 				attachDto.setFilename(multipartFile.getOriginalFilename());
-// 				
-// 				// list에 추가하기
-// 				list.add(attachDto);
-// 				
-// 			} catch (Exception e) {
-// 				log.error(e.getMessage());
-// 			}
-// 		}		
-// 		return new ResponseEntity<List<pImgVO>>(list, HttpStatus.OK);
-// 	}
- 	
+    // 팝업스토어 등록
+    @PostMapping("/psRegister")
+    public String registerPopStore(
+            popStoreVO psvo,
+            @RequestParam("categories") List<pCatVO> categories,
+            @RequestParam("uploadFile") MultipartFile[] imageFiles,
+            Model model) {
 
-	// 동기방식 
-//	@PostMapping("/psRegister")
-//	public String psRegister(popStoreVO psvo, @RequestParam("psImg") List<MultipartFile> psImg, RedirectAttributes rttr) {
-//	    log.info("psRegister..." + psvo);
+        try {
+            // 이미지 정보를 담을 리스트 생성
+            List<pImgVO> images = new ArrayList<>();
+
+            // MultipartFile 배열을 pImgVO 리스트로 변환
+            for (MultipartFile file : imageFiles) {
+                if (!file.isEmpty()) {
+                    pImgVO imgVO = new pImgVO();
+                    imgVO.setFilename(file.getOriginalFilename());
+                    imgVO.setUploadPath("C:\\upload"); // 실제 경로 설정 필요
+                    imgVO.setUuid(java.util.UUID.randomUUID().toString());
+                    images.add(imgVO);
+                }
+            }
+
+            // 파일 업로드 메서드 호출 (이미지 업로드)
+            ResponseEntity<List<pImgVO>> response = uploadAsyncPost(imageFiles);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                images = response.getBody(); // 업로드된 이미지 정보
+            }
+
+            // 팝업스토어 등록
+            Map<String, Object> result = pservice.psInsert(psvo, categories, images);
+            int psNo = (int) result.get("psNo"); // 삽입된 팝업스토어 ID
+
+            // 추가적으로 삽입된 카테고리 및 이미지 ID를 사용할 수 있음
+            List<Integer> insertedCategories = (List<Integer>) result.get("insertedCategories");
+            List<Integer> insertedImages = (List<Integer>) result.get("insertedImages");
+
+            model.addAttribute("message", "팝업스토어 등록이 완료되었습니다. ID: " + psNo);
+            // 필요하다면 추가적인 정보를 모델에 추가 가능
+
+            return "redirect:/popup/psList"; // 등록 후 리스트 페이지로 리다이렉트
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "팝업스토어 등록 중 오류가 발생했습니다: " + e.getMessage());
+            return "admin/popUpRegister"; // 등록 페이지로 돌아감
+        }
+    }
+
+//    @PostMapping("/psRegister")
+//    public String registerPopStore(
+//            popStoreVO psvo,
+//            @RequestParam("categories") List<pCatVO> categories,
+//            @RequestParam("uploadFile") MultipartFile[] imageFiles,
+//            Model model) {
 //
-//	    List<pImgVO> imgList = new ArrayList<>();
-//	    
-//	    if (psImg != null) {
-//	        for (MultipartFile file : psImg) {
-//	            pImgVO img = new pImgVO();
-//	            img.setFilename(file.getOriginalFilename());
-//	            imgList.add(img);
-//	            log.info("Uploaded file: " + file.getOriginalFilename());
-//	        }
-//	    }
+//        try {
+//            // 이미지 정보를 담을 리스트 생성
+//            List<pImgVO> images = new ArrayList<>();
 //
-//	    // 팝업스토어 등록
-//	    pservice.psInsert(psvo, imgList);
-//	    
-//	    rttr.addFlashAttribute("result", "success");
-//	    return "redirect:/admin/psList"; 
-//	}
+//            // MultipartFile 배열을 pImgVO 리스트로 변환
+//            for (MultipartFile file : imageFiles) {
+//                if (!file.isEmpty()) {
+//                    pImgVO imgVO = new pImgVO();
+//                    imgVO.setFilename(file.getOriginalFilename());
+//                    imgVO.setUploadPath("/uploads/test/"); // 실제 경로 설정 필요
+//                    imgVO.setUuid(java.util.UUID.randomUUID().toString());
+//                    images.add(imgVO);
+//                }
+//            }
+//
+//            // 파일 업로드 메서드 호출
+//            ResponseEntity<List<pImgVO>> response = uploadAsyncPost(imageFiles);
+//            if (response.getStatusCode() == HttpStatus.OK) {
+//                images = response.getBody(); // 업로드된 이미지 정보
+//            }
+//
+//            // 팝업스토어 등록
+//            int psNo = pservice.psInsert(psvo, categories, images);
+//            
+//            model.addAttribute("message", "팝업스토어 등록이 완료되었습니다. ID: " + psNo);
+//            return "redirect:/popup/psList"; // 등록 후 리스트 페이지로 리다이렉트
+//        } catch (Exception e) {
+//            model.addAttribute("errorMessage", "팝업스토어 등록 중 오류가 발생했습니다: " + e.getMessage());
+//            return "admin/popUpRegister"; // 등록 페이지로 돌아감
+//        }
+//    }
+
+//    @PostMapping("/psRegister")
+//    public String registerPopStore(
+//    		popStoreVO psvo,
+//    		@RequestParam("categories") List<pCatVO> categories,
+//    		@RequestParam("images") List<MultipartFile> imageFiles,
+//    		Model model) {
+//    	
+//    	try {
+//    		// 이미지 정보를 담을 리스트 생성
+//    		List<pImgVO> images = new ArrayList<>();
+//    		for (MultipartFile file : imageFiles) {
+//    			if (!file.isEmpty()) {
+//    				// 파일 처리 로직 (UUID 생성, 파일 경로 설정 등)
+//    				pImgVO imgVO = new pImgVO();
+//    				imgVO.setFilename(file.getOriginalFilename());
+//    				imgVO.setUploadPath("/uploads/test/"); // 실제 경로 설정 필요
+//    				imgVO.setUuid(java.util.UUID.randomUUID().toString());
+//    				images.add(imgVO);
+//    			}
+//    		}
+//    		
+//    		// 팝업스토어 등록
+//    		int psNo = pservice.psInsert(psvo, categories, images);
+//    		
+//    		model.addAttribute("message", "팝업스토어 등록이 완료되었습니다. ID: " + psNo);
+//    		return "redirect:/popup/success"; // 성공 페이지로 리다이렉트
+//    	} catch (Exception e) {
+//    		model.addAttribute("errorMessage", "팝업스토어 등록 중 오류가 발생했습니다: " + e.getMessage());
+//    		return "popup/register"; // 등록 페이지로 돌아감
+//    	}
+//    }
+    
+    
+//    @PostMapping("/psRegister")
+//    public String registerPopStore(@ModelAttribute popStoreVO psvo, @RequestParam("imgList") List<MultipartFile> imgList) {
+//        // DB에 등록
+//        pservice.psInsert(psvo, imgList);
+//        return "redirect:/admin/psList"; // 성공 후 목록 페이지로 이동
+//    }
+//    @PostMapping("/psRegister")
+//    public String registerPopStore(@ModelAttribute popStoreVO psvo, @RequestParam("imgList") List<MultipartFile> imgList) {
+//        Map<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("popStore", psvo);
+//        paramMap.put("imgList", imgList);
+//
+//        // DB에 등록
+//        pservice.psInsert(paramMap);
+//        return "redirect:/admin/psList"; // 성공 후 목록 페이지로 이동
+//    }
+
+//    @PostMapping("/psRegister")
+//    public String registerPopStore(
+//            @ModelAttribute popStoreVO psvo, 
+//            @RequestParam("imgList") List<MultipartFile> imgList) {
+//        
+//        // Map 생성
+//        Map<String, Object> paramMap = new HashMap<>();
+//        paramMap.put("psvo", psvo);
+//        
+//        // imgList를 pImgVO 리스트로 변환
+//        List<pImgVO> pImgList = new ArrayList<>();
+//        for (MultipartFile file : imgList) {
+//            pImgVO imgVO = new pImgVO();
+//            imgVO.setFilename(file.getOriginalFilename());
+//            imgVO.setUploadPath("/uploads/test/"); // 예시 경로
+//            // UUID나 기타 필요한 정보 설정
+//            pImgList.add(imgVO);
+//        }
+//        
+//        paramMap.put("imgList", pImgList);
+//
+//        // 서비스 호출
+//        pservice.psInsert(paramMap);
+//        
+//        return "redirect:/admin/psList"; // 성공 후 목록 페이지로 이동
+//    }
+//    public String registerPopStore(
+//    		@ModelAttribute popStoreVO psvo,
+//    		@RequestParam("imgList") List<MultipartFile> imgList) {
+//    	
+//    	
+//    	// 이미지 리스트를 pImgVO 리스트로 변환
+//    	List<pImgVO> pImgList = new ArrayList<>();
+//    	for (MultipartFile file : imgList) {
+//    		if (!file.isEmpty()) {
+//    			pImgVO imgVO = new pImgVO();
+//    			imgVO.setUuid(java.util.UUID.randomUUID().toString());
+//    			imgVO.setFilename(file.getOriginalFilename());
+//    			imgVO.setUploadPath("/uploads/test/"); // 예시 경로
+//    			pImgList.add(imgVO);
+//    		}
+//    	}
+//    	
+//    	// 서비스 호출 (여기서 pImgList를 그대로 전달)
+//    	pservice.psInsert(psvo, imgList); // imgList를 전달
+//    	
+//    	return "redirect:/admin/psList"; // 성공 후 목록 페이지로 이동
+//    }
+    
+
 
 
 }

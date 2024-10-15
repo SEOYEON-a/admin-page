@@ -289,9 +289,16 @@ document.getElementById('searchBTN').addEventListener('click', function() {
 
 //**** footer 영역 ****
 // 문의 리스트 확인 버튼 클릭 시 문의 리스트 확인 페이지로 이동
-document.querySelector('#askList').addEventListener('click', function() {
-    location.href = '/admin/askListCheck'; // JSP 페이지로 이동
-});
+// const로 변수 설정해서 한 이유는 관리자 페이지를 제외한 페이지에서는
+// footer을 쓰지 않지만 admin.js는 전체 페이지에서 사용하므로 
+// 변수 설정한 후 기본값이 null이므로 만약에 askList가 null이 아니면
+// 즉, askList가 있으면 아래 코드 실행하라는 코드임 (footer 영역 전체에 적용)
+const askList = document.querySelector('#askList');
+if(askList != null){
+	document.querySelector('#askList').addEventListener('click', function() {
+		location.href = '/admin/askListCheck'; // JSP 페이지로 이동
+	});
+}
 
 
 //function checkAskList() {
@@ -333,10 +340,13 @@ document.querySelector('#askList').addEventListener('click', function() {
 //}
 
 // 상품 상태 조회 버튼 클릭 시 상품 상태 조회 페이지로 이동
-document.querySelector('#goodsState').addEventListener('click', checkGoodsState);
-
-function checkGoodsState() {
-	window.location.href = '/admin/goodsState'; // JSP 페이지로 이동
+const goodsState = document.querySelector('#goodsState');
+if(goodsState !== null){
+	document.querySelector('#goodsState').addEventListener('click', checkGoodsState);
+	
+	function checkGoodsState() {
+		window.location.href = '/admin/goodsState'; // JSP 페이지로 이동
+	}	
 }
 //function checkGoodsState() {
 //    fetch('/admin/goodsState')
@@ -361,10 +371,13 @@ function goToPage(url) {
 }
 
 // 등록하기 버튼 클릭 시 이동
-document.getElementById('registerBtn').addEventListener('click', function() {
-	if (activeTab === 'popUp') {
-		goToPage('/admin/popUpRegister'); // 팝업스토어 관리 탭에서 버튼 클릭 시 팝업 스토어 등록 페이지로 이동
-	} else if (activeTab === 'store') {
-		goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동
-	}	
-});
+const registerBtn = document.querySelector('#registerBtn');
+if(registerBtn != null){
+	document.getElementById('registerBtn').addEventListener('click', function() {
+		if (activeTab === 'popUp') {
+			goToPage('/admin/popUpRegister'); // 팝업스토어 관리 탭에서 버튼 클릭 시 팝업 스토어 등록 페이지로 이동
+		} else if (activeTab === 'store') {
+			goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동
+		}	
+	});	
+}
