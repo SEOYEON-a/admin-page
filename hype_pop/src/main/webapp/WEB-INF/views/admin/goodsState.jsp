@@ -32,25 +32,6 @@
 		</table>
 		
 		<button type="button" id="saveAsk"></button>
-			
-		<!-- page -->
-		<div class="page-wrap">
-         <ul class="page-nation">
-            <c:if test="${pageMaker.prev }">
-               <li class="previous">
-                  <a href="${pageMaker.startPage-1 }"> &lt; </a>
-               </li>
-            </c:if>
-            <c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }" step="1">
-               <li>
-                  <a href="${num }" class="${pageMaker.cri.pageNum == num ? 'active' : '' }"> ${num } </a>
-               </li>
-            </c:forEach>
-            <c:if test="${pageMaker.next }">
-               <li><a href="${pageMaker.endPage+1 }"> &gt; </a></li>
-            </c:if>
-         </ul>
-       </div>
 		
 	</div>
 </body>

@@ -1,8 +1,5 @@
 package org.hype.domain;
 
-import java.sql.Date;
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +11,6 @@ import lombok.Setter;
 @Setter
 public class pCatVO {
 	private int psNo; // 팝업스토어 번호
-	private int userNo; // 회원 번호
 	private int healthBeauty; // 헬스 /뷰티
 	private int game; // 게임
 	private int culture; // 문화
@@ -28,5 +24,5 @@ public class pCatVO {
 	private int character; // 캐릭터
 	private int experience; // 체험
 	private int collaboration; // 콜라보
-	private int entertainment; // 콜라보
+	private int entertainment; // 방송
 }

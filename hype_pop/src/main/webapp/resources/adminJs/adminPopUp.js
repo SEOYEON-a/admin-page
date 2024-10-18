@@ -1,8 +1,11 @@
 // 활성화된 탭을 추적하기 위한 변수
 {let activeTab = 'popUp';}
 
-//form 객체 가져오기
-{const form = document.forms[0];}
+// form 객체 가져오기 (현재 사용안하고 있음)
+//{const form = document.forms[0];}
+
+// 파일 선택 여부
+let isFileSelected = false;
 
 // **** 관리자 Header 영역 (공통) ****
 // 탭 클릭 시 해당 기능 활성화
@@ -79,7 +82,7 @@ function PopUpStoreLists(popUpStores) {
 }
 
 //**** 쇼핑몰(상품) 영역 ****
-//쇼핑몰 관리하기 활성화
+// 쇼핑몰 관리하기 활성화
 function activateStoreTab() {
  activeTab = 'store'; // 현재 활성화된 탭 업데이트
  fetch('/admin/gList/')
@@ -98,7 +101,7 @@ function activateStoreTab() {
      });
 }
 
-//쇼핑몰 관리하기 버튼 클릭 시 상품 리스트 영역 출력
+// 쇼핑몰 관리하기 버튼 클릭 시 상품 리스트 영역 출력
 function GoodsLists(goods) {
 	const adminMain = document.querySelector('.adminMain');
 	adminMain.innerHTML = '';
@@ -131,7 +134,7 @@ function GoodsLists(goods) {
 }
 
 //**** 회원 영역 ****
-//회원 관리하기 활성화
+// 회원 관리하기 활성화
 function activateMemberTab() {
 	 activeTab = 'member'; // 현재 활성화된 탭 업데이트
 	 document.getElementById('registerBtn').style.visibility = 'hidden';  // 회원 관리 탭에서 등록 버튼 숨기기
@@ -151,7 +154,7 @@ function activateMemberTab() {
 		    });
 }
 
-//회원 관리하기 버튼 클릭 시 회원 리스트 출력
+// 회원 관리하기 버튼 클릭 시 회원 리스트 출력
 function MemberLists(members) {
 	console.log(members);
  const adminMain = document.querySelector('.adminMain');
@@ -187,146 +190,43 @@ function MemberLists(members) {
  adminMain.appendChild(list);
 }
 
-//등록하기 버튼 클릭 시 팝업스토어 등록
-//AdminController의 psRegister로 전송
-function popStoreRegister(f) {
-//	console.log(f.snsAddress.value);  확인용
-	
- if (!f.psLatitude.value) {
-     alert('위도를 입력해주세요');
-     return false; 
- }
- if (!f.psLongitude.value) {
-     alert('경도를 입력해주세요');
-     return false; 
- }
- if (!f.storeName.value) {
-     alert('이름을 입력해주세요');
-     return false; 
- }
- if (!f.storeCat.value) {
-     alert('카테고리를 입력해주세요');
-     return false; 
- }
- if (!f.startDate.value) {
-     alert('시작일을 입력해주세요');
-     return false; 
- }
- if (!f.endDate.value) {
-     alert('종료일을 입력해주세요');
-     return false; 
- }
- if (!f.address.value) {
-     alert('주소를 입력해주세요');
-     return false; 
- }
- if (!f.snsAddress.value) {
-     alert('SNS주소를 입력해주세요');
-     return false; 
- }
- if (!f.company.value) {
-     alert('주최사 정보를 입력해주세요');
-     return false; 
- }
- if (!f.transfer.value) {
-     alert('교통편을 입력해주세요');
-     return false; 
- }
- if (!f.parking.value) {
-     alert('주차장정보를 입력해주세요');
-     return false; 
- }
- if (!f.storeExp.value) {
-     alert('설명글을 입력해주세요');
-     return false; 
- }
- if (!f.uploadFile.files.length) {
-     alert('이미지 파일을 업로드해주세요');
-     return false; 
- }
-
- // 모든 검증이 통과한 경우
- const formData = new FormData(f); // 폼 데이터 수집
-
- // AJAX 요청
- fetch('/admin/psRegister', {
-     method: 'POST',
-     body: formData
- })
- .then(response => {
-     if (!response.ok) {
-         throw new Error('등록 실패: ' + response.statusText);
-     }
-     return response.json();
- })
- .then(data => {
-     // 성공적으로 등록된 경우의 처리
-     alert('팝업스토어가 등록되었습니다.');
-     // 필요한 경우 페이지를 새로 고침하거나 다른 작업 수행
- })
- .catch(error => {
-     console.error('Error:', error);
- });
- 
- // 모든 검증이 통과한 경우
-// return true; 
-}
-
-
 //**** 팝업스토어 등록 페이지 영역 ****
-//팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
+// 등록하기 버튼 클릭 시 팝업스토어 등록 
+// 에러 발생 중이라 주석 처리
+// AdminController의 psRegister로 전송
+//document.getElementById('psRegisterBtn').addEventListener('click', popStoreRegister);
+
+//let formData;
+//let uploadFile;
+//function popStoreRegister(f) {
+//
+// // 선택된 카테고리 값 가져오기
+// const selectedCategories = Array.from(f.psCat.selectedOptions).map(option => option.value);
+//
+// // 카테고리가 선택되지 않았을 때 에러 처리
+// if (selectedCategories.length === 0) {
+//     alert('하나 이상의 카테고리를 선택해주세요');
+//     return false; 
+// }
+//
+// // 카테고리 정보를 객체로 변환
+// const categories = selectedCategories.join(',');
+// 
+// // FormData 수집
+// formData = new FormData(f);
+// formData.append('psCat', categories); // 카테고리 정보 추가
+// formData.set('uploadFile', uploadFile); // 파일 정보 추가
+// 
+// 
+// console.log('폼 데이터 전송:', ...formData.entries()); 
+// 
+//  return true; 
+//}
+//
+// 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
 document.querySelector('#popUpimg').addEventListener('click', function() {
 	document.querySelector('#fileInput').click(); // 클릭 시 파일 선택 창 열기
 });
-
-//document.querySelector('#fileInput').addEventListener('change', function(event) {
-//    const files = event.target.files;
-//    const uploadedImagesDiv = document.getElementById('uploadedImages');
-//
-//    // 기존의 이미지 미리보기를 초기화
-//    uploadedImagesDiv.innerHTML = '';
-//
-//    if (files.length > 0) {
-//        const formData = new FormData();
-//        for (let i = 0; i < files.length; i++) {
-//            if (!checkFile(files[i].name, files[i].size)) {
-//                return; // 파일 검증 실패 시 종료
-//            }
-//            formData.append('uploadFile', files[i]);
-//
-//            // 이미지 미리보기 생성
-//            const reader = new FileReader();
-//            reader.onload = function(e) {
-//                const img = document.createElement('img');
-//                img.src = e.target.result; // 파일의 Data URL
-//                img.style.width = '300px'; // 이미지 크기 조절
-//                img.style.marginRight = '10px'; // 간격 조정
-//                uploadedImagesDiv.appendChild(img); // 미리보기 div에 추가
-//            }
-//            reader.readAsDataURL(files[i]); // 파일을 Data URL로 읽기
-//        }
-//
-//        // fetch 호출을 Promise 체인으로 처리
-//        fetch('/admin/uploadAsyncAction', {
-//            method: 'POST',
-//            body: formData
-//        })
-//        .then(response => {
-//            if (response.ok) {
-//                return response.json(); // JSON으로 변환
-//            } else {
-//                throw new Error('파일 업로드 실패: ' + response.statusText);
-//            }
-//        })
-//        .then(fileInfo => {
-//            showUploadFile(fileInfo); // 파일 정보 표시
-//            document.querySelector('#fileInput').value = ''; // 파일 선택 초기화
-//        })
-//        .catch(error => {
-//            console.error('Error during upload:', error);
-//        });
-//    }
-//});	
 
 document.querySelector('#fileInput').addEventListener('input', function(event) {
     const files = event.target.files;
@@ -334,6 +234,8 @@ document.querySelector('#fileInput').addEventListener('input', function(event) {
 
     // 기존의 이미지 미리보기를 초기화
     uploadedImagesDiv.innerHTML = '';
+    
+    isFileSelected = files.length > 0;
 
     if (files.length > 0) {
         const formData = new FormData();
@@ -343,6 +245,7 @@ document.querySelector('#fileInput').addEventListener('input', function(event) {
             if (!checkFile(file.name, file.size)) {
                 return; // 파일 검증 실패 시 종료
             }
+            uploadFile = file;
             formData.append('uploadFile', file);
 
             // 이미지 미리보기 생성
@@ -357,6 +260,9 @@ document.querySelector('#fileInput').addEventListener('input', function(event) {
             reader.readAsDataURL(file); // 파일을 Data URL로 읽기
         });
 
+        // AJAX 요청을 보내기 전에 FormData 확인
+        console.log(...formData.entries()); // FormData 내용 확인
+        
         // 파일 업로드 함수 호출
         uploadFiles(formData); // 선택된 파일들 업로드 함수 호출
     }
@@ -382,7 +288,6 @@ function uploadFiles(formData) {
     })
     .then(fileInfo => {
         document.querySelector('#fileInput').value = ''; // 파일 선택 초기화
-
         // 업로드가 성공적으로 완료되면 '팝업스토어 이미지'텍스트 사라짐
         document.querySelector('#popUpimg').textContent = '';
     })
@@ -390,28 +295,6 @@ function uploadFiles(formData) {
         console.error('Error during upload:', error);
     });
 }
-
-
-// 사용안하는 코드 (보류)
-//document.querySelector('#psRegister').addEventListener('click', async function() {
-// const formData = new FormData(document.querySelector('form')); // 전체 폼 데이터 가져오기
-//
-// try {
-//     const registerResponse = await fetch('/admin/psRegister', {
-//         method: 'POST',
-//         body: formData
-//     });
-//
-//     if (registerResponse.ok) {
-//         console.log('팝업스토어 등록 성공');
-//         window.location.href = '/admin/psList'; // 성공 후 목록 페이지로 이동
-//     } else {
-//         console.error('팝업스토어 등록 실패');
-//     }
-// } catch (error) {
-//     console.error('Error during registration:', error);
-// }
-//});
 
 // 파일 검증
 const regex = new RegExp("(.*?)\\.(exe|sh|zip|alz)$");
@@ -428,3 +311,26 @@ function checkFile(fileName, fileSize) {
     }
     return true;
 }
+
+//**** 팝업스토어 수정/삭제 페이지 영역 ****
+// 에러 발생 중이라 주석 처리
+//document.querySelector('#psDelete').addEventListener('click', popupDelete);
+//
+//function popupDelete() {
+//	if (confirm('정말로 삭제하시겠습니까?')) {
+//		// 카테고리 정보를 가져오기 (예시)
+//        const psCat = document.querySelector('input[name="psCat"]').value;
+//
+//        // 카테고리 정보를 hidden input에 추가
+//        document.querySelector('input[name="psCat"]').value = psCat;
+//
+//        // 이미지 UUID를 가져와서 hidden input에 추가
+//        const imageUuid = document.querySelector('input[name="imageUuid"]').value;
+//
+//        // 제출할 폼에 추가 정보 설정
+//        document.querySelector('input[name="imageUuid"]').value = imageUuid;
+//
+//        // 폼 제출
+//        document.querySelector('#deleteForm').submit();
+//    }
+//}

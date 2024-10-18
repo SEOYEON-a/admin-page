@@ -1,7 +1,8 @@
 package org.hype.domain;
 
 import java.sql.Date;
-import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,11 +24,12 @@ public class popStoreVO {
 	private double latitude; 
 	private double longitude; 
 	private String psExp; 
-	private List<pImgVO> psImg; 
+	private pImgVO psImg; 
 	private int likeCount; 
 	private String snsAd; 
 	private String comInfo; 
 	private String transInfo; 
 	private String parkinginfo; 
 	private double avgRating; 
+	private MultipartFile imageFile;
 }

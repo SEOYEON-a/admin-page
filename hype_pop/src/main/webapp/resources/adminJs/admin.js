@@ -1,7 +1,7 @@
 // 활성화된 탭을 추적하기 위한 변수
 let activeTab = 'popUp';
 
-//form 객체 가져오기
+// form 객체 가져오기
 const f = document.forms[0];
 
 // **** 관리자 Header 영역 (공통) ****
@@ -300,45 +300,6 @@ if(askList != null){
 	});
 }
 
-
-//function checkAskList() {
-//    fetch('/admin/askListCheck')
-//        .then(response => {
-//            if (!response.ok) {
-//                throw new Error('서버 오류: ' + response.statusText);
-//            }
-//            return response.text();
-//        })
-//        .then(url => {
-//      	console.log("받은 URL: ", url);
-//            window.location.href = url; // 페이지 이동
-//        })
-//        .catch(err => {
-//            console.error(err);
-//        });
-//}
-//function checkAskList() {
-//fetch('/admin/askListCheck')
-//  .then(response => {
-//      if (!response.ok) {
-//          throw new Error('서버 오류: ' + response.statusText);
-//      }
-//      return response.json();
-//  })
-//  .then(data => {
-//      console.log("받은 URL: ", data.redirectUrl);
-//      if (data.redirectUrl) {
-//          window.location.href = data.redirectUrl;
-//      } else {
-//          alert('유효한 URL을 받지 못했습니다.');
-//      }
-//  })
-//  .catch(err => {
-//      console.error(err);
-//      alert('문제가 발생했습니다: ' + err.message);
-//  });
-//}
-
 // 상품 상태 조회 버튼 클릭 시 상품 상태 조회 페이지로 이동
 const goodsState = document.querySelector('#goodsState');
 if(goodsState !== null){
@@ -348,22 +309,6 @@ if(goodsState !== null){
 		window.location.href = '/admin/goodsState'; // JSP 페이지로 이동
 	}	
 }
-//function checkGoodsState() {
-//    fetch('/admin/goodsState')
-//        .then(response => {
-//            if (!response.ok) {
-//                throw new Error('서버 오류: ' + response.statusText);
-//            }
-//            return response.text();
-//        })
-//        .then(url => {
-//            window.location.href = url; // 페이지 이동
-//        })
-//        .catch(err => {
-//            console.error(err);
-//        });
-//}
-
 
 // 등록하기 버튼 클릭 시 페이지 이동 함수
 function goToPage(url) {
@@ -375,9 +320,9 @@ const registerBtn = document.querySelector('#registerBtn');
 if(registerBtn != null){
 	document.getElementById('registerBtn').addEventListener('click', function() {
 		if (activeTab === 'popUp') {
-			goToPage('/admin/popUpRegister'); // 팝업스토어 관리 탭에서 버튼 클릭 시 팝업 스토어 등록 페이지로 이동
+			goToPage('/admin/popUpRegister'); // 팝업스토어 관리 탭에서 버튼 클릭 시 팝업 스토어 등록 페이지로 이동 (컨트롤러 경로)
 		} else if (activeTab === 'store') {
-			goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동
+			goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동 (컨트롤러 경로)
 		}	
 	});	
 }
