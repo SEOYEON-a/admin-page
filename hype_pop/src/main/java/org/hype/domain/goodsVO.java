@@ -17,11 +17,12 @@ public class goodsVO {
 	private int gNo; 
 	private int psNo; 
 	private String gName; 
+	private gCatVO gCat; 
 	private int gPrice; 
 	private String gExp; 
 	private List<gImgVO> gImg; 
 	private int gHit; 
 	private int likeCount; 
 	private Date sellDate; 
-	private gCatVO gCat; 
+	private int replyCount;
 }

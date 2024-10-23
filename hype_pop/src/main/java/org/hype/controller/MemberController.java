@@ -1,141 +1,197 @@
-package org.hype.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import lombok.extern.log4j.Log4j;
-
-@Log4j
-@Controller
-@RequestMapping("/member/*")
-public class MemberController {
-
-    
-    // ºñ¹Ğ¹øÈ£ º¯°æ Ã³¸®
-    // ½ÇÁ¦ DB ¿¬µ¿°ú ºñ¹Ğ¹øÈ£ À¯È¿¼º °Ë»ç´Â ¼­ºñ½º¿¡¼­ Ã³¸®ÇÏ°Ô µË´Ï´Ù!
-    // POST ¿äÃ»À¸·Î »ç¿ëÀÚÀÇ »õ·Î¿î ºñ¹Ğ¹øÈ£¸¦ ¹Ş¾Æ Ã³¸®ÇÏ°Ô µË´Ï´Ù!
-    @PostMapping("/updatePassword")
-    public String updatePassword(@RequestParam("userId") String userId, 
-                                 @RequestParam("currentPassword") String currentPassword, 
-                                 @RequestParam("newPassword") String newPassword, Model model) {
-        // ÁÖ¼®: ÇöÀç ºñ¹Ğ¹øÈ£°¡ ¸Â´ÂÁö È®ÀÎÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿ä
-        // boolean isCurrentPasswordValid = memberService.checkPassword(userId, currentPassword);
-
-        // ÁÖ¼®: »õ ºñ¹Ğ¹øÈ£·Î ¾÷µ¥ÀÌÆ®ÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿ä
-        // if (isCurrentPasswordValid) {
-        //     memberService.updatePassword(userId, newPassword);
-        //     model.addAttribute("message", "ºñ¹Ğ¹øÈ£°¡ ¼º°øÀûÀ¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
-        //     return "/member/updateSuccess"; // ¼º°ø ½Ã °á°ú ÆäÀÌÁö·Î ÀÌµ¿ÇÏ°Ô µË´Ï´Ù!
-        // } else {
-        //     model.addAttribute("error", "ÇöÀç ºñ¹Ğ¹øÈ£°¡ ¿Ã¹Ù¸£Áö ¾Ê½À´Ï´Ù.");
-             return "/member/changePassword"; // ½ÇÆĞ ½Ã ´Ù½Ã ºñ¹Ğ¹øÈ£ º¯°æ ÆäÀÌÁö·Î ÀÌµ¿ÇÏ°Ô µË´Ï´Ù!
-        // }
-    }
-
-   
-
-    // ÀüÈ­¹øÈ£ º¯°æ Ã³¸®
-    // POST ¿äÃ»À¸·Î »ç¿ëÀÚÀÇ »õ·Î¿î ÀüÈ­¹øÈ£¸¦ ¹Ş¾Æ Ã³¸®
-    @PostMapping("/updatePhone")
-    public String updatePhone(@RequestParam("userId") String userId, 
-                              @RequestParam("newPhone") String newPhone, Model model) {
-        // ÁÖ¼®: ÀüÈ­¹øÈ£¸¦ ¾÷µ¥ÀÌÆ®ÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿ä
-        // memberService.updatePhone(userId, newPhone);
-        // model.addAttribute("message", "ÀüÈ­¹øÈ£°¡ ¼º°øÀûÀ¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
-         return "/member/updateSuccess"; // ¼º°ø ½Ã °á°ú ÆäÀÌÁö·Î ÀÌµ¿
-    }
-
-
-    // ÀÌ¸ŞÀÏ º¯°æ Ã³¸®
-    // POST ¿äÃ»À¸·Î »ç¿ëÀÚÀÇ »õ·Î¿î ÀÌ¸ŞÀÏÀ» ¹Ş¾Æ Ã³¸®
-    @PostMapping("/updateEmail")
-    public String updateEmail(@RequestParam("userId") String userId, 
-                              @RequestParam("newEmail") String newEmail, Model model) {
-        // ÁÖ¼®: ÀÌ¸ŞÀÏÀ» ¾÷µ¥ÀÌÆ®ÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿ä
-        // memberService.updateEmail(userId, newEmail);
-        // model.addAttribute("message", "ÀÌ¸ŞÀÏÀÌ ¼º°øÀûÀ¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
-         return "/member/updateSuccess"; // ¼º°ø ½Ã °á°ú ÆäÀÌÁö·Î ÀÌµ¿ÇÏ°Ô µË´Ï´Ù!
-    }
-    // ÁÁ¾Æ¿äÇÑ ÆË¾÷½ºÅä¾î ¸ñ·Ï ¶ç¿öÁÖ´Â ¸Ş¼­µå
-    @GetMapping("/likedPopUpStores")
-    public String getLikedPopUpStores(@RequestParam("userId") String userId, Model model) {
-        log.info("ÁÁ¾Æ¿äÇÑ ÆË¾÷½ºÅä¾î ¸ñ·Ï Á¶È¸: " + userId);
-        
-        // List<PopUpStore> likedStores = memberService.getLikedPopUpStores(userId);
-        // model.addAttribute("likedStores", likedStores);
-
-        return "/member/likedPopUpStores"; // ÁÁ¾Æ¿äÇÑ ÆË¾÷½ºÅä¾î ¸ñ·Ï JSP
-    }
-
-    // ¸ñ·Ï¿¡¼­ »èÁ¦ÇÏ´Â ¸Ş¼­µå
-    @PostMapping("/removeLikedPopUpStore")
-    public String removeLikedPopUpStore(@RequestParam("userId") String userId, @RequestParam("storeId") Long storeId, Model model) {
-        log.info("ÁÁ¾Æ¿äÇÑ ÆË¾÷½ºÅä¾î »èÁ¦: " + storeId + " by " + userId);
-        
-        // boolean isRemoved = memberService.removeLikedPopUpStore(userId, storeId);
-        // if (isRemoved) {
-        //     model.addAttribute("message", "ÆË¾÷½ºÅä¾î°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
-        // } else {
-        //     model.addAttribute("error", "ÆË¾÷½ºÅä¾î »èÁ¦¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
-        // }
-
-        return "redirect:/member/likedPopUpStores"; // ÁÁ¾Æ¿äÇÑ ÆË¾÷½ºÅä¾î ¸ñ·Ï ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®ÇÏ°Ô µË´Ï´Ù!
-    }
-
-    // ÁÁ¾Æ¿äÇÑ ±ÂÁî ¸ñ·Ï ¶ç¿öÁÖ´Â ¸Ş¼­µå
-    @GetMapping("/likedGoods")
-    public String getLikedGoods(@RequestParam("userId") String userId, Model model) {
-        log.info("ÁÁ¾Æ¿äÇÑ ±ÂÁî ¸ñ·Ï Á¶È¸: " + userId);
-        
-        // List<Goods> likedGoods = memberService.getLikedGoods(userId);
-        // model.addAttribute("likedGoods", likedGoods);
-
-        return "/member/likedGoods"; // ÁÁ¾Æ¿äÇÑ ±ÂÁî ¸ñ·Ï JSP
-    }
-
-    // ÁÁ¾Æ¿äÇÑ ±ÂÁî ¸ñ·Ï¿¡¼­ »èÁ¦ÇÏ´Â ¸Ş¼­µå
-    @PostMapping("/removeLikedGoods")
-    public String removeLikedGoods(@RequestParam("userId") String userId, @RequestParam("goodsId") Long goodsId, Model model) {
-        log.info("ÁÁ¾Æ¿äÇÑ ±ÂÁî »èÁ¦: " + goodsId + " by " + userId);
-        
-        // boolean isRemoved = memberService.removeLikedGoods(userId, goodsId);
-        // if (isRemoved) {
-        //     model.addAttribute("message", "±ÂÁî°¡ »èÁ¦µÇ¾ú½À´Ï´Ù.");
-        // } else {
-        //     model.addAttribute("error", "±ÂÁî »èÁ¦¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
-        // }
-
-        return "redirect:/member/likedGoods"; // ÁÁ¾Æ¿äÇÑ ±ÂÁî ¸ñ·Ï ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®ÇÏ°Ô µË´Ï´Ù!
-    }
-
-    // °ü½É»ç º¯°æ ¸Ş¼­µå
-    @PostMapping("/updateInterests")
-    public String updateInterests(@RequestParam("userId") String userId, @RequestParam("interests") String interests, Model model) {
-        log.info("°ü½É»ç º¯°æ: " + userId + " -> " + interests);
-        
-        // memberService.updateInterests(userId, interests);
-        // model.addAttribute("message", "°ü½É»ç°¡ ¼º°øÀûÀ¸·Î º¯°æµÇ¾ú½À´Ï´Ù.");
-
-        return "/member/updateSuccess"; // ¼º°ø ½Ã °á°ú ÆäÀÌÁö·Î ÀÌµ¿ÇÏ°Ô µË´Ï´Ù!
-    }
-
-    // È¸¿ø Å»Åğ ¸Ş¼­µå
-    @PostMapping("/withdraw")
-    public String withdraw(@RequestParam("userId") String userId, Model model) {
-        log.info("È¸¿ø Å»Åğ ¿äÃ»: " + userId);
-        
-        // boolean isWithdrawn = memberService.withdraw(userId);
-        // if (isWithdrawn) {
-        //     model.addAttribute("message", "È¸¿ø Å»Åğ°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.");
-        // } else {
-        //     model.addAttribute("error", "È¸¿ø Å»Åğ¿¡ ½ÇÆĞÇß½À´Ï´Ù.");
-        // }
-
-        return "redirect:/"; // ¸ŞÀÎ ÆäÀÌÁö·Î ¸®´ÙÀÌ·ºÆ®ÇÏ°Ô µË´Ï´Ù!
-    }
-}
+//package org.hype.controller;
+//
+//import java.util.List;
+//
+//import org.hype.domain.mCatVO;
+//import org.hype.domain.signInVO;
+//import org.hype.service.MemberService;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.ModelAttribute;
+//import org.springframework.web.bind.annotation.PostMapping;
+//import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RequestParam;
+//import org.springframework.web.bind.annotation.ResponseBody;
+//import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+//
+//import lombok.extern.log4j.Log4j;
+//
+//@Log4j
+//@Controller
+//@RequestMapping("/member/*")
+//public class MemberController {
+//   
+//   @Autowired
+//   private MemberService mservice;
+//
+//   // ë¡œê·¸ì¸ í˜ì´ì§€ë¡œ ì´ë™
+//   @GetMapping("/login")
+//   public String login() {
+//      return "member/login";
+//   }
+//   
+//   // ë¡œê·¸ì¸ ì²˜ë¦¬
+//   @PostMapping("/login")
+//   public String login(signInVO svo, Model model) {
+//      signInVO member = mservice.loginMember(svo);
+//      if (member != null) {       
+//         return "popUp/popUpMain";
+//      } else {
+//         model.addAttribute("error", "ë¡œê·¸ì¸ ì˜¤ë¥˜ì…ë‹ˆë‹¤.");
+//         return "member/login";
+//      }
+//   }
+//   
+//   // íšŒì›ê°€ì…
+//   @GetMapping("/join")
+//   public String joinPage() {
+//      log.info("join now");
+//      return "member/joinPage";
+//   } 
+//
+//   // íšŒì›ê°€ì… ì²˜ë¦¬
+//   @PostMapping("/join")
+//   public String join(signInVO svo, mCatVO mcvo) {
+//      log.warn("mcvo :" + mcvo.getGame());
+//      log.warn("mcvo :" + mcvo.getCulture());
+//      log.warn("mcvo :" + mcvo.getShopping());
+//      // íšŒì›ê°€ì… ì²˜ë¦¬
+//      mservice.joinMember(svo, mcvo);
+//      return "popUp/popUpMain";
+//   }
+//
+//   @GetMapping("/myPage")
+//   public String myPage() { 
+//      return "/member/myPage"; 
+//   }
+//   
+//   @GetMapping("/userReply")
+//   public String userReply() { 
+//      System.out.println("userReply..");
+//      return "/member/userReply"; 
+//   }
+//   
+//   @GetMapping("/myCart")
+//   public String myCart() { 
+//      System.out.println("myCart..");
+//      return "/purchase/myCart"; 
+//   }
+//   
+//   @GetMapping("/paymentList")
+//   public String paymentList() { 
+//      System.out.println("paymentList..");
+//      return "/purchase/paymentList"; 
+//   }
+//
+//   /*---------------------------------------------------------------------------*/
+//
+//   // ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ í˜ì´ì§€ë¡œ ì´ë™
+//   @PostMapping("/updatePassword")
+//   public String updatePassword(@RequestParam("userId") String userId, 
+//                                @RequestParam("currentPassword") String currentPassword, 
+//                                @RequestParam("newPassword") String newPassword, Model model) {
+//      // ë¹„ë°€ë²ˆí˜¸ í™•ì¸ ë¡œì§
+//      // boolean isCurrentPasswordValid = memberService.checkPassword(userId, currentPassword);
+//
+//      // ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ ë¡œì§
+//      // if (isCurrentPasswordValid) {
+//      //     memberService.updatePassword(userId, newPassword);
+//      //     model.addAttribute("message", "ë¹„ë°€ë²ˆí˜¸ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      //     return "/member/updateSuccess"; // ì„±ê³µ í˜ì´ì§€ë¡œ ì´ë™
+//      // } else {
+//      //     model.addAttribute("error", "í˜„ì¬ ë¹„ë°€ë²ˆí˜¸ê°€ ì˜¬ë°”ë¥´ì§€ ì•ŠìŠµë‹ˆë‹¤.");
+//      return "/member/changePassword"; // ë¹„ë°€ë²ˆí˜¸ ë³€ê²½ í˜ì´ì§€ë¡œ ì´ë™
+//      // }
+//   }
+//
+//   // ì „í™”ë²ˆí˜¸ ì—…ë°ì´íŠ¸
+//   @PostMapping("/updatePhone")
+//   public String updatePhone(@RequestParam("userId") String userId, 
+//                             @RequestParam("newPhone") String newPhone, Model model) {
+//      // ì „í™”ë²ˆí˜¸ ì—…ë°ì´íŠ¸ ë¡œì§
+//      // memberService.updatePhone(userId, newPhone);
+//      // model.addAttribute("message", "ì „í™”ë²ˆí˜¸ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      return "/member/updateSuccess"; // ì„±ê³µ í˜ì´ì§€ë¡œ ì´ë™
+//   }
+//
+//   // ì´ë©”ì¼ ì—…ë°ì´íŠ¸
+//   @PostMapping("/updateEmail")
+//   public String updateEmail(@RequestParam("userId") String userId, 
+//                             @RequestParam("newEmail") String newEmail, Model model) {
+//      // ì´ë©”ì¼ ì—…ë°ì´íŠ¸ ë¡œì§
+//      // memberService.updateEmail(userId, newEmail);
+//      // model.addAttribute("message", "ì´ë©”ì¼ì´ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      return "/member/updateSuccess"; // ì„±ê³µ í˜ì´ì§€ë¡œ ì´ë™
+//   }
+//
+//   // ì¦ê²¨ì°¾ê¸°í•œ íŒì—… ìŠ¤í† ì–´ ëª©ë¡
+//   @GetMapping("/likedPopUpStores")
+//   public String getLikedPopUpStores(@RequestParam("userId") String userId, Model model) {
+//      log.info("ì¦ê²¨ì°¾ê¸°í•œ íŒì—… ìŠ¤í† ì–´ ëª©ë¡: " + userId);
+//      // List<PopUpStore> likedStores = memberService.getLikedPopUpStores(userId);
+//      // model.addAttribute("likedStores", likedStores);
+//      return "/member/likedPopUpStores"; // JSPë¡œ ì´ë™
+//   }
+//
+//   // ì¦ê²¨ì°¾ê¸°í•œ íŒì—… ìŠ¤í† ì–´ ì œê±°
+//   @PostMapping("/removeLikedPopUpStore")
+//   public String removeLikedPopUpStore(@RequestParam("userId") String userId, @RequestParam("storeId") Long storeId, Model model) {
+//      log.info("ì¦ê²¨ì°¾ê¸°í•œ íŒì—… ìŠ¤í† ì–´ ì œê±°: " + storeId + " by " + userId);
+//      // boolean isRemoved = memberService.removeLikedPopUpStore(userId, storeId);
+//      // if (isRemoved) {
+//      //     model.addAttribute("message", "íŒì—… ìŠ¤í† ì–´ê°€ ì„±ê³µì ìœ¼ë¡œ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      // } else {
+//      //     model.addAttribute("error", "íŒì—… ìŠ¤í† ì–´ ì œê±°ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
+//      // }
+//      return "redirect:/member/likedPopUpStores"; // ëª©ë¡ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+//   }
+//
+//   // ì¦ê²¨ì°¾ê¸°í•œ ìƒí’ˆ ëª©ë¡
+//   @GetMapping("/likedGoods")
+//   public String getLikedGoods(@RequestParam("userId") String userId, Model model) {
+//      log.info("ì¦ê²¨ì°¾ê¸°í•œ ìƒí’ˆ ëª©ë¡: " + userId);
+//      // List<Goods> likedGoods = memberService.getLikedGoods(userId);
+//      // model.addAttribute("likedGoods", likedGoods);
+//      return "/member/likedGoods"; // JSPë¡œ ì´ë™
+//   }
+//
+//   // ì¦ê²¨ì°¾ê¸°í•œ ìƒí’ˆ ì œê±°
+//   @PostMapping("/removeLikedGoods")
+//   public String removeLikedGoods(@RequestParam("userId") String userId, @RequestParam("goodsId") Long goodsId, Model model) {
+//      log.info("ì¦ê²¨ì°¾ê¸°í•œ ìƒí’ˆ ì œê±°: " + goodsId + " by " + userId);
+//      // boolean isRemoved = memberService.removeLikedGoods(userId, goodsId);
+//      // if (isRemoved) {
+//      //     model.addAttribute("message", "ìƒí’ˆì´ ì„±ê³µì ìœ¼ë¡œ ì œê±°ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      // } else {
+//      //     model.addAttribute("error", "ìƒí’ˆ ì œê±°ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
+//      // }
+//      return "redirect:/member/likedGoods"; // ëª©ë¡ í˜ì´ì§€ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+//   }
+//
+//   // ê´€ì‹¬ì‚¬ ì—…ë°ì´íŠ¸
+//   @PostMapping("/updateInterests")
+//   public String updateInterests(@RequestParam("userId") String userId, @RequestParam("interests") String interests, Model model) {
+//      log.info("ê´€ì‹¬ì‚¬ ì—…ë°ì´íŠ¸: " + userId + " -> " + interests);
+//      // memberService.updateInterests(userId, interests);
+//      // model.addAttribute("message", "ê´€ì‹¬ì‚¬ê°€ ì„±ê³µì ìœ¼ë¡œ ë³€ê²½ë˜ì—ˆìŠµë‹ˆë‹¤.");
+//      return "/member/updateSuccess"; // ì„±ê³µ í˜ì´ì§€ë¡œ ì´ë™
+//   }
+//
+//   // íšŒì› íƒˆí‡´
+//   @PostMapping("/withdraw")
+//   public String withdraw(@RequestParam("userId") String userId, Model model) {
+//      log.info("íšŒì› íƒˆí‡´ ìš”ì²­: " + userId);
+//      // boolean isWithdrawn = memberService.withdraw(userId);
+//      // if (isWithdrawn) {
+//      //     model.addAttribute("message", "íšŒì› íƒˆí‡´ê°€ ì„±ê³µì ìœ¼ë¡œ ì´ë£¨ì–´ì¡ŒìŠµë‹ˆë‹¤.");
+//      // } else {
+//      //     model.addAttribute("error", "íšŒì› íƒˆí‡´ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.");
+//      // }
+//      return "redirect:/"; // í™ˆìœ¼ë¡œ ë¦¬ë‹¤ì´ë ‰íŠ¸
+//   }
+//}

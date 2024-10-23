@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
 </head>
 <body>
 	<div class="adminHeader"> 

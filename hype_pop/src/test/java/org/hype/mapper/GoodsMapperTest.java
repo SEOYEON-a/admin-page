@@ -18,15 +18,4 @@ import lombok.extern.log4j.Log4j;
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml") 
 public class GoodsMapperTest {
 	
-	@Autowired
-	private GoodsMapper mapper;
-	
-	@Test
-	public void testGetList() {
-		List<goodsVO> list = mapper.getGList();
-		
-		for (goodsVO vo : list) {
-			log.info(vo);  // 화면 출력
-		}
-	}
 }

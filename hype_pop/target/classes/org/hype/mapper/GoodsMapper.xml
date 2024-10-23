@@ -4,20 +4,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.hype.mapper.GoodsMapper">
-	<select id="getGList" resultType="org.hype.domain.goodsVO">
+	<!-- <select id="getGList" resultType="org.hype.domain.goodsVO">
 	    SELECT 
             gNo, 
             gName, 
             gPrice,
             sellDate
         FROM goods_info_tbl
-    </select>
+    </select> -->
     
-   	<select id="getListBySearchGs" parameterType="String" resultType="org.hype.domain.goodsVO">
+<!--    	<select id="getListBySearchGs" parameterType="String" resultType="org.hype.domain.goodsVO">
     	SELECT * FROM goods_info_tbl WHERE gName LIKE '%' || #{searchGs} || '%'
-	</select>
-	
-	<select id="getGoodsById" parameterType="int" resultType="org.hype.domain.goodsVO">
-   		SELECT gNo, gName, gPrice, sellDate FROM goods_info_tbl WHERE gNo = #{gNo}
-	</select>
+	</select> -->
 </mapper>

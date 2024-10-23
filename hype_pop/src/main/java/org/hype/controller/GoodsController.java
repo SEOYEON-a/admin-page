@@ -1,59 +1,126 @@
-package org.hype.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import lombok.extern.log4j.Log4j;
-
-@Log4j
-@Controller
-@RequestMapping("/goodsStore/*")
-public class GoodsController {
-    @GetMapping("/goodsDetails")
-    public String goodsSearch(@RequestParam("goodsName") String goodsName, Model model) {
-        // searchData¸¦ »ç¿ëÇÏ¿© °Ë»ö ·ÎÁ÷À» Ã³¸®
-        System.out.println("°Ë»ö µ¥ÀÌÅÍ: " + goodsName);
-        
-        //DB¿¡¼­ Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ÀÌ ¿©±âÀÖ¾î¾ßÇÔ
-        
-        // searchData¸¦ ¸ğµ¨¿¡ Ãß°¡ÇÏ¿© JSP·Î Àü´Ş
-        model.addAttribute("goodsName", goodsName);
-        
-        return "/goodsStore/goodsDetails"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
-    }
- 
-
-    @GetMapping("/goodsMain")
-    public String goodsMain() {
-    	
-    	// ±ÂÁîµé Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ ÇÊ¿ä
-         
-         log.info("±ÂÁî ¸ŞÀÎÆäÀÌÁö·Î");
-        
-        return "/goodsStore/goodsMain"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
-    }
-//    @GetMapping("/goodsMain")
-//    public String goodsMain(Model model) {
-//        log.info("±ÂÁî ¸ŞÀÎÆäÀÌÁö·Î");
+//package org.hype.controller;
 //
-//        // ¼­ºñ½º¿¡¼­ ±ÂÁî ¸®½ºÆ®¸¦ ¹Ş¾Æ¿È
-//        List<Goods> goodsList = goodsService.getGoodsList();
+//import java.util.List;
+//import java.util.Map;
+//
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpSession;
+//
+//import org.hype.domain.gCatVO;
+//import org.hype.domain.goodsVO;
+//import org.hype.domain.rankVO;
+//import org.hype.service.GoodsService;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Controller;
+//import org.springframework.ui.Model;
+//import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.RequestMapping;
+//import org.springframework.web.bind.annotation.RequestParam;
+//
+//import lombok.extern.log4j.Log4j;
+//
+//@Log4j
+//@Controller
+//@RequestMapping("/goodsStore/*")
+//public class GoodsController {
+//	
+//	@Autowired
+//	private GoodsService gService;
+//	
+//	String open = null;
+//	
+//    @GetMapping("/goodsDetails")
+//    public String goodsDetails(@RequestParam("gno") int gno, Model model, HttpServletRequest request) {
+//    	goodsVO vo = gService.getOneByGno(gno);
+//    	System.out.println("êµ¿ì¦ˆ ìƒì„¸ í˜ì´ì§€ gno : " + gno);
+//    	
+//    	HttpSession session = request.getSession();
+//    	String open = (String) session.getAttribute("open"); // ì„¸ì…˜ì— íŠ¹ì • gnoì˜ open ê°’ ì €ì¥
+//    	if (open == null) {
+//    		session.setAttribute("open", "yes"); // gnoë³„ë¡œ ì„¸ì…˜ì— 'open' ì„¤ì •
+//    		
+//    		int hit = vo.getGhit() + 1; // ì¡°íšŒìˆ˜ ì¦ê°€
+//    		vo.setGhit(hit);
+//    		gService.getUpdatehit(vo);  // ì¡°íšŒìˆ˜ ì—…ë°ì´íŠ¸
+//    	}
+//        model.addAttribute("goods", vo);
+//        log.info("like count ëŠ” " + gService.getOneByGno(gno).getLikeCount());
 //        
-//        // ¸ğµ¨¿¡ ±ÂÁî ¸®½ºÆ® Ãß°¡
-//        model.addAttribute("goodsList", goodsList);
+//        open = (String) session.getAttribute("open");
+//        if (open == null) {
+//            session.setAttribute("open", "yes");
+//            // ê²Œì‹œê¸€ ì¡°íšŒ ì‹œ 'open' ê°’ì„ 'yes'ë¡œ ì„¤ì •
+//
+//            int hit = vo.getGhit() + 1;
+//            vo.setGhit(hit);
+//            gService.getUpdatehit(vo);
+//            // ì¡°íšŒìˆ˜ ì¦ê°€ í›„ ì—…ë°ì´íŠ¸
+//        }
 //        
-//        return "/goodsStore/goodsMain"; // ¸ŞÀÎ ÆäÀÌÁö·Î ÀÌµ¿
+//        return "/goodsStore/goodsDetails";
 //    }
-    @GetMapping("/goodsSearch")
-    public String goodsSearch() {
-         
-    	// ±ÂÁîµé Á¤º¸ ¹Ş¾Æ¿À´Â ·ÎÁ÷ ÇÊ¿ä
-    	
-         log.info("±ÂÁî °Ë»öÆäÀÌÁö·Î");
-        
-        return "/goodsStore/goodsSearch"; // °Ë»ö °á°ú¸¦ º¸¿©ÁÙ JSP ÆäÀÌÁö ÀÌ¸§
-    }
-}
+// 
+//    @GetMapping("/goodsMain")
+//    public String goodsMain(Model model, HttpServletRequest request) {
+//        // ë©”ì¸ í˜ì´ì§€ë¥¼ ë³´ì—¬ì¤ë‹ˆë‹¤
+//        log.info("ë©”ì¸ í˜ì´ì§€ë¡œ ì´ë™");
+//        List<goodsVO> vo1 = gService.getListByLikeCount();
+//        vo1.forEach(item -> log.info("vo1ëŠ” " + item.getGname()));
+//        model.addAttribute("likeGoods", gService.getListByLikeCount());
+//        
+//        
+//        Map<String, Object> result1 = gService.getListByInterestOneNotLogin();
+//        String category1 = (String) result1.get("category");
+//        List<goodsVO> interestOneNotLogin = (List<goodsVO>) result1.get("goodsList");
+//        
+//        Map<String, Object> result2 = gService.getListByInterestTwoNotLogin();
+//        String category2 = (String) result2.get("category");
+//        List<goodsVO> interestTwoNotLogin = (List<goodsVO>) result2.get("goodsList");
+//        
+//        Map<String, Object> result3 = gService.getListByInterestThreeNotLogin();
+//        String category3 = (String) result3.get("category");
+//        List<goodsVO> interestThreeNotLogin = (List<goodsVO>) result3.get("goodsList");
+//        
+//        HttpSession session = request.getSession();
+//        session.setAttribute("open", "null");
+//        
+//        model.addAttribute("categoryOne", category1);
+//        model.addAttribute("categoryTwo", category2);
+//        model.addAttribute("categoryThree", category3);
+//        model.addAttribute("interestOneNotLogin", interestOneNotLogin);
+//        model.addAttribute("interestTwoNotLogin", interestTwoNotLogin);
+//        model.addAttribute("interestThreeNotLogin", interestThreeNotLogin);
+//        
+//        
+//        return "/goodsStore/goodsMain"; // ë©”ì¸ í˜ì´ì§€ JSPì˜ ê²½ë¡œ
+//    }
+//
+//    @GetMapping("/goodsSearch")
+//    public String goodsSearch(@RequestParam(value = "searchText", required = false) String searchText, Model model, HttpServletRequest request) {
+//        // ê²€ìƒ‰ì–´ê°€ ì—†ìœ¼ë©´ ë¹ˆ ë¬¸ìì—´ë¡œ ì²˜ë¦¬í•˜ì—¬ ì „ì²´ ëª©ë¡ ê²€ìƒ‰
+//        if (searchText == null || searchText.trim().isEmpty()) {
+//            searchText = "";  // ë¹ˆ ê²€ìƒ‰ì–´ë¡œ ì²˜ë¦¬í•˜ì—¬ ì „ì²´ ê²°ê³¼ ì¶œë ¥
+//        }
+//
+//        // ê²€ìƒ‰ ë¦¬ìŠ¤íŠ¸ ê°€ì ¸ì˜¤ê¸° (ê²€ìƒ‰ì–´ê°€ ì—†ì„ ë•ŒëŠ” ì „ì²´ ê²°ê³¼ ë°˜í™˜)
+//        List<goodsVO> voList = gService.getSearchList(searchText, 0, 10);
+//
+//        // ê° ìƒí’ˆì— ì¹´í…Œê³ ë¦¬ ì •ë³´ ì¶”ê°€
+//        for (goodsVO vo : voList) {
+//            gCatVO voCat = gService.getCategory(vo.getGno());
+//            log.info("ê²€ìƒ‰ ì‹œ cat ì€ : " + voCat);
+//            vo.setGcat(voCat);
+//        }
+//
+//        // ì„¸ì…˜ ì²˜ë¦¬
+//        HttpSession session = request.getSession();
+//        session.setAttribute("open", "null");
+//
+//        // ëª¨ë¸ì— ê²€ìƒ‰ ê²°ê³¼ ë° ê²€ìƒ‰ì–´ ì¶”ê°€
+//        model.addAttribute("searchList", voList);
+//        model.addAttribute("searchText", searchText);
+//
+//        return "/goodsStore/goodsSearch";  // JSP í˜ì´ì§€ ë°˜í™˜
+//    }
+//
+//}
