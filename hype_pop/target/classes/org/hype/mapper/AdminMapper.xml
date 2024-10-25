@@ -66,28 +66,50 @@
 	    SELECT COUNT(*) FROM goods_info_tbl 
 	</select>
 	
-	<!-- 검색어 조건 빼고 일단 페이징 처리 해보기 -->
-	<!-- <select id="getList" parameterType="org.hype.domain.Criteria" resultType="org.hype.domain.popStoreVO">
-	    <![CDATA[
-	        SELECT psNo, psName, psStartDate, psEndDate
+	<select id="getMList" resultType="org.hype.domain.signInVO">
+	<![CDATA[
+		SELECT userNo, userId, userEmail, lastLoginDate, enabled, auth
 	        FROM (
-	            SELECT ROWNUM rn, psNo, psName, psStartDate, psEndDate
+	            SELECT ROWNUM rn, userNo, userId, userEmail, lastLoginDate, enabled, auth
 	            FROM (
-	                SELECT * FROM pop_main_tbl ORDER BY psNo ASC
+	                SELECT * FROM sign_in_info_tbl 
+	                ]]>
+	                WHERE  
+	                <if test="searchMs != null and searchMs != ''">
+		            	userId LIKE '%' || #{searchMs} || '%'
+		            </if>
+		            <if test="searchMs == null or searchMs == ''">
+		            	1=1
+		            </if> 
+		        <![CDATA[
+				ORDER BY userNo asc
 	            ) a
-	            WHERE ROWNUM <= #{pageNum} * #{amount}	
+	            WHERE ROWNUM <= #{cri.pageNum} * #{cri.amount}	
 	        )
-	        WHERE rn > (#{pageNum} - 1) * #{amount}
-	    ]]>
-	</select> -->
-		
-	
+	        WHERE rn > (#{cri.pageNum} - 1) * #{cri.amount}
+	   ]]>
+    </select>
+    
+    <select id="getMTotal" resultType="int">
+	    SELECT COUNT(*) FROM sign_in_info_tbl 
+	</select>
+    
+	<select id="getQList" resultType="org.hype.domain.qnaVO">
+	    SELECT *
+		FROM qna_tbl
+		ORDER BY qnaNo ASC
+	</select>   
+   
 	<select id="getPopStoreById" parameterType="int" resultType="org.hype.domain.popStoreVO">
    		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
 	</select>
 	
 	<select id="getGoodsById" parameterType="int" resultType="org.hype.domain.goodsVO">
    		SELECT gNo, gName, gPrice, sellDate FROM goods_info_tbl WHERE gNo = #{gNo}
+	</select>
+	
+	<select id="getMembersById" parameterType="String" resultType="org.hype.domain.signInVO">
+   		SELECT userNo, userId, userEmail, lastLoginDate, enabled, auth FROM sign_in_info_tbl WHERE userNo = #{userNo}
 	</select>
 	
 	

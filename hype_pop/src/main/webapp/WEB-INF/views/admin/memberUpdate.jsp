@@ -21,6 +21,6 @@
     <button type="button" id="downBtn">↓</button>
 	
 	<div id="mCancel">취소 및 리스트로 돌아가기</div>	
-	<div id="mUpdate">수정완료</div>	
+	<div id="mUpdate">수정완료</div>
 </body>
 </html>
