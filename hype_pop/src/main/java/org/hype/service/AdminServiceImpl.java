@@ -14,6 +14,7 @@ import org.hype.mapper.AdminMapper;
 import org.hype.mapper.AttachMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.log4j.Log4j;
 
@@ -66,11 +67,22 @@ public class AdminServiceImpl implements AdminService{
 	
 	// 문의 영역
 	// 문의 리스트 가져오기
+	// 페이징 X
 	@Override
 	public List<qnaVO> getQList() {
 		return mapper.getQList();
 	}
-	
+	// 페이징O	
+//	@Override
+//	public List<qnaVO> getQList(Criteria cri, String qnaType) {
+//		return mapper.getQList(cri, qnaType);
+//	}
+
+//	@Override
+//	public int getQTotal(String qnaType) {
+//		return mapper.getQTotal(qnaType);
+//	}
+
 	// 특정 팝업스토어 조회
 	@Override
 	public popStoreVO getPopStoreById(int psNo) {
@@ -87,6 +99,14 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public signInVO getMembersById(String userId) {
 		return mapper.getMembersById(userId);
+	}
+
+	// 회원 정보 업데이트	
+	@Override
+	public int updateMem(signInVO svo) {
+		return mapper.updateMem(svo);
 	}	
+	
+	
 		
 }

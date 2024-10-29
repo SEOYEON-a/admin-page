@@ -68,7 +68,14 @@
                         <td>${vo.quantity}</td> <!-- 개수를 vo.quantity로 수정 -->
                         <td>${vo.price}</td> <!-- 가격을 vo.price로 수정 -->
                         <td>${vo.regdate}</td> <!-- 구매날짜 -->
-                        <td>${vo.status}</td> <!-- 상품현황 -->
+                        <td>
+                        	<select id="goodsType">
+					            <option value="receive">구매완료</option>
+					            <option value="inDelivery">배송 중</option>
+					            <option value="delivered">배송 완료</option>
+					        </select>
+                        ${vo.status}
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>

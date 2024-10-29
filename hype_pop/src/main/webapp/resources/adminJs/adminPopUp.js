@@ -222,7 +222,7 @@
 //
 //    console.log('폼 데이터 전송:', ...formData.entries());
 //
-//    // fetch를 사용하여 폼 데이터 전송
+//    // fetch를 사용하여 폼 데이터 전송 (jsp에서 submit을 하고 있으므로 fetch를 태울 필요가 없음)
 //    fetch(form.action, {
 //        method: 'POST',
 //        body: formData,
@@ -379,6 +379,7 @@
 //
 //function popupDelete() {
 //	if (confirm('정말로 삭제하시겠습니까?')) {
+//		
 //		// 카테고리 정보를 가져오기 (예시)
 //        const psCat = document.querySelector('input[name="psCat"]').value;
 //

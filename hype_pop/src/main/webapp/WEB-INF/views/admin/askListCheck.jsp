@@ -36,13 +36,13 @@
 	
     <form action="#" id="qnaTypeBox">
         <label for="qnaType">문의 유형 선택:</label>
-        <select id="qnaType" onchange="filterQnaList()">
+        <select id="qnaType" onchange="loadQnaList()">
             <option value="refund">일반</option>
             <option value="delivery">결제</option>
             <option value="complain">기타</option>
         </select>
         <label for="answerStatus">답변 여부:</label>
-        <input type="checkbox" id="answerStatus" onchange="filterQnaList()"> 답변 완료
+        <input type="checkbox" id="answerStatus" onchange="loadQnaList()"> 답변 완료
     </form>
 
     <table id="qnaListCat">
@@ -55,7 +55,10 @@
                 <th>답변 여부</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="qnaListBody">
+            <!-- 데이터가 여기에 삽입됩니다 -->
+        </tbody>
+        <%-- <tbody>
         	<c:forEach var="qnaList" items="${qna}">
                 <tr>
                     <td>${qna.qnaNo}</td>
@@ -63,14 +66,12 @@
                     <td>${qna.qnaTitle}</td>
                     <td>${qna.qnaRegDate}</td>                    
                     <td>${qna.qnaAnswer}</td>                    
-                    <%-- <td>${qna.qnaAnswer != null && !qna.qnaAnswer.isEmpty() ? '답변 완료' : '답변 미완료'}</td> --%>
                 </tr>
             </c:forEach>           
-        </tbody>
+        </tbody> --%>
     </table>
 
-	<div id="pagination">         
-	</div>
+	<div id="pagination"></div>
 	
 <script type="text/javascript" src="/resources/adminJs/adminQna.js"></script>  
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  

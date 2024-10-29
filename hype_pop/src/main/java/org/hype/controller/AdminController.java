@@ -18,6 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -189,13 +192,15 @@ public class AdminController {
 	
 	// 회원 아이디 클릭 시 회원 정보 수정 페이지로 이동
 	@GetMapping("/memberUpdate")
-	public String updateMembers(@RequestParam("userId") String userId, Model model) {
-	    log.info("회원 정보 수정 페이지로 이동: userId = " + userId);
+	public String updateMembers(@RequestParam("userNo") String userNo, Model model) {
+	    log.info("회원 정보 수정 페이지로 이동: userNo = " + userNo);
 	    
 	    // 해당 userId 에 대한 회원 정보 조회
-	    signInVO members = aservice.getMembersById(userId);
-	    if (members != null) {
-	        model.addAttribute("members", members); // JSP에서 사용하기 위해 모델에 추가
+	    signInVO svo = aservice.getMembersById(userNo);
+	    log.info("member의 userNo 찾기 : " + svo.getUserNo());
+	    
+	    if (svo != null) {
+	        model.addAttribute("svo", svo); // JSP에서 사용하기 위해 모델에 추가
 	        return "admin/memberUpdate"; // JSP 파일 경로
 	    } else {
 	        // 해당 ID의 회원이 없는 경우 처리
@@ -214,16 +219,44 @@ public class AdminController {
 	    return new ResponseEntity<>(qnaList, HttpStatus.OK);
 	}
 	
-//  페이징 적용 O (아직 수정 안봄)	
+	
+	//  페이징 적용 O
+//	@ResponseBody
+//	@GetMapping(value = "/qnaList", produces = {"application/json;charset=UTF-8", "application/xml"})
+//	public ResponseEntity<Map<String, Object>> getQnaList(Criteria cri,
+//	                                                       @RequestParam(required = false) String qnaType) {
+//	    // 기본값 설정
+//	    if (cri.getPageNum() <= 0) {
+//	        cri.setPageNum(1);
+//	    }
+//	    if (cri.getAmount() <= 0) {
+//	        cri.setAmount(10);
+//	    }
+//
+//	    // 전체 문의 수 가져오기 (qnaType 필터링 포함)
+//	    int total = aservice.getQTotal(qnaType);
+//	    List<qnaVO> list = aservice.getQList(cri, qnaType);
+//
+//	    // PageDTO 생성
+//	    PageDTO<qnaVO> pageMaker = new PageDTO<>(cri, total);
+//
+//	    // 응답 데이터 생성
+//	    Map<String, Object> response = new HashMap<>();
+//	    response.put("list", list);
+//	    response.put("total", total);
+//	    response.put("pageMaker", pageMaker);
+//
+//	    return ResponseEntity.ok(response);
+//	}
+
 //	@ResponseBody
 //	@GetMapping(value ="/qnaList",
 //			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
 //					   MediaType.APPLICATION_XML_VALUE})
-//	public ResponseEntity<Map<String, Object>> getQList(Criteria cri, 
-//			@RequestParam(required = false) Boolean answerStatus) {
+//	public ResponseEntity<Map<String, Object>> getQList(Criteria cri) {
 //		log.warn(cri.getAmount());
 //		log.warn(cri.getPageNum());
-//		log.warn("answerStatus: " + answerStatus);
+////		log.warn("answerStatus: " + answerStatus);
 //		
 //		if (cri.getPageNum() == 0 || cri.getAmount() == 0) {
 //			cri.setPageNum(1);
@@ -233,19 +266,19 @@ public class AdminController {
 //		log.info(cri.getPageNum() + "/" + cri.getAmount());
 //		
 //		int total = aservice.getQTotal(answerStatus);  // 전체 문의 수 
-////		List<qnaVO> list = aservice.getQList(cri, searchMs);  // 검색 결과
-//		List<qnaVO> list = aservice.getQList(cri, answerStatus);
+//		List<qnaVO> list = aservice.getQList(cri, answerStatus);  // 검색 결과
+////		List<qnaVO> list = aservice.getQList(cri, answerStatus);
 //		PageDTO pageMaker = new PageDTO(cri, total);  // 페이지 메이커
 //		
 //		
-//		log.info("list : " + list);
-//		log.info("total : " + total);
+////		log.info("list : " + list);
+////		log.info("total : " + total);
 //		log.info("pageMaker : " + pageMaker);
 //		
 //		Map<String, Object> response = new HashMap<>();	
 //		
-//		response.put("list", list);
-//		response.put("total", total);
+////		response.put("list", list);
+////		response.put("total", total);
 //		response.put("pageMaker", pageMaker);
 //		
 //		return ResponseEntity.ok(response);
@@ -274,4 +307,38 @@ public class AdminController {
     public String goodsRegister() {
         return "admin/goodsRegister"; 
     }
+    
+    
+    
+    // *** 회원 정보 수정 영역 ***
+    @PostMapping(value = "/mUpdate", consumes=MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody signInVO svo) {
+       System.out.println("Received data: " + svo.getAuth());  // 로그 추가
+       System.out.println("Received data: " + svo.getEnabled());  // 로그 추가
+       System.out.println("Received data: " + svo.getUserEmail());  // 로그 추가
+       System.out.println("Received data: " + svo.getUserId());  // 로그 추가
+       System.out.println("Received data: " + svo.getUserNo());  // 로그 추가
+       System.out.println("Received data: " + svo.getUserName());  // 로그 추가
+       System.out.println("Received data: " + svo.getUserNumber());  // 로그 추가
+       
+        Map<String, Object> response = new HashMap<>();
+        try {
+            int result = aservice.updateMem(svo);
+            if (result == 1) {
+                response.put("status", "success");
+                response.put("message", "회원 정보가 성공적으로 수정되었습니다.");
+                return ResponseEntity.ok(response);  // 200 OK
+            } else {
+                response.put("status", "failure");
+                response.put("message", "회원 정보 수정에 실패했습니다.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // 400 Bad Request
+            }
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("message", "서버 오류가 발생했습니다: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);  // 500 Internal Server Error
+        }
+    }
+
 }

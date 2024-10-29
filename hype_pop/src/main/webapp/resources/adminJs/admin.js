@@ -386,7 +386,7 @@ function MemberLists(members) {
        
     	// 회원아이디 클릭 시 회원 정보 수정 페이지로 이동
         const link = document.createElement('a');
-        link.href = `memberUpdate?userId=${member.userNo}`;
+        link.href = `memberUpdate?userNo=${member.userNo}`;
         link.textContent = member.userId; // 회원 아이디에만 링크 걸리게 설정
         link.style.color = 'black'; // 링크 색상 변경	
         link.style.textDecoration = 'none'; // 밑줄 제거
