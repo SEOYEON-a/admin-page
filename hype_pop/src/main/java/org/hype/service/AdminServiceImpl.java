@@ -72,6 +72,18 @@ public class AdminServiceImpl implements AdminService{
 	public List<qnaVO> getQList() {
 		return mapper.getQList();
 	}
+	
+	// 필터링된 Q&A 리스트 가져오기
+//    public List<qnaVO> getFilteredQList(String qnaType, Boolean answerStatus) {
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("qnaType", qnaType);
+//        params.put("answerStatus", answerStatus);
+//        
+//        System.out.println("필터링 조건: " + params);
+//        	
+//        return mapper.getFilteredQList(params);
+//    }
+	
 	// 페이징O	
 //	@Override
 //	public List<qnaVO> getQList(Criteria cri, String qnaType) {

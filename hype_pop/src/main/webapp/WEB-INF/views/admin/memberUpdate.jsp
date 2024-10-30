@@ -150,20 +150,20 @@ button:hover {
 	<div id="AllList"></div>
 	
 	<form id="memberForm" method="POST">
-		<input type="text" name="userNo" value="${svo.userNo}" readonly="readonly">
+		<input type="text" name="userNo" value="${svo.userNo}" readonly>
 		<div id="mId">회원 아이디 <input type="text" name="userId" value="${svo.userId}"></div>
 		<div id="mName">회원 이름 <input type="text" name="userName" value="${svo.userName}"></div>
 		<div id="mEmail">회원 이메일 <input type="text" name="userEmail" value="${svo.userEmail}"></div>
 		<div id="mPhone">회원 전화번호 <input type="number" name="userNumber" value="${svo.userNumber}"></div>
-		<div id="activeAccount">계정 활성화 여부 <input type="number" name="enabled" value="${svo.enabled}"></div>
-		<div id="authority">권한 <input type="number" name="auth" value="${svo.auth}"> </div>
-	    <button type="button" id="upBtn">↑</button>
-	    <button type="button" id="downBtn">↓</button>	
+		<div id="authority">권한 <input type="number" id="auth" name="auth" value="${svo.auth}" readonly> 
+		    <button type="button" id="upBtn">↑</button>
+		    <button type="button" id="downBtn">↓</button>			
+		</div>
+		<div id="joinDate">가입일 <input type="text" name="regDate" value="${svo.regDate}" readonly></div>
+		<div id="updateLogin">최신 로그인 날짜 <input type="text" name="lastLoginDate" value="${svo.lastLoginDate}"></div>
 	</form>
 	
-	<div id="joinDate">가입일 <input type="text" name="regDate" value="${svo.regDate}"></div>
-	<div id="updateLogin">최신 로그인 날짜 <input type="text" name="lastLoginDate" value="${svo.lastLoginDate}"></div>
-    <button type="button" id="mCancel">취소 및 리스트로 돌아가기</button>	
+    <button type="button" id="mCancel" onclick="backtoMList()">취소 및 리스트로 돌아가기</button>	
     <button type="button" id="mUpdate" onclick="updateMemberList()">수정완료</button>
 	
 	<div id="pagination"></div>

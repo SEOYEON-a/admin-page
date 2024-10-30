@@ -22,12 +22,12 @@ public interface AdminService {
 	public int getMTotal(String searchMs);
 	// 검색어 포함 문의 페이징 처리
 	public List<qnaVO> getQList(); // 페이징X
+//	public List<qnaVO> getFilteredQList(String qnaType, Boolean answerStatus);
+	
 //	public List<qnaVO> getQList(Criteria cri, String qnaType);  // 페이징O
 //	public int getQTotal(String qnaType);
 	
-	
-//	public int updateMem(String userId);  // 회원 정보 업데이트
-	public int updateMem(signInVO svo);
+	public int updateMem(signInVO svo);  // 회원 정보 업데이트
 	
     public popStoreVO getPopStoreById (int psNo);  // 특정 팝업스토어 조회
 	public goodsVO getGoodsById (int gNo);  // 특정 굿즈(상품) 조회

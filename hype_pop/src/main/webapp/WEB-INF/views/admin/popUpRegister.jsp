@@ -89,7 +89,7 @@ button:hover {
 	
 	<div id="AllList"></div>
 	
-	<form id="registerForm" method="POST" action="/admin/psRegister" enctype="multipart/form-data" onsubmit="return popStoreRegister(event);">
+	<form id="registerForm" method="POST" action="/admin/psRegister" enctype="multipart/form-data">
 	    <div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
 	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
 	    <div id="uploadedImages"></div>
@@ -97,35 +97,36 @@ button:hover {
 	    <div id="psLatitude">위도 <input type="text" name="latitude"></div>
 	    <div id="psLongitude">경도 <input type="text" name="longitude"></div>
 	    
-	    <div id="storeName">팝업스토어 이름 <input type="text" name="psName"></div>
+	    <div id="storeName">팝업스토어 이름 <input type="text" name="psName" value="테스트 등록 팝업스토어"></div>
 	    <div id="cats">팝업스토어 카테고리
-		    <select id="storeCat" name="psCat" multiple>
-		        <option value="1">헬스/뷰티</option>
-		        <option value="1">게임</option>
-		        <option value="1">문화</option>
-		        <option value="1">쇼핑</option>
-		        <option value="1">문구</option>
-		        <option value="1">키즈</option>
-		        <option value="1">디자인</option>
-		        <option value="1">식품</option>
-		        <option value="1">인테리어</option>
-		        <option value="1">정책</option>
-		        <option value="1">캐릭터</option>
-		        <option value="1">체험</option>
-		        <option value="1">콜라보</option>
-		        <option value="1">방송</option>
-		    </select>
-		</div>
-	    <div id="startDate">시작일 <input type="text" name="psStartDate"></div>
-	    <div id="endDate">종료일 <input type="text" name="psEndDate"></div>
-	    <div id="address">주소 <input type="text" name="psAddress"></div>
-	    <div id="snsAddress">SNS 주소 <input type="text" name="snsAd"></div>
-	    <div id="company">주최사 정보 <input type="text" name="comInfo"></div>
-	    <div id="transfer">교통편 <input type="text" name="transInfo"></div>
-	    <div id="parking">주차장 정보 <input type="text" name="parkingInfo"></div>
-	    <div id="storeExp">설명글 <input type="text" name="psExp"></div>
+          <div>
+             <input type="checkbox" name="psCat.healthBeauty" value="1">헬스/뷰티
+             <input type="checkbox" name="psCat.game" value="1">게임
+             <input type="checkbox" name="psCat.culture" value="1">문화
+             <input type="checkbox" name="psCat.shopping" value="1">쇼핑
+             <input type="checkbox" name="psCat.supply" value="1">문구
+             <input type="checkbox" name="psCat.kids" value="1">키즈
+             <input type="checkbox" name="psCat.design" value="1">디자인
+             <input type="checkbox" name="psCat.foods" value="1">식품
+             <input type="checkbox" name="psCat.interior" value="1">인테리어
+             <input type="checkbox" name="psCat.policy" value="1">정책
+             <input type="checkbox" name="psCat.character" value="1">캐릭터
+             <input type="checkbox" name="psCat.experience" value="1">체험
+             <input type="checkbox" name="psCat.collaboration" value="1">콜라보
+             <input type="checkbox" name="psCat.entertainment" value="1">방송
+          </div>
+      </div>
+	    <div id="startDate">시작일 <input type="date" name="psStartDate"></div>
+	    <div id="endDate">종료일 <input type="date" name="psEndDate"></div>
 	    
-        <!-- <button type="submit" id="psRegisterBtn">등록하기</button> -->
+	    <div id="address">주소 <input type="text" name="psAddress" value="서울시 어딘가"></div>
+	    <div id="snsAddress">SNS 주소 <input type="text" name="snsAd" value="https://www.instagram.com/insertTest"></div>
+	    <div id="company">주최사 정보 <input type="text" name="comInfo" value="주최사 정보"></div>
+	    <div id="transfer">교통편 <input type="text" name="transInfo" value="가는 방법"></div>
+	    <div id="parking">주차장 정보 <input type="text" name="parkingInfo" value="주차 불가"></div>
+	    <div id="storeExp">설명글 <input type="text" name="psExp" value="설명글"></div>
+	    
+        <button type="button" id="psRegisterBtn" onclick="popStoreRegister();">등록하기</button>
 	</form>	
 	
 	<div id="pagination"></div>

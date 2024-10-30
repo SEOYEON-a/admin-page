@@ -250,6 +250,101 @@
 
 //**** 팝업스토어 등록 페이지 영역 ****
 // 등록하기 버튼 클릭 시 팝업스토어 등록
+// 파일 미리보기
+document.querySelector('#imageFile').addEventListener('input', function(event) {
+    const files = event.target.files;
+    const uploadedImagesDiv = document.getElementById('uploadedImages');
+
+    // 기존의 이미지 미리보기를 초기화
+    uploadedImagesDiv.innerHTML = '';
+    
+    let isFileSelected = files.length > 0;
+
+    if (isFileSelected) {
+        const formData = new FormData();
+
+        // 새로 선택한 파일만 미리보기 생성
+        Array.from(files).forEach(file => {
+            if (!checkFile(file.name, file.size)) {
+                return; // 파일 검증 실패 시 종료
+            }
+//            uploadFile = file;
+            formData.append('uploadFile', file);
+
+            // 이미지 미리보기 생성
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.createElement('img');
+                img.src = e.target.result; // 파일의 Data URL
+                img.style.width = '300px'; // 이미지 크기 조절
+                img.style.marginRight = '10px'; // 간격 조정
+                uploadedImagesDiv.appendChild(img); // 미리보기 div에 추가
+            };
+            reader.readAsDataURL(file); // 파일을 Data URL로 읽기
+        });
+
+        // AJAX 요청을 보내기 전에 FormData 확인
+        console.log(...formData.entries()); // FormData 내용 확인
+        
+        // 파일 업로드 함수 호출
+//        uploadFiles(formData); // 선택된 파일들 업로드 함수 호출
+    } else {
+    	console.error('파일이 선택되지 않았습니다.');
+    }
+});
+
+// 파일 검증
+// const regex = new RegExp("(.*?)\\.(exe|sh|zip|alz)$");
+// 이미지인것만 올릴 수 있도록 변경
+const regex = new RegExp("(.*?)\\.(jpg|jpeg|png|gif)$");
+const MAX_SIZE = 5242880; // 5MB
+
+function checkFile(fileName, fileSize) {
+  if (fileSize >= MAX_SIZE) {
+      alert("파일 사이즈가 너무 큽니다.");
+      return false;
+  }
+  if (!regex.test(fileName)) {
+      alert("잘못된 파일 확장자입니다.");
+      return false;
+  }
+  return true;
+}
+
+ 
+// 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
+document.querySelector('#popUpimg').addEventListener('click', function() {
+	document.querySelector('#imageFile').click(); // 클릭 시 파일 선택 창 열기
+});
+
+// 팝업 스토어 등록 버튼 클릭 이벤트
+function popStoreRegister(e){
+	const form = document.forms[0];
+	
+    // 여기서부터 if까지는 파일 존재하고 잘 넘어가는지 확인하는 코드이므로
+    // 지워도 됨
+	const formData = new FormData(form);
+	const fileInput = formData.get('imageFile');
+	
+	// 파일 존재 등을 판단하는 방법
+	console.log(form.imageFile.files);
+	console.log(formData.has('imageFile'));
+	console.log(fileInput);
+	console.log(fileInput.size);
+	
+	// 파일이 선택되지 않았을 시 경고창 출력
+	if(fileInput.size === 0){
+		alert('대표 이미지를 선택하십시오.');
+		return;
+	}
+	
+	// 추가적인 다른 입력 내용들 예외 처리 필요****
+
+
+	form.submit();
+}
+
+
 // 에러 발생 중이라 주석 처리
 // AdminController의 psRegister로 전송
 //document.getElementById('psRegisterBtn').addEventListener('click', popStoreRegister);
@@ -281,58 +376,6 @@
 //}
 
 //
-// 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
-//document.querySelector('#popUpimg').addEventListener('click', function() {
-//	document.querySelector('#imageFile').click(); // 클릭 시 파일 선택 창 열기
-//});
-
-// 파일 미리보기
-//document.querySelector('#imageFile').addEventListener('input', function(event) {
-//    const files = event.target.files;
-//    const uploadedImagesDiv = document.getElementById('uploadedImages');
-//
-//    // 기존의 이미지 미리보기를 초기화
-//    uploadedImagesDiv.innerHTML = '';
-//    
-//    let isFileSelected = files.length > 0;
-//
-//    if (isFileSelected) {
-//        const formData = new FormData();
-//
-//        // 새로 선택한 파일만 미리보기 생성
-//        Array.from(files).forEach(file => {
-//            if (!checkFile(file.name, file.size)) {
-//                return; // 파일 검증 실패 시 종료
-//            }
-////            uploadFile = file;
-//            formData.append('uploadFile', file);
-//
-//            // 이미지 미리보기 생성
-//            const reader = new FileReader();
-//            reader.onload = function(e) {
-//                const img = document.createElement('img');
-//                img.src = e.target.result; // 파일의 Data URL
-//                img.style.width = '300px'; // 이미지 크기 조절
-//                img.style.marginRight = '10px'; // 간격 조정
-//                uploadedImagesDiv.appendChild(img); // 미리보기 div에 추가
-//            };
-//            reader.readAsDataURL(file); // 파일을 Data URL로 읽기
-//        });
-//
-//        // AJAX 요청을 보내기 전에 FormData 확인
-//        console.log(...formData.entries()); // FormData 내용 확인
-//        
-//        // 파일 업로드 함수 호출
-////        uploadFiles(formData); // 선택된 파일들 업로드 함수 호출
-//    } else {
-//    	console.error('파일이 선택되지 않았습니다.');
-//    }
-//});
-
-// 업로드된 이미지 클릭 시 파일 선택 창 열기
-//document.getElementById('uploadedImages').addEventListener('click', function() {
-//    document.querySelector('#imageFile').click(); // 클릭 시 파일 선택 창 열기
-//});
 
 // 파일 업로드 함수
 //function uploadFiles(formData) {
@@ -357,21 +400,6 @@
 //    });
 //}
 
-// 파일 검증
-//const regex = new RegExp("(.*?)\\.(exe|sh|zip|alz)$");
-//const MAX_SIZE = 5242880; // 5MB
-//
-//function checkFile(fileName, fileSize) {
-//    if (fileSize >= MAX_SIZE) {
-//        alert("파일 사이즈가 너무 큽니다.");
-//        return false;
-//    }
-//    if (regex.test(fileName)) {
-//        alert("잘못된 파일 확장자입니다.");
-//        return false;
-//    }
-//    return true;
-//}
 
 //**** 팝업스토어 수정/삭제 페이지 영역 ****
 // 에러 발생 중이라 주석 처리

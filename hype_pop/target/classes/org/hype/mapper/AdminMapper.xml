@@ -95,11 +95,25 @@
 	    SELECT COUNT(*) FROM sign_in_info_tbl 
 	</select>
     
-	<select id="getQList" resultType="org.hype.domain.qnaVO">
+ 	<select id="getQList" resultType="org.hype.domain.qnaVO">
 	    SELECT *
 		FROM qna_tbl
 		ORDER BY qnaNo ASC
-	</select>   
+	</select>  
+	
+	<!-- 필터링된 Q&A 리스트 가져오기 -->
+<!--     <select id="getFilteredQnaList" parameterType="map" resultType="org.hype.domain.qnaVO">
+        SELECT *
+        FROM qna_tbl
+        WHERE 1=1
+        <if test="qnaType != null and qnaType != ''">
+            AND qnaType = #{qnaType}
+        </if>
+        <if test="answerStatus != null">
+            AND qnaAnswer = #{answerStatus}
+        </if>
+        ORDER BY qnaNo ASC
+    </select> -->
 	
 	<select id="getPopStoreById" parameterType="int" resultType="org.hype.domain.popStoreVO">
    		SELECT psNo, psName, psStartDate, psEndDate FROM pop_main_tbl WHERE psNo = #{psNo}
@@ -110,18 +124,13 @@
 	</select>
 	
 	<select id="getMembersById" parameterType="String" resultType="org.hype.domain.signInVO">
-   		SELECT userNo, userId, userEmail, lastLoginDate, enabled, auth FROM sign_in_info_tbl WHERE userNo = #{userNo}
+   		SELECT userNo, userId, userName, userNumber, regDate, userEmail, lastLoginDate, enabled, auth 
+   		FROM sign_in_info_tbl 
+   		WHERE userNo = #{userNo}
 	</select>
 	
 	
 	<!-- 회원 정보 수정페이지 -->
-	<!-- 회원 정보 리스트 출력 -->
-<!-- 	<select id="updateMList" resultType="org.hype.domain.signInVO">
-		SELECT userId, userName, userEmail, userNumber, regDate, lastLoginDate, enabled, auth
-		FROM sign_in_info_tbl
-		WHERE userId = #{userId}
-	</select> -->
-	
 	<update id="updateMem" parameterType="org.hype.domain.signInVO">
 		UPDATE sign_in_info_tbl
 		SET 
@@ -130,7 +139,8 @@
 			userEmail = #{userEmail},
 			userNumber = #{userNumber},					
 			enabled = #{enabled},			
-			auth = #{auth}	
+			auth = #{auth},
+        	lastLoginDate = #{lastLoginDate}
 		WHERE 
 			userNo = #{userNo}
 	</update>

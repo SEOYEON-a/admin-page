@@ -1,6 +1,7 @@
 package org.hype.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
@@ -17,7 +18,10 @@ public interface AdminMapper {
 	public int getGTotal(String searchGs);
 	public List<signInVO> getMList(@Param("cri") Criteria cri, @Param("searchMs") String searchMs);  // 관리자 회원 리스트 가져오기
 	public int getMTotal(String searchMs);
-	public List<qnaVO> getQList();  // 관리자 문의 리스트 가져오기 (페이징X)
+	public List<qnaVO> getQList();  // 관리자 문의 리스트 가져오기 (페이징X) 체크박스만 적용
+//	public List<qnaVO> getFilteredQList(Map<String, Object> params);
+	
+	
 //	public List<qnaVO> getQList(@Param("cri") Criteria cri, @Param("qnaType") String qnaType);  // 페이징O
 //	public int getQTotal(@Param("qnaType") String qnaType);
 	

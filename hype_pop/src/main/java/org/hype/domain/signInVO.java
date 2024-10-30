@@ -21,7 +21,6 @@ public class signInVO {
    private String userNumber; // 전화번호
    private Date regDate; // 가입일
    private Date lastLoginDate; // 마지막 로그인 날짜
-   private int enabled; // 계정 활성화 여부
    private int auth; // 권한
    private String snsToken; // Access Token
    private String snsType; // sns 종류
