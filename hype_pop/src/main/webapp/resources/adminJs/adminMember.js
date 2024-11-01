@@ -52,7 +52,7 @@ function updateMemberList() {
         }
     });
 //    new FormData(form).forEach((value, key) => (formDataObj[key] = value));  // 날짜 없을 때 
-    console.log("formData를 출력합니다 : " + JSON.stringify(formDataObj));
+//    console.log("formData를 출력합니다 : " + JSON.stringify(formDataObj));
 
     fetch("/admin/mUpdate", {
         method: "POST",
@@ -64,11 +64,13 @@ function updateMemberList() {
     })
     .then(response => {
         if (!response.ok) {
+        	console.log("서버오류입니다!");
             throw new Error('서버 오류: ' + response.statusText);
         }
         return response.json();
     })
     .then(data => {
+    	console.log("성공햇나요?!");
         if (data.status === "success") {
             alert("멤버 정보가 성공적으로 업데이트되었습니다!");
              window.location.href = "/admin/adminPage";  // 수정 완료 후 이동
@@ -87,22 +89,22 @@ function backtoMList() {
 	window.location.href = "/admin/adminPage";  // 수정 완료 후 이동	
 }
 
-function hideMemInfo() {
-    // 폼 숨기기
-    const form = document.querySelector('#memberForm'); // 특정 ID로 폼 선택
-    if (form) {
-        form.style.display = 'none'; // 폼 숨기기
-    }
-
-    // 버튼 숨기기
-    const cancelButton = document.querySelector('#mCancel'); // 취소 버튼 선택
-    const updateButton = document.querySelector('#mUpdate'); // 수정 완료 버튼 선택
-
-    if (cancelButton) {
-        cancelButton.style.display = 'none'; // 취소 버튼 숨기기
-    }
-
-    if (updateButton) {
-        updateButton.style.display = 'none'; // 수정 완료 버튼 숨기기
-    }
-}
+//function hideMemInfo() {
+//    // 폼 숨기기
+//    const form = document.querySelector('#memberForm'); // 특정 ID로 폼 선택
+//    if (form) {
+//        form.style.display = 'none'; // 폼 숨기기
+//    }
+//
+//    // 버튼 숨기기
+//    const cancelButton = document.querySelector('#mCancel'); // 취소 버튼 선택
+//    const updateButton = document.querySelector('#mUpdate'); // 수정 완료 버튼 선택
+//
+//    if (cancelButton) {
+//        cancelButton.style.display = 'none'; // 취소 버튼 숨기기
+//    }
+//
+//    if (updateButton) {
+//        updateButton.style.display = 'none'; // 수정 완료 버튼 숨기기
+//    }
+//}

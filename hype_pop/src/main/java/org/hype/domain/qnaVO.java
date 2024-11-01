@@ -21,5 +21,5 @@ public class qnaVO {
    private Date qnaRegDate; //  문의 날짜
    private String qnaAnswer; //  문의 답변
    
-   private Boolean answerStatus; // 답변 상태 추가
+//   private String answerStatus; // 답변 상태 추가 
 }

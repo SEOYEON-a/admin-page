@@ -146,6 +146,5 @@ input[type="text"], input[type="file"] {
     <button type="button" id="psUpdate" >수정완료</button>
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
-<script type="text/javascript" src="/resources/adminJs/adminPopUp.js"></script>
 </body>
 </html>

@@ -3,6 +3,8 @@ package org.hype.domain;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,15 +16,17 @@ import lombok.Setter;
 @Setter
 public class goodsVO {
 	
-	private int gNo; 
-	private int psNo; 
-	private String gName; 
-	private gCatVO gCat; 
-	private int gPrice; 
-	private String gExp; 
-	private List<gImgVO> gImg; 
-	private int gHit; 
+	private int gno; 
+	private int psno; 
+	private int gprice; 
+	private int ghit; 
 	private int likeCount; 
+	private int replycnt;
+	private String gname; 
+	private String gexp; 
+	private gCatVO gcat; 
+	private List<gImgVO> attachList; 
 	private Date sellDate; 
-	private int replyCount;
+	
+	private List<MultipartFile> imageFiles;
 }

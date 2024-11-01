@@ -22,9 +22,6 @@ public class PopUpMapperTest {
 	PopUpMapper mapper;
 	
 	@Autowired
-	public AttachMapper amapper;
-	
-	@Autowired
 	public PopUpService service;
 	
 //	@Test

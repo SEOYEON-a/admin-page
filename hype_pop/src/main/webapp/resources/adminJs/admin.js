@@ -122,7 +122,7 @@ function loadPopUpStores(page = 1) {
 
 // 팝업스토어 관리하기 버튼 클릭 시 팝업 스토어 리스트 영역 출력
 function PopUpStoreLists(popUpStores) {
-	console.log('PopUpStoreLists called with:', popUpStores);
+//	console.log('PopUpStoreLists called with:', popUpStores);
     const popSList = document.querySelector('#AllList');
     const adminMain = document.querySelector('.adminMain');
     popSList.innerHTML = '';
@@ -491,4 +491,3 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('registerBtn 요소가 DOM에 없습니다.');
     }
 });
-

@@ -151,7 +151,7 @@ button:hover {
 	
 	<form id="memberForm" method="POST">
 		<input type="text" name="userNo" value="${svo.userNo}" readonly>
-		<div id="mId">회원 아이디 <input type="text" name="userId" value="${svo.userId}"></div>
+		<div id="mId">회원 아이디 <input type="text" name="userId" value="${svo.userId}" readonly></div>
 		<div id="mName">회원 이름 <input type="text" name="userName" value="${svo.userName}"></div>
 		<div id="mEmail">회원 이메일 <input type="text" name="userEmail" value="${svo.userEmail}"></div>
 		<div id="mPhone">회원 전화번호 <input type="number" name="userNumber" value="${svo.userNumber}"></div>

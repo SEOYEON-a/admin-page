@@ -37,6 +37,13 @@ input[type="text"], select {
     box-sizing: border-box; /* 패딩과 테두리 포함 */
 }
 
+input[type="date"] {
+	padding: 10px; /* 내부 여백 */
+    border: 1px solid #ced4da; /* 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    box-sizing: border-box; /* 패딩과 테두리 포함 */
+}
+
 #adminSearchBox {
     width: auto; /* 자동 너비 조정 */
     margin: 20px 10px 10px; /* 위쪽 여백 추가 */
@@ -58,11 +65,9 @@ input[type="text"], select {
 }
 
 #uploadedImages {
-    margin-top: 10px; /* 상단 여백 */
-    min-height: 50px; /* 최소 높이 */
-    border: 1px dashed #ced4da; /* 점선 테두리 */
+    margin-top: 5px; /* 상단 여백 */
+    min-height: 70px; /* 최소 높이 */    
     padding: 10px; /* 내부 여백 */
-    border-radius: 5px; /* 모서리 둥글게 */
 }
 
 button {
@@ -89,7 +94,7 @@ button:hover {
 	
 	<div id="AllList"></div>
 	
-	<form id="registerForm" method="POST" action="/admin/psRegister" enctype="multipart/form-data">
+	<form id="psRegisterForm" method="POST" action="/admin/psRegister" enctype="multipart/form-data">
 	    <div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
 	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
 	    <div id="uploadedImages"></div>
@@ -97,7 +102,7 @@ button:hover {
 	    <div id="psLatitude">위도 <input type="text" name="latitude"></div>
 	    <div id="psLongitude">경도 <input type="text" name="longitude"></div>
 	    
-	    <div id="storeName">팝업스토어 이름 <input type="text" name="psName" value="테스트 등록 팝업스토어"></div>
+	    <div id="storeName">팝업스토어 이름 <input type="text" name="psName"></div>
 	    <div id="cats">팝업스토어 카테고리
           <div>
              <input type="checkbox" name="psCat.healthBeauty" value="1">헬스/뷰티
@@ -116,15 +121,15 @@ button:hover {
              <input type="checkbox" name="psCat.entertainment" value="1">방송
           </div>
       </div>
-	    <div id="startDate">시작일 <input type="date" name="psStartDate"></div>
-	    <div id="endDate">종료일 <input type="date" name="psEndDate"></div>
+	    <div id="startDate">시작일 <br><input type="date" name="psStartDate"></div>
+	    <div id="endDate">종료일 <br><input type="date" name="psEndDate"></div>
 	    
-	    <div id="address">주소 <input type="text" name="psAddress" value="서울시 어딘가"></div>
-	    <div id="snsAddress">SNS 주소 <input type="text" name="snsAd" value="https://www.instagram.com/insertTest"></div>
-	    <div id="company">주최사 정보 <input type="text" name="comInfo" value="주최사 정보"></div>
-	    <div id="transfer">교통편 <input type="text" name="transInfo" value="가는 방법"></div>
-	    <div id="parking">주차장 정보 <input type="text" name="parkingInfo" value="주차 불가"></div>
-	    <div id="storeExp">설명글 <input type="text" name="psExp" value="설명글"></div>
+	    <div id="address">주소 <input type="text" name="psAddress" ></div>
+	    <div id="snsAddress">SNS 주소 <input type="text" name="snsAd"></div>
+	    <div id="company">주최사 정보 <input type="text" name="comInfo"></div>
+	    <div id="transfer">교통편 <input type="text" name="transInfo"></div>
+	    <div id="parking">주차장 정보 <input type="text" name="parkingInfo"></div>
+	    <div id="storeExp">설명글 <input type="text" name="psExp"></div>
 	    
         <button type="button" id="psRegisterBtn" onclick="popStoreRegister();">등록하기</button>
 	</form>	
