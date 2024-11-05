@@ -45,7 +45,6 @@ public interface AdminService {
 	// 굿즈 insert
 	public int insertGoodsStore(goodsVO gvo);
 	
-	
 	// 문의 리스트 확인 페이지 영역
 	// 문의 리스트 가져오기	
 	public List<qnaVO> getQnaListByType(String qnaType, String qnaAnswer);

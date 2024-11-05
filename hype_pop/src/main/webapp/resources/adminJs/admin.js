@@ -458,7 +458,7 @@ if(goodsState !== null){
 	}	
 }
 
-// 등록하기 버튼 클릭 시 페이지 이동 함수
+// 등록 버튼 클릭 시 페이지 이동 함수
 function goToPage(url) {
 	window.location.href = url;
 }
@@ -473,6 +473,14 @@ if(registerBtn != null){
 			goToPage('/admin/goodsRegister'); // 쇼핑몰 관리 탭에서 버튼 클릭 시 상품(굿즈) 등록 페이지로 이동 (컨트롤러 경로)
 		}	
 	});	
+}
+
+// 전시회 등록하기 버튼 클릭 시 이동
+const registerExBtn = document.querySelector('#registerExBtn');
+if (registerExBtn) {
+    registerExBtn.addEventListener('click', () => {
+        goToPage('/admin/exhRegister'); // 전시회 등록 페이지로 이동
+    });
 }
 
 // AdminController의 (/admin)에서만 등록하기 버튼 보이기

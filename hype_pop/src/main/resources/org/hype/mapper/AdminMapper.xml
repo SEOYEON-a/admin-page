@@ -114,8 +114,7 @@
    		SELECT userNo, userId, userName, userNumber, regDate, userEmail, lastLoginDate, enabled, auth 
    		FROM sign_in_info_tbl 
    		WHERE userNo = #{userNo}
-	</select>
-	
+	</select>	
 	
 	<!-- 팝업스토어 등록하기 페이지 -->	
 	<insert id="insertPopStore" parameterType="org.hype.domain.popStoreVO">
@@ -157,14 +156,15 @@
 	    INSERT INTO goods_info_tbl 
 	    (gno, psno, gname, gprice, sellDate, gexp)
 	    VALUES 
-	    (#{gno}, 999, #{gname}, #{gprice}, #{sellDate}, #{gexp})
+	    (#{gno}, #{psno}, #{gname}, #{gprice}, #{sellDate}, #{gexp})
 	</insert>
 	
-	<insert id="insertGImage" parameterType="org.hype.domain.gImgVO">
+	<insert id="insertBannerImage" parameterType="org.hype.domain.gImgVO">
 	    INSERT INTO goods_banner_img_tbl (gno, uuid, uploadPath, filename) 
 	    VALUES (#{gno}, #{uuid}, #{uploadPath}, #{fileName})
 	</insert>
-	<insert id="insertGImage2" parameterType="org.hype.domain.gImgVO">
+	
+	<insert id="insertDetailImage" parameterType="org.hype.domain.gImgVO">
 	    INSERT INTO goods_detail_img_tbl  (gno, uuid, uploadPath, filename) 
 	    VALUES (#{gno}, #{uuid}, #{uploadPath}, #{fileName})
 	</insert>

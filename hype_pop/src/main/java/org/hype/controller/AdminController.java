@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -241,11 +242,18 @@ public class AdminController {
 		return "admin/goodsState"; // JSP 파일 경로
 	}
 	
+	
 	// 등록하기 버튼 클릭 시 이동
 	@GetMapping("/popUpRegister")
     public String popUpRegister() {
         return "admin/popUpRegister"; 
     }
+	
+	// 전시회 등록하기 버튼 클릭 시 이동
+	@GetMapping("/exhRegister")
+	public String exhRegister() {
+		return "admin/exhRegister"; 
+	}
 
 	// 상품(굿즈) 등록 페이지에서
 	// 셀렉트 박스 팝업스토어 리스트 출력
@@ -253,7 +261,7 @@ public class AdminController {
     public String goodsRegister(Model model) {
     	List<popStoreVO> popStores = aservice.getAllPopStores(); // 서비스에서 모든 팝업스토어를 가져옴
     	model.addAttribute("popStores", popStores); // 모델에 추가
-    	log.warn("모든 팝업스토어 전부 다 가져오나요?? " + model);
+//    	log.warn("모든 팝업스토어 전부 다 가져오나요?? " + model);
     	return "admin/goodsRegister"; // JSP 페이지로 이동
     }    
     
@@ -330,7 +338,6 @@ public class AdminController {
     }
     
     // *** 상품(굿즈) 등록 페이지 ***
-
     @InitBinder("goodsVO")
     public void initBinder2 (WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -340,68 +347,78 @@ public class AdminController {
         binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
     }
       	
+    
     @PostMapping("/gRegister")
     public String registerGoodsStore(@ModelAttribute goodsVO gvo) {
-        log.warn("registerGoodsStore......");
-
+    	
+    	log.info(gvo.getGname());
+    	log.info(gvo.getGexp());
+    	log.info(gvo.getPsno());
+    	log.info(gvo.getGprice());
+    	log.info(gvo.getImageFiles().get(0).getOriginalFilename());
+    	log.info(gvo.getImageFiles().get(1).getOriginalFilename());
+        
         // 이미지 등록 처리 로직
         if (gvo.getImageFiles() != null && !gvo.getImageFiles().isEmpty()) {
             log.info("Image file upload process started...");
 
-            // 두 개의 경로 설정
+            // 배너와 상세 이미지 경로
             String bannerUploadPath = "\\\\192.168.0.129\\storeGoodsImg\\굿즈 배너 사진";
             String detailUploadPath = "\\\\192.168.0.129\\storeGoodsImg\\굿즈 상세 사진";
 
-            for (MultipartFile multipartFile : gvo.getImageFiles()) {
+            List<gImgVO> attachList = new ArrayList<gImgVO>();
+            // 이미지 파일을 순회하며 처리
+            for (int i = 0; i < gvo.getImageFiles().size(); i++) {
+                MultipartFile multipartFile = gvo.getImageFiles().get(i);
                 if (!multipartFile.isEmpty()) {
-                    String originalFileName = multipartFile.getOriginalFilename();
-                    String uploadFileName = originalFileName.substring(originalFileName.lastIndexOf("\\") + 1);
-
-                    UUID uuid = UUID.randomUUID();
-                    uploadFileName = uuid.toString() + "_" + uploadFileName;
-
-                    // 업로드할 경로 선택 (여기서는 배너와 상세를 구분하는 조건 추가)
-                    String uploadPath;
-                    if (isBannerImage(originalFileName)) { // 배너 이미지인지 확인하는 메소드
-                        uploadPath = bannerUploadPath;
-                    } else {
-                        uploadPath = detailUploadPath;
-                    }
-
                     try {
+                        String originalFileName = multipartFile.getOriginalFilename();
+                        String uploadFileName = originalFileName.substring(originalFileName.lastIndexOf("\\") + 1);
+                        
+                        UUID uuid = UUID.randomUUID();
+                        uploadFileName = uuid.toString() + "_" + uploadFileName;
+
+                        // 배너/상세 이미지 선택: 첫 번째는 배너, 두 번째는 상세
+                        String uploadPath = (i == 0) ? bannerUploadPath : detailUploadPath;
+
+                        log.info("1");
                         // 이미지 파일을 지정된 경로에 저장
                         File saveFile = new File(uploadPath, uploadFileName);
                         multipartFile.transferTo(saveFile);
 
-                        // gImgVO 객체 생성하여 attachList에 추가
+                        log.info("2");
+                        
+                        
+                        // gImgVO 생성 후 attachList에 추가
                         gImgVO gImgVo = new gImgVO();
                         gImgVo.setUuid(uuid.toString());
                         gImgVo.setUploadPath(uploadPath);
-                        gImgVo.setFilename(originalFileName);
+                        gImgVo.setFileName(originalFileName);                 
+                        
+                        attachList.add(gImgVo);
 
-                        gvo.getAttachList().add(gImgVo); // attachList에 추가
                     } catch (Exception e) {
-                        log.error("Image upload failed: " + e.getMessage());
+                        log.error("Image upload failed for file: " + multipartFile.getOriginalFilename());
                     }
                 }
             }
-
-            // DB에 상품 등록
-            int result = aservice.insertGoodsStore(gvo);
-            log.info("Goods registered with result: " + result);
+            
+            gvo.setAttachList(attachList);
+            
+            for(int i=0; i<gvo.getAttachList().size(); i++) {
+            	 // DB에 상품 등록
+                log.info("--------------------------------");
+                log.info(gvo.getAttachList().get(i).getFileName());
+                log.info(gvo.getAttachList().get(i).getUploadPath());
+                log.info(gvo.getAttachList().get(i).getUuid());	
+                int result = aservice.insertGoodsStore(gvo);
+                log.info("Goods registered with result: " + result);
+            }
+            
         }
 
-        return "redirect:/admin/adminPage";
+        return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션
     }
-
-    // 배너 이미지인지 확인하는 메소드
-    private boolean isBannerImage(String fileName) {
-        // 여기에 배너 이미지 파일명 또는 확장자 확인 로직을 추가합니다.
-        // 예시: "banner"라는 단어가 포함되어 있는지 확인
-        return fileName.toLowerCase().contains("banner");
-    }
-
-
     
     // *** 문의 리스트 확인 페이지 ***
 	// 문의 리스트 출력

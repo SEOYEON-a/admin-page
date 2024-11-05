@@ -116,22 +116,30 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public int insertGoodsStore(goodsVO gvo) {
 	    // 1. 상품 등록
+		log.warn("파일이름 가져오기 " + gvo.getAttachList().get(0).getFileName());
+		log.warn(gvo.getAttachList().get(1).getFileName());
 	    int result1 = mapper.insertGoodsStore(gvo);
-	    
-	    // gno를 각 이미지에 설정
-	    if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
-	        for (gImgVO img : gvo.getAttachList()) {
-	            img.setGno(gvo.getGno()); // gno 설정
-	            log.warn("gno 설정: " + gvo.getGno());
-	            int result2 = mapper.insertGImage(img); // 각 이미지 등록
-	            log.warn("insertGImage 결과: " + result2);
-	            if (result2 <= 0) {
-	                throw new RuntimeException("이미지 등록 실패: " + img.getFilename());
+	    log.warn("상품 등록 결과: " + result1);
+
+	    if (result1 > 0) {
+
+	    	for (gImgVO img : gvo.getAttachList()) {
+	            img.setGno(gvo.getGno()); // gno를 각 이미지에 설정
+	            // 배너 이미지 등록
+	            if (img.getUploadPath().contains("굿즈 배너 사진")) {
+	                int result2 = mapper.insertBannerImage(img);
+	                log.warn("배너 이미지 등록 결과: " + result2);
+	            }
+	            // 상세 이미지 등록
+	            else if (img.getUploadPath().contains("굿즈 상세 사진")) {
+	                int result3 = mapper.insertDetailImage(img);
+	                log.warn("상세 이미지 등록 결과: " + result3);
 	            }
 	        }
+	    } else {
+	        throw new RuntimeException("상품 등록 실패");
 	    }
 
-	    log.warn("result1의 값은 " + result1);
 	    return result1;
 	}
 

@@ -43,13 +43,14 @@ public interface AdminMapper {
 	// 굿즈 등록하기
 	public List<popStoreVO> getAllPopStores();	
 	public int insertGoodsStore(goodsVO gvo);
-	public int insertGImage(gImgVO gImgVo);  // 이미지 등록
+	public int insertBannerImage(gImgVO gImgVo);  // 배너 이미지 등록
+	public int insertDetailImage(gImgVO gImgVo);  // 상세 이미지 등록
 	
 	
 	// 관리자 문의 리스트 가져오기	
 	public List<qnaVO> getQnaListByType(@Param("qnaType") String qnaType, @Param("qnaAnswer") String qnaAnswer); 	
 //	public List<qnaVO> getQList(@Param("cri") Criteria cri, @Param("qnaType") String qnaType);  // 페이징O
-//	public int getQTotal(@Param("qnaType") String qnaType);
+//	public int getQTotal(String qnaType);
 	
 	// 상품 상태 조회 리스트 가져오기
 //	public int updatePurchaseList(payVO pvo);  

@@ -95,37 +95,37 @@ button:hover {
 	
 	<div id="AllList"></div>
 	
-	<select id="storeList" onchange="setStorePsNo()">
+	<select id="exhList" onchange="setExhNo()">
         <option value="전체">전체</option>
-	    <c:forEach var="store" items="${popStores}">
-	        <option value="${store.psName}" data-psno="${store.psNo}">${store.psName}</option>
+	    <c:forEach var="exh" items="${exhibitions}">
+	        <option value="${exh.exhName}" data-psno="${exh.exhNo}">${exh.exhName}</option>
 	    </c:forEach>
     </select>
         
-	<form id="gRegisterForm" method="POST" action="/admin/gRegister" enctype="multipart/form-data">
-	    <div id="gBannerImg" style="cursor: pointer;">상품 배너 이미지</div>
-        <input type="file" id="gBannerImageFile" name="imageFiles[0]" style="display: none;">
-        <div id="uploadedBannerImages"></div>
+	<form id="eRegisterForm" method="POST" action="/admin/exhRegister" enctype="multipart/form-data">
+	    <div id="eBannerImg" style="cursor: pointer;">전시회 배너 이미지</div>
+        <input type="file" id="eBannerImageFile" name="exImageFiles[0]" style="display: none;">
+        <div id="uploadedExBannerImages"></div>
         
-	    <div id="gDetailImg" style="cursor: pointer;">상품 상세 이미지</div>
-        <input type="file" id="gDetailImageFile" name="imageFiles[1]" style="display: none;">
-        <div id="uploadedDetailImages"></div>
+	    <div id="eDetailImg" style="cursor: pointer;">전시회 상세 이미지</div>
+        <input type="file" id="eDetailImageFile" name="exImageFiles[1]" style="display: none;">
+        <div id="uploadedExDetailImages"></div>
 	    
-	    <div id="pName">팝업스토어 번호 <input type="text" name="psno" readonly></div>
-	    <div id="gName">상품 이름 <input type="text" name="gname"></div>
-	    <div id="gPrice">상품 가격 <input type="text" name="gprice"></div>
+	    <div id="eName">전시회 번호 <input type="text" name="psno" readonly></div>
+	    <div id="eName">전시회 이름 <input type="text" name="gname"></div>
+	    <div id="ePrice">전시회 가격 <input type="text" name="gprice"></div>
 	    
-	    <div id="gEndDate">상품 판매 종료일 <br>
-	    	<input type="date" name="sellDate">
+	    <div id="exhEndDate">전시회 종료일 <br>
+	    	<input type="date" name="endDate">
 	    </div>
-	    <div id="storeExp">설명글 <input type="text" name="gexp"></div>
+	    <div id="exhExp">설명글 <input type="text" name="gexp"></div>
 	    
-        <button type="button" id="gRegisterBtn" onclick="goodsRegister();">등록하기</button>
+        <button type="button" id="eRegisterBtn" onclick="exhRegister();">등록하기</button>
 	</form>	
 	
 	<div id="pagination"></div>
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
-<script type="text/javascript" src="/resources/adminJs/adminGoods.js"></script>  
+<script type="text/javascript" src="/resources/adminJs/adminExhibit.js"></script>  
 </body>
 </html>
