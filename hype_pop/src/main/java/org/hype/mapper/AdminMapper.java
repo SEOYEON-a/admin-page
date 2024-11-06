@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
+import org.hype.domain.exhImgVO;
+import org.hype.domain.exhVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pCatVO;
@@ -41,10 +43,15 @@ public interface AdminMapper {
 	public int insertPsCat(pCatVO cvo);  // 카테고리 등록
 	
 	// 굿즈 등록하기
-	public List<popStoreVO> getAllPopStores();	
+	public List<popStoreVO> getAllPopStores();	  // select box 모든 팝업스토어 출력
 	public int insertGoodsStore(goodsVO gvo);
 	public int insertBannerImage(gImgVO gImgVo);  // 배너 이미지 등록
 	public int insertDetailImage(gImgVO gImgVo);  // 상세 이미지 등록
+	
+	// 전시회 등록하기
+	public int insertExhibition(exhVO evo);
+	public int insertExhBannerImage(exhImgVO exhImgVo);  // 배너 이미지 등록
+	public int insertExhDetailImage(exhImgVO exhImgVo);  // 상세 이미지 등록
 	
 	
 	// 관리자 문의 리스트 가져오기	

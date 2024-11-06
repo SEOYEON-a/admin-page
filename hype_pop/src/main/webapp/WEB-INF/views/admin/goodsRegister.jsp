@@ -113,6 +113,24 @@ button:hover {
 	    
 	    <div id="pName">팝업스토어 번호 <input type="text" name="psno" readonly></div>
 	    <div id="gName">상품 이름 <input type="text" name="gname"></div>
+	    <div id="gCats">상품 카테고리
+          <div>
+             <input type="checkbox" name="gcat.healthBeauty" value="1">헬스/뷰티
+             <input type="checkbox" name="gcat.game" value="1">게임
+             <input type="checkbox" name="gcat.culture" value="1">문화
+             <input type="checkbox" name="gcat.shopping" value="1">쇼핑
+             <input type="checkbox" name="gcat.supply" value="1">문구
+             <input type="checkbox" name="gcat.kids" value="1">키즈
+             <input type="checkbox" name="gcat.design" value="1">디자인
+             <input type="checkbox" name="gcat.foods" value="1">식품
+             <input type="checkbox" name="gcat.interior" value="1">인테리어
+             <input type="checkbox" name="gcat.policy" value="1">정책
+             <input type="checkbox" name="gcat.character" value="1">캐릭터
+             <input type="checkbox" name="gcat.experience" value="1">체험
+             <input type="checkbox" name="gcat.collaboration" value="1">콜라보
+             <input type="checkbox" name="gcat.entertainment" value="1">방송
+          </div>
+      </div>
 	    <div id="gPrice">상품 가격 <input type="text" name="gprice"></div>
 	    
 	    <div id="gEndDate">상품 판매 종료일 <br>

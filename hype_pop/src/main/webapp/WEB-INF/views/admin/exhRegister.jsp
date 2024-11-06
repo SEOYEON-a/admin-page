@@ -94,33 +94,27 @@ button:hover {
 	<jsp:include page="layout/adminHeader.jsp"/>
 	
 	<div id="AllList"></div>
-	
-	<select id="exhList" onchange="setExhNo()">
-        <option value="전체">전체</option>
-	    <c:forEach var="exh" items="${exhibitions}">
-	        <option value="${exh.exhName}" data-psno="${exh.exhNo}">${exh.exhName}</option>
-	    </c:forEach>
-    </select>
         
-	<form id="eRegisterForm" method="POST" action="/admin/exhRegister" enctype="multipart/form-data">
-	    <div id="eBannerImg" style="cursor: pointer;">전시회 배너 이미지</div>
-        <input type="file" id="eBannerImageFile" name="exImageFiles[0]" style="display: none;">
+	<form id="exhRegisterForm" method="POST" action="/admin/eRegister" enctype="multipart/form-data">
+	    <div id="exhBannerImg" style="cursor: pointer;">전시회 배너 이미지</div>
+        <input type="file" id="exhBannerImageFile" name="imageExhFiles[0]" style="display: none;">
         <div id="uploadedExBannerImages"></div>
         
-	    <div id="eDetailImg" style="cursor: pointer;">전시회 상세 이미지</div>
-        <input type="file" id="eDetailImageFile" name="exImageFiles[1]" style="display: none;">
+	    <div id="exhDetailImg" style="cursor: pointer;">전시회 상세 이미지</div>
+        <input type="file" id="exhDetailImageFile" name="imageExhFiles[1]" style="display: none;">
         <div id="uploadedExDetailImages"></div>
 	    
-	    <div id="eName">전시회 번호 <input type="text" name="psno" readonly></div>
-	    <div id="eName">전시회 이름 <input type="text" name="gname"></div>
-	    <div id="ePrice">전시회 가격 <input type="text" name="gprice"></div>
+	    <div id="exhName">이름 <input type="text" name="exhName"></div>
+	    <div id="exhAddress">주소 <input type="text" name="exhLocation"></div>
+	    <div id="exhStartDate">시작일 <br><input type="date" name="exhStartDate"></div>
+	    <div id="exhEndDate">종료일 <br><input type="date" name="exhEndDate"></div>
+	    <div id="exhWatchTime">러닝타임 <input type="number" name="exhWatchTime"></div>
+	    <div id="exhWatchAge">연령가 <input type="text" name="exhWatchAge"></div>
+	    <div id="ePrice">가격 <input type="number" name="exhPrice"></div>
 	    
-	    <div id="exhEndDate">전시회 종료일 <br>
-	    	<input type="date" name="endDate">
-	    </div>
-	    <div id="exhExp">설명글 <input type="text" name="gexp"></div>
+	    <div id="exhExp">설명글 <input type="text" name="exhInfo"></div>
 	    
-        <button type="button" id="eRegisterBtn" onclick="exhRegister();">등록하기</button>
+        <button type="button" id="exhRegisterBtn" onclick="exhRegister();">등록하기</button>
 	</form>	
 	
 	<div id="pagination"></div>

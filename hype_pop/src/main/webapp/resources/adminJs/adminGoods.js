@@ -151,14 +151,29 @@ function goodsRegister() {
     const formData = new FormData(form);
 
     // 예외처리
+    // 체크박스
+    const checkboxes = form.querySelectorAll('input[type="checkbox"][name^="gcat"]');
+    const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
     
-    if (!form.imageFiles[0].value) {
+    const gBannerImageFile = document.getElementById('gBannerImageFile');
+    const gDetailImageFile = document.getElementById('gDetailImageFile');
+
+    
+    if (gBannerImageFile.files.length === 0) {
     	alert('상품 배너 이미지를 입력해주세요');
     	return;
     }
-    if (!form.imageFiles[1].value) {
+    if (gDetailImageFile.files.length === 0) {
     	alert('상품 상세 이미지를 입력해주세요');
     	return;
+    }
+    if (selectedCategories.length === 0) {
+        alert('최소 한 개의 카테고리를 선택해야 합니다.');
+        return;
+    }
+    if (selectedCategories.length > 3) {
+        alert('최대 세 개의 카테고리만 선택할 수 있습니다.');
+        return;
     }
     if (!form.gname.value) {
         alert('상품 이름을 입력해주세요');

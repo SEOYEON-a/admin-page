@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.List;
 
 import org.hype.domain.Criteria;
+import org.hype.domain.exhImgVO;
+import org.hype.domain.exhVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pImgVO;
@@ -142,7 +144,40 @@ public class AdminServiceImpl implements AdminService{
 
 	    return result1;
 	}
+	
+	// 전시회 등록 페이지 영역
+	// 전시회 정보 등록	
+	@Transactional
+	@Override
+	public int insertExhibition(exhVO evo) {
+	    // 1. 상품 등록
+		log.warn("파일이름 가져오기 " + evo.getAttachExhList().get(0).getFileName());
+		log.warn(evo.getAttachExhList().get(1).getFileName());
+	    int result1 = mapper.insertExhibition(evo);
+	    log.warn("전시회 등록 결과: " + result1);
 
+	    if (result1 > 0) {
+
+	    	for (exhImgVO exhImg : evo.getAttachExhList()) {
+	    		exhImg.setExhNo(evo.getExhNo()); // exhNo를 각 이미지에 설정
+	    		log.warn("전시회 번호 : " + evo.getExhNo());
+	            // 배너 이미지 등록
+	            if (exhImg.getUploadPath().contains("전시회 배너 사진")) {
+	                int result2 = mapper.insertExhBannerImage(exhImg);
+	                log.warn("배너 이미지 등록 결과: " + result2);
+	            }
+	            // 상세 이미지 등록
+	            else if (exhImg.getUploadPath().contains("전시회 상세 사진")) {
+	                int result3 = mapper.insertExhDetailImage(exhImg);
+	                log.warn("상세 이미지 등록 결과: " + result3);
+	            }
+	        }
+	    } else {
+	        throw new RuntimeException("전시회 등록 실패");
+	    }
+
+	    return result1;
+	}
 
 	// 문의 리스트 확인 페이지 영역
 	// 문의 리스트 가져오기

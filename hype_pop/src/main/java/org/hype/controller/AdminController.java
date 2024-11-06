@@ -12,6 +12,8 @@ import java.util.UUID;
 
 import org.hype.domain.Criteria;
 import org.hype.domain.PageDTO;
+import org.hype.domain.exhImgVO;
+import org.hype.domain.exhVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pImgVO;
@@ -345,8 +347,7 @@ public class AdminController {
         
         // java.sql.Date 변환을 위해 CustomDateEditor 사용
         binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
-    }
-      	
+    }      	
     
     @PostMapping("/gRegister")
     public String registerGoodsStore(@ModelAttribute goodsVO gvo) {
@@ -381,12 +382,9 @@ public class AdminController {
                         // 배너/상세 이미지 선택: 첫 번째는 배너, 두 번째는 상세
                         String uploadPath = (i == 0) ? bannerUploadPath : detailUploadPath;
 
-                        log.info("1");
                         // 이미지 파일을 지정된 경로에 저장
                         File saveFile = new File(uploadPath, uploadFileName);
                         multipartFile.transferTo(saveFile);
-
-                        log.info("2");
                         
                         
                         // gImgVO 생성 후 attachList에 추가
@@ -405,7 +403,7 @@ public class AdminController {
             
             gvo.setAttachList(attachList);
             
-            for(int i=0; i<gvo.getAttachList().size(); i++) {
+            for(int i = 0; i < gvo.getAttachList().size(); i++) {
             	 // DB에 상품 등록
                 log.info("--------------------------------");
                 log.info(gvo.getAttachList().get(i).getFileName());
@@ -415,6 +413,81 @@ public class AdminController {
                 log.info("Goods registered with result: " + result);
             }
             
+        }
+
+        return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션
+    }
+    
+	// *** 전시회 등록 페이지 ***
+    @InitBinder("exhVO")
+    public void initBinder3 (WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        
+        // java.sql.Date 변환을 위해 CustomDateEditor 사용
+        binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
+    }
+      	
+    
+    @PostMapping("/eRegister")
+    public String registerExhibition (@ModelAttribute exhVO evo) {
+
+    	log.info("전시회 배너 이미지 : " + evo.getImageExhFiles().get(0).getOriginalFilename());
+    	log.info(evo.getImageExhFiles().get(1).getOriginalFilename());
+    	log.info("전시회 이름 : " + evo.getExhName());
+    	log.info(evo.getExhLocation());
+    	log.info(evo.getExhStartDate());
+    	log.info(evo.getExhEndDate());
+    	log.info(evo.getExhWatchTime());
+    	log.info(evo.getExhPrice());
+    	log.info(evo.getExhInfo());
+    	log.info(evo.getExhNo());    	
+        
+        // 이미지 등록 처리 로직
+        if (evo.getImageExhFiles() != null && !evo.getImageExhFiles().isEmpty()) {
+            log.info("Image file upload process started...");
+
+            // 배너와 상세 이미지 경로
+            String exhBannerUploadPath = "\\\\192.168.0.129\\storeGoodsImg\\전시회 배너 사진";
+            String exhDetailUploadPath = "\\\\192.168.0.129\\storeGoodsImg\\전시회 상세 사진";
+
+            List<exhImgVO> attachExhList = new ArrayList<exhImgVO>();
+            
+            // 이미지 파일을 순회하며 처리
+            for (int i = 0; i < evo.getImageExhFiles().size(); i++) {
+                MultipartFile multipartFile = evo.getImageExhFiles().get(i);
+                if (!multipartFile.isEmpty()) {
+                    try {
+                        String originalFileName = multipartFile.getOriginalFilename();
+                        String uploadFileName = originalFileName.substring(originalFileName.lastIndexOf("\\") + 1);
+                        
+                        UUID uuid = UUID.randomUUID();
+                        uploadFileName = uuid.toString() + "_" + uploadFileName;
+
+                        // 배너/상세 이미지 선택: 첫 번째는 배너, 두 번째는 상세
+                        String uploadPath = (i == 0) ? exhBannerUploadPath : exhDetailUploadPath;
+
+                        // 이미지 파일을 지정된 경로에 저장
+                        File saveFile = new File(uploadPath, uploadFileName);
+                        multipartFile.transferTo(saveFile);                        
+                        
+                        // exhImgVO 생성 후 attachExhList에 추가
+                        exhImgVO exhImgVo = new exhImgVO();
+                        exhImgVo.setUuid(uuid.toString());
+                        exhImgVo.setUploadPath(uploadPath);
+                        exhImgVo.setFileName(originalFileName);                 
+                        
+                        attachExhList.add(exhImgVo);
+
+                    } catch (Exception e) {
+                        log.error("Image upload failed for file: " + multipartFile.getOriginalFilename());
+                    }
+                }
+            }
+            
+            evo.setAttachExhList(attachExhList);
+            
+            int result = aservice.insertExhibition(evo);
         }
 
         return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션

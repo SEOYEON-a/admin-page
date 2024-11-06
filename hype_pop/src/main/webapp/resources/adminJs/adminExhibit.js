@@ -1,17 +1,5 @@
 // *** 전시회 등록 페이지 영역 ***
-// 등록하기 버튼 클릭 시 전시회 등록
-// exhNo 가져오기
-//document.getElementById('exhList').addEventListener('change', setStorePsNo);
-//
-//function setExhNo() {
-//    const exhList = document.getElementById("exhList");
-//    const selectedOption = storeList.options[exhList.selectedIndex];
-//    console.log('모든 전시회 출력: ', selectedOption); // 선택된 psNo 출력
-//    const psNo = selectedOption.getAttribute("data-psno"); // data-psno 속성에서 psNo 가져오기
-//    console.log('선택된 psNo 출력: ', psNo); // 선택된 psNo 출력
-//    document.querySelector('input[name="psno"]').value = psNo;  // psNo를 readonly input에 설정
-//}
-
+// 등록하기 버튼 클릭 시 전시회 등록     
 // 파일 검증
 const regex = new RegExp("(.*?)\\.(jpg|jpeg|png|gif)$");
 const MAX_SIZE = 5242880; // 5MB
@@ -29,17 +17,17 @@ function checkFile(fileName, fileSize) {
 }
 
 // 배너 이미지 클릭 시 파일 선택
-document.querySelector('#eBannerImg').addEventListener('click', function() {
-    document.querySelector('#eBannerImageFile').click(); // 클릭 시 파일 선택 창 열기
+document.querySelector('#exhBannerImg').addEventListener('click', function() {
+    document.querySelector('#exhBannerImageFile').click(); // 클릭 시 파일 선택 창 열기
 });
 
 // 상세 이미지 클릭 시 파일 선택
-document.querySelector('#eDetailImg').addEventListener('click', function() {
-    document.querySelector('#eDetailImageFile').click(); // 클릭 시 파일 선택 창 열기
+document.querySelector('#exhDetailImg').addEventListener('click', function() {
+    document.querySelector('#exhDetailImageFile').click(); // 클릭 시 파일 선택 창 열기
 });
 
 // 배너 이미지 파일 미리보기 및 검증
-document.querySelector('#eBannerImageFile').addEventListener('input', function(event) {
+document.querySelector('#exhBannerImageFile').addEventListener('input', function(event) {
     const files = event.target.files;
     const uploadedExBannerImagesDiv = document.getElementById('uploadedExBannerImages');
 
@@ -66,7 +54,7 @@ document.querySelector('#eBannerImageFile').addEventListener('input', function(e
 });
 
 // 상세 이미지 파일 미리보기 및 검증
-document.querySelector('#eDetailImageFile').addEventListener('input', function(event) {
+document.querySelector('#exhDetailImageFile').addEventListener('input', function(event) {
     const files = event.target.files;
     const uploadedExDetailImagesDiv = document.getElementById('uploadedExDetailImages');
 
@@ -92,7 +80,7 @@ document.querySelector('#eDetailImageFile').addEventListener('input', function(e
     });
 });
 
-// 상품(굿즈) 등록 버튼 클릭 이벤트
+// 전시회 등록 버튼 클릭 이벤트
 function exhRegister() {
 	const form = document.forms[0];
 	
@@ -100,28 +88,54 @@ function exhRegister() {
     const formData = new FormData(form);
 
     // 예외처리
+    const exhBannerImageFile = document.getElementById('exhBannerImageFile');
+    const exhDetailImageFile = document.getElementById('exhDetailImageFile');
     
-    if (!form.imageFiles[0].value) {
+    let exhibitionInfo = document.querySelector("input[name='exhInfo']").value;
+    exhibitionInfo = exhibitionInfo.replace(/\n/g, "<br/>");
+
+    // 변환된 정보를 HTML에 삽입하거나, 필요한 경우 서버에 제출
+    document.getElementById("uploadedExBannerImages").innerHTML = exhibitionInfo;
+
+    formData.set("exhInfo", exhibitionInfo);
+    
+    if (exhBannerImageFile.files.length === 0) {
     	alert('전시회 배너 이미지를 입력해주세요');
     	return;
     }
-    if (!form.imageFiles[1].value) {
+    if (exhDetailImageFile.files.length === 0) {
     	alert('전시회 상세 이미지를 입력해주세요');
     	return;
     }
-    if (!form.gname.value) {
+    if (!form.exhName.value) {
         alert('전시회 이름을 입력해주세요');
         return;
     }
-    if (!form.gprice.value) {
-        alert('전시회 가격을 입력해주세요');
-        return;
+    if (!form.exhLocation.value) {
+    	alert('전시회 주소를 입력해주세요');
+    	return;
     }
-    if (!form.sellDate.value) {
-        alert('전시회 종료일을 입력해주세요');
-        return;
+    if (!form.exhStartDate.value) {
+    	alert('전시회 시작일을 입력해주세요');
+    	return;
     }
-    if (!form.gexp.value) {
+    if (!form.exhEndDate.value) {
+    	alert('전시회 종료일을 입력해주세요');
+    	return;
+    }
+    if (!form.exhWatchTime.value) {
+    	alert('전시회 러닝타임을 입력해주세요');
+    	return;
+    }
+    if (!form.exhWatchAge.value) {
+    	alert('전시회 연렁대를 입력해주세요');
+    	return;
+    }
+    if (!form.exhPrice.value) {
+    	alert('전시회 가격을 입력해주세요');
+    	return;
+    }
+    if (!form.exhInfo.value) {
         alert('설명글을 입력해주세요');
         return;
     }

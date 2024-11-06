@@ -169,7 +169,29 @@
 	    VALUES (#{gno}, #{uuid}, #{uploadPath}, #{fileName})
 	</insert>
 	
-    
+	<!-- 전시회 등록하기 페이지 -->	
+    <insert id="insertExhibition" parameterType="org.hype.domain.exhVO">
+		<selectKey keyProperty="exhNo" resultType="int" order="BEFORE">
+         	SELECT exhno_seq.nextVal FROM dual
+      	</selectKey>
+      	
+	    INSERT INTO exh_main_tbl 
+	    (exhNo, exhName, exhLocation, exhStartDate, exhEndDate, 
+	    exhWatchTime, exhWatchAge, exhPrice, exhInfo)
+	    VALUES 
+	    (#{exhNo}, #{exhName}, #{exhLocation}, #{exhStartDate}, #{exhEndDate},
+	    #{exhWatchTime}, #{exhWatchAge}, #{exhPrice}, #{exhInfo})
+	</insert>
+	
+	<insert id="insertExhBannerImage" parameterType="org.hype.domain.exhImgVO">
+	    INSERT INTO exh_img_tbl (exhNo, uuid, uploadPath, filename) 
+	    VALUES (#{exhNo}, #{uuid}, #{uploadPath}, #{fileName})
+	</insert>
+	
+	<insert id="insertExhDetailImage" parameterType="org.hype.domain.exhImgVO">
+	    INSERT INTO exh_detail_img_tbl  (exhNo, uuid, uploadPath, filename) 
+	    VALUES (#{exhNo}, #{uuid}, #{uploadPath}, #{fileName})
+	</insert>
 	
     <!-- 문의 리스트 회원 페이지 -->	
 	<!-- 필터링된 Q&A 리스트 가져오기 -->
