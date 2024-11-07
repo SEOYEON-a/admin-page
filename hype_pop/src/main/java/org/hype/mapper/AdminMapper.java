@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
 import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
+import org.hype.domain.gCatVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pCatVO;
@@ -42,11 +43,15 @@ public interface AdminMapper {
 	public int insertPsImage(pImgVO imgVo);  // 이미지 등록
 	public int insertPsCat(pCatVO cvo);  // 카테고리 등록
 	
+	// 팝업스토어 수정하기
+//	public int updatePopStores(popStoreVO pvo);
+	
 	// 굿즈 등록하기
 	public List<popStoreVO> getAllPopStores();	  // select box 모든 팝업스토어 출력
 	public int insertGoodsStore(goodsVO gvo);
 	public int insertBannerImage(gImgVO gImgVo);  // 배너 이미지 등록
 	public int insertDetailImage(gImgVO gImgVo);  // 상세 이미지 등록
+	public int insertGcat(gCatVO gvo); 			  // 카테고리 등록
 	
 	// 전시회 등록하기
 	public int insertExhibition(exhVO evo);

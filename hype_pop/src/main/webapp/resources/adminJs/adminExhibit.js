@@ -89,15 +89,7 @@ function exhRegister() {
 
     // 예외처리
     const exhBannerImageFile = document.getElementById('exhBannerImageFile');
-    const exhDetailImageFile = document.getElementById('exhDetailImageFile');
-    
-    let exhibitionInfo = document.querySelector("input[name='exhInfo']").value;
-    exhibitionInfo = exhibitionInfo.replace(/\n/g, "<br/>");
-
-    // 변환된 정보를 HTML에 삽입하거나, 필요한 경우 서버에 제출
-    document.getElementById("uploadedExBannerImages").innerHTML = exhibitionInfo;
-
-    formData.set("exhInfo", exhibitionInfo);
+    const exhDetailImageFile = document.getElementById('exhDetailImageFile');    
     
     if (exhBannerImageFile.files.length === 0) {
     	alert('전시회 배너 이미지를 입력해주세요');

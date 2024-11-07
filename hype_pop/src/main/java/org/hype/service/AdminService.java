@@ -40,6 +40,9 @@ public interface AdminService {
 	// 팝업스토어 등록하기
 	public int insertPopStore(popStoreVO pvo); 
 	
+	// 팝업스토어 수정하기
+//	public int updatePopStores(popStoreVO pvo);
+	
 	// 굿즈 등록하기 
 	// selectbox 모든 팝업스토어 가져오기
 	public List<popStoreVO> getAllPopStores();	

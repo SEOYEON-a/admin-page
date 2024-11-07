@@ -107,6 +107,27 @@ public class AdminServiceImpl implements AdminService{
 		return result1;		
 	}
 	
+	// 팝업스토어 수정/삭제 페이지 영역
+	// 팝업스토어 정보 수정
+//	@Override
+//	public int updatePopStores(popStoreVO pvo) {
+//		log.info("팝업스토어 수정..." + pvo);
+//		
+//		int result1 = mapper.updatePopStores(pvo);
+//		pvo.getPsImg().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
+//		log.warn(pvo.getPsNo());
+//		int result2 = mapper.updatePsImage(pvo.getPsImg());	 // vo 가져오기
+//		
+//		pvo.getPsCat().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
+//		
+//		int result3 = mapper.updatePsCat(pvo.getPsCat());	 // vo 가져오기
+//
+//		log.warn("result1의 값은 " + result1);
+//		log.warn("result2의 값은 " + result2);
+//
+//		return result1;		
+//	}
+	
 	// 상품(굿즈) 등록 페이지 영역
 	// 상품(굿즈) 정보 등록	
 	@Override
@@ -121,11 +142,12 @@ public class AdminServiceImpl implements AdminService{
 		log.warn("파일이름 가져오기 " + gvo.getAttachList().get(0).getFileName());
 		log.warn(gvo.getAttachList().get(1).getFileName());
 	    int result1 = mapper.insertGoodsStore(gvo);
-	    log.warn("상품 등록 결과: " + result1);
+	    log.warn("상품 등록 결과: " + result1);	
 
 	    if (result1 > 0) {
 
 	    	for (gImgVO img : gvo.getAttachList()) {
+	    		log.warn("gno는 ? : " + gvo.getGno());
 	            img.setGno(gvo.getGno()); // gno를 각 이미지에 설정
 	            // 배너 이미지 등록
 	            if (img.getUploadPath().contains("굿즈 배너 사진")) {
@@ -141,6 +163,10 @@ public class AdminServiceImpl implements AdminService{
 	    } else {
 	        throw new RuntimeException("상품 등록 실패");
 	    }
+	    
+	    gvo.getGcat().setGno(gvo.getGno()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
+	    
+	    int result4 = mapper.insertGcat(gvo.getGcat());	    
 
 	    return result1;
 	}

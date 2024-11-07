@@ -323,7 +323,7 @@ public class AdminController {
                 pImgVO imgVo = new pImgVO();
                 imgVo.setUuid(uuid.toString());
                 imgVo.setUploadPath(uploadPath);
-                imgVo.setFilename(originalFileName);
+                imgVo.setFileName(originalFileName);
                 
                 vo.setPsImg(imgVo);
 
@@ -338,6 +338,13 @@ public class AdminController {
     	
     	return "redirect:/admin/adminPage";
     }
+    
+    // *** 팝업스토어 수정/삭제 페이지 ***
+    // 진행 중
+//    @PostMapping("/psUpdate")
+//    public void updatePopUpStore(@ModelAttribute popStoreVO vo) {
+//    	
+//    }
     
     // *** 상품(굿즈) 등록 페이지 ***
     @InitBinder("goodsVO")
@@ -402,17 +409,9 @@ public class AdminController {
             }
             
             gvo.setAttachList(attachList);
-            
-            for(int i = 0; i < gvo.getAttachList().size(); i++) {
-            	 // DB에 상품 등록
-                log.info("--------------------------------");
-                log.info(gvo.getAttachList().get(i).getFileName());
-                log.info(gvo.getAttachList().get(i).getUploadPath());
-                log.info(gvo.getAttachList().get(i).getUuid());	
-                int result = aservice.insertGoodsStore(gvo);
-                log.info("Goods registered with result: " + result);
-            }
-            
+                        
+            int result = aservice.insertGoodsStore(gvo);
+            log.info("Goods registered with result: " + result);
         }
 
         return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션
@@ -426,8 +425,7 @@ public class AdminController {
         
         // java.sql.Date 변환을 위해 CustomDateEditor 사용
         binder.registerCustomEditor(java.sql.Date.class, new CustomDateEditor(dateFormat, true));
-    }
-      	
+    }      	
     
     @PostMapping("/eRegister")
     public String registerExhibition (@ModelAttribute exhVO evo) {

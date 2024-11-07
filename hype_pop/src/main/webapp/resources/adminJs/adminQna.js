@@ -14,8 +14,7 @@ function loadQnaList() {
     console.log("선택된 문의 유형 : " + qnaType);
     console.log("선택된 답변 유형 : " + qnaAnswer);
 
-//    fetch(`/admin/qnaList?qnaType=${encodeURIComponent(qnaType)}&qnaAnswer=${encodeURIComponent(qnaAnswer)}`)
-    fetch(`/admin/qnaList?qnaType=${qnaType}&qnaAnswer=${qnaAnswer}`)
+    fetch(`/admin/qnaList?qnaType=${encodeURIComponent(qnaType)}&qnaAnswer=${encodeURIComponent(qnaAnswer)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -28,19 +27,15 @@ function loadQnaList() {
 
             // 필터링된 데이터 출력
             data.forEach(qna => {
-            	console.log("필터링 데이터 출력하기 : " + qna)
-                if (!qnaAnswer || (qnaAnswer && qna.qnaAnswer)) {
-                    const formattedDate = new Date(qna.qnaRegDate).toLocaleDateString(); // 날짜 포맷 변환
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${qna.qnaNo}</td>
-                        <td>${qna.qnaType}</td>
-                        <td>${qna.qnaTitle}</td>
-                        <td>${formattedDate}</td>
-                        <td>${qna.qnaAnswer ? '답변 완료' : '답변 미완료'}</td>
-                    `;
-                    tbody.appendChild(row);
-                }
+                const formattedDate = new Date(qna.qnaRegDate).toLocaleDateString();
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${qna.qnaNo}</td>
+                    <td>${qna.qnaType}</td>
+                    <td>${qna.qnaTitle}</td>
+                    <td>${formattedDate}</td>
+                    <td>${qna.qnaAnswer ? '답변 완료' : '답변 미완료'}</td>`;
+                tbody.appendChild(row);
             });
         })
         .catch(error => {

@@ -1,4 +1,4 @@
-// 권한 업다운 
+// 권한 업다운  
 //// 0이면 비활성화 유저, 1이면 활성유저
 //document.addEventListener("DOMContentLoaded", function() {
 //    // ↑ 버튼 클릭 시 auth 값을 2로 설정

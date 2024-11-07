@@ -65,6 +65,16 @@ input[type="date"] {
     text-align: center; /* 중앙 정렬 */
 }
 
+#gBannerImg, #gDetailImg {
+    display: inline-block;
+    padding: 10px 15px; /* 내부 여백 */
+    background-color: #007bff; /* 버튼 색상 */
+    color: white; /* 글자색 흰색 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    cursor: pointer; /* 커서 변경 */
+    text-align: center; /* 중앙 정렬 */
+}
+
 #uploadedImages {
     margin-top: 5px; /* 상단 여백 */
     min-height: 70px; /* 최소 높이 */    
