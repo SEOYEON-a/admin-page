@@ -60,7 +60,6 @@ function checkFile(fileName, fileSize) {
   }
   return true;
 }
-
  
 // 팝업스토어 이미지 클릭 시 파일(이미지) 첨부 기능
 document.querySelector('#popUpimg').addEventListener('click', function() {
@@ -71,8 +70,6 @@ document.querySelector('#popUpimg').addEventListener('click', function() {
 function popStoreRegister(e){
 	const form = document.forms[0];
 	
-    // 여기서부터 if까지는 파일 존재하고 잘 넘어가는지 확인하는 코드이므로
-    // 지워도 됨
 	const formData = new FormData(form);
 	const fileInput = formData.get('imageFile');
 	
@@ -94,12 +91,10 @@ function popStoreRegister(e){
         alert('최대 세 개의 카테고리만 선택할 수 있습니다.');
         return;
     }
-	// 파일이 선택되지 않았을 시 경고창 출력
 	if(fileInput.size === 0){
 		alert('대표 이미지를 선택하십시오.');
 		return;
 	}
-	
 	if (!form.latitude.value) {
 	    alert('위도를 입력해주세요');
 	    return; 
@@ -152,56 +147,61 @@ function popStoreRegister(e){
 
 //**** 팝업스토어 수정/삭제 페이지 영역 ****
 // 수정하기 버튼 클릭 시 업데이트
-// 진행 중
-//document.querySelector('#psUpdate').addEventListener('click', popupUpdate);
-//
-//function popupUpdate() {
-//	const f = document.forms[0];
-//	
-//	if(f.latitude.value == ''){
-//		alert('위도를 입력해주세요');
-//		return;
-//	}
-//	if(f.latitude.value == ''){
-//		alert('경도를 입력해주세요');
-//		return;		
-//	}
-//	if(f.psName.value == ''){
-//		alert('팝업스토어 이름을 입력해주세요');
-//		return;
-//	}
-//	if(f.psStartDate.value == ''){
-//		alert('시작일을 입력해주세요');
-//		return;
-//	}
-//	if(f.psEndDate.value == ''){
-//		alert('종료일을 입력해주세요');
-//		return;		
-//	}
-//	if(f.psAddress.value == ''){
-//		alert('주소를 입력해주세요');
-//		return;
-//	}
-//	if(f.snsAd.value == ''){
-//		alert('SNS주소를 입력해주세요');
-//		return;		
-//	}
-//	if(f.comInfo.value == ''){
-//		alert('주최사 정보를 입력해주세요');
-//		return;
-//	}
-//	if(f.transInfo.value == ''){
-//		alert('교통편을 입력해주세요');
-//		return;		
-//	}
-//	if(f.psExp.value == ''){
-//		alert('설명글을 입력해주세요');
-//		return;
-//	}
-//	
-//	f.action = '/admin/psUpdate';   // post방식 왜? servlet에서 postMapping 해놨기때문에 post로 작성
-//	f.submit();
-//}
+function popStoreUpdate() {
+	const f = document.forms[0];
+	
+	const fileInput = formData.get('imageFile');
+	
+	// 예외처리
+	const checkboxes = f.querySelectorAll('input[type="checkbox"][name^="psCat"]');
+    const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+    if (selectedCategories.length === 0) {
+        alert('최소 한 개의 카테고리를 선택해야 합니다.');
+        return;
+    }
+    if (selectedCategories.length > 3) {
+        alert('최대 세 개의 카테고리만 선택할 수 있습니다.');
+        return;
+    }
+    if(fileInput.size === 0){
+		alert('대표 이미지를 선택하십시오.');
+		return;
+	}
+	if(f.psName.value == ''){
+		alert('팝업스토어 이름을 입력해주세요');
+		return;
+	}
+	if(f.psStartDate.value == ''){
+		alert('시작일을 입력해주세요');
+		return;
+	}
+	if(f.psEndDate.value == ''){
+		alert('종료일을 입력해주세요');
+		return;		
+	}
+	if(f.psAddress.value == ''){
+		alert('주소를 입력해주세요');
+		return;
+	}
+	if(f.snsAd.value == ''){
+		alert('SNS주소를 입력해주세요');
+		return;		
+	}
+	if(f.comInfo.value == ''){
+		alert('주최사 정보를 입력해주세요');
+		return;
+	}
+	if(f.transInfo.value == ''){
+		alert('교통편을 입력해주세요');
+		return;		
+	}
+	if(f.psExp.value == ''){
+		alert('설명글을 입력해주세요');
+		return;
+	}
+	
+	f.submit();
+}
 
 // 에러 발생 중이라 주석 처리
 //document.querySelector('#psDelete').addEventListener('click', popupDelete);

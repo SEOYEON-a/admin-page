@@ -16,6 +16,7 @@ import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
+import org.hype.domain.pCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.payVO;
 import org.hype.domain.popStoreVO;
@@ -100,8 +101,7 @@ public class AdminController {
 	    response.put("pageMaker", pageMaker);
 	    
 	    return ResponseEntity.ok(response);
-	}
-	
+	}	
 	
 	// 상품 리스트 출력 (header - 공통)
 	// 페이징 O
@@ -137,6 +137,42 @@ public class AdminController {
 		response.put("pageMaker", pageMaker);
 		
 		return ResponseEntity.ok(response);
+	}
+	
+	// 전시회 리스트 출력 (header - 공통)
+	// 페이징 처리 O
+	@ResponseBody
+	@GetMapping(value ="/exhList",
+			produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,
+					   MediaType.APPLICATION_XML_VALUE})
+	public ResponseEntity<Map<String, Object>> getExhList(Criteria cri, @RequestParam(required = false) String searchEs) {
+	    log.warn(cri.getAmount());
+	    log.warn(cri.getPageNum());
+	    log.warn(searchEs);
+	    
+	    if (cri.getPageNum() == 0 || cri.getAmount() == 0) {
+	        cri.setPageNum(1);
+	        cri.setAmount(10);
+	    }
+	    
+	    log.info(cri.getPageNum() + "/" + cri.getAmount());
+
+	    int total = aservice.getExhTotal(searchEs);  // 전체 스토어 수 
+	    List<exhVO> list = aservice.getExhList(cri, searchEs);  // 검색 결과
+	    PageDTO pageMaker = new PageDTO(cri, total);  // 페이지 메이커
+	    
+	    
+	    log.info("list : " + list);
+	    log.info("total : " + total);
+	    log.info("pageMaker : " + pageMaker);
+	    
+	    Map<String, Object> response = new HashMap<>();	
+	    
+	    response.put("list", list);
+		response.put("total", total);
+	    response.put("pageMaker", pageMaker);
+	    
+	    return ResponseEntity.ok(response);
 	}
 		
 	// 회원 리스트 출력 (header - 공통)
@@ -179,10 +215,33 @@ public class AdminController {
 	@GetMapping("/popUpUpdate")
 	public String updatePopUp(@RequestParam("psNo") int psNo, Model model) {
 		log.info("팝업스토어 수정 페이지로 이동: psNo = " + psNo);
-		
+				
 		// 해당 psNo에 대한 팝업스토어 정보 조회
 		popStoreVO popStore = aservice.getPopStoreById(psNo);
+		log.info("해당 psNo을 받아오나요? : " + popStore.getPsNo());
 		if (popStore != null) {
+			pImgVO pImgVO = aservice.getPsImg(psNo);
+			popStore.setPsImg(pImgVO);
+			
+			pCatVO catVO = aservice.getPsCat(psNo);	
+	        popStore.setPsCat(catVO);
+	        
+	        log.info("카테고리: healthBeauty = " + catVO.getHealthBeauty() + 
+	                ", game = " + catVO.getGame() + 
+	                ", culture = " + catVO.getCulture() + 
+	                ", shopping = " + catVO.getShopping() + 
+	                ", supply = " + catVO.getSupply() + 
+	                ", kids = " + catVO.getKids() + 
+	                ", design = " + catVO.getDesign() + 
+	                ", foods = " + catVO.getFoods() + 
+	                ", interior = " + catVO.getInterior() + 
+	                ", policy = " + catVO.getPolicy() + 
+	                ", character = " + catVO.getCharacter() + 
+	                ", experience = " + catVO.getExperience() + 
+	                ", collaboration = " + catVO.getCollaboration() + 
+	                ", entertainment = " + catVO.getEntertainment());
+
+			
 			model.addAttribute("popStore", popStore); // JSP에서 사용하기 위해 모델에 추가
 			return "admin/psUpdateDelete"; // JSP 파일 경로
 		} else {
@@ -205,6 +264,22 @@ public class AdminController {
 	        // 해당 ID의 굿즈가 없는 경우 처리
 	        return "redirect:/admin/gList";
 	    }
+	}
+	
+	// 전시회 이름 클릭 시 전시회 수정/삭제 페이지로 이동
+	@GetMapping("/exhUpdate")
+	public String updateExhibitions(@RequestParam("exhNo") int exhNo, Model model) {
+		log.info("전시회 수정 페이지로 이동: exhNo = " + exhNo);
+		
+		// 해당 psNo에 대한 팝업스토어 정보 조회
+		exhVO exh = aservice.getExhById(exhNo);
+		if (exh != null) {
+			model.addAttribute("exh", exh); // JSP에서 사용하기 위해 모델에 추가
+			return "admin/exhUpdateDelete"; // JSP 파일 경로
+		} else {
+			// 해당 ID의 팝업스토어가 없는 경우 처리
+			return "redirect:/admin/exhList";
+		}
 	}
 	
 	// 회원 아이디 클릭 시 회원 정보 수정 페이지로 이동
@@ -341,10 +416,33 @@ public class AdminController {
     
     // *** 팝업스토어 수정/삭제 페이지 ***
     // 진행 중
-//    @PostMapping("/psUpdate")
-//    public void updatePopUpStore(@ModelAttribute popStoreVO vo) {
-//    	
-//    }
+    @PostMapping("/psUpdateDelete")
+    public String updatePopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+    	
+    	Method[] methods = vo.getClass().getDeclaredMethods();
+    	
+    	for (Method method : methods) {
+            // 메서드 이름이 'get'으로 시작하는지 확인
+            if (method.getName().startsWith("get")) {
+                // 메서드를 호출하여 값을 가져옴
+                Object value = method.invoke(vo);
+                System.out.println(method.getName().substring(3) + ": " + value);
+            }
+         }    	
+    	
+    	try {
+            int result = aservice.updatePopStore(vo);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage"; // 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/popUpUpdate?error=true";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/popUpUpdate?error=true"; 
+        }
+    }
     
     // *** 상품(굿즈) 등록 페이지 ***
     @InitBinder("goodsVO")

@@ -3,6 +3,7 @@ package org.hype.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
 import org.hype.domain.exhVO;
 import org.hype.domain.goodsVO;
@@ -25,6 +26,10 @@ public interface AdminService {
 	// 상품 리스트 가져오기
 	public List<goodsVO> getGList(Criteria cri, String searchGs);  
 	public int getGTotal(String searchGs);
+	// 검색어 포함 전시회 페이징 처리 
+	// 전시회 리스트 가져오기
+	public List<exhVO> getExhList(@Param("cri") Criteria cri, String searchEs);  
+	public int getExhTotal(String searchEs);
 	// 검색어 포함 회원 페이징 처리 
 	// 회원 리스트 가져오기
 	public List<signInVO> getMList(Criteria cri, String searchMs);
@@ -34,6 +39,8 @@ public interface AdminService {
 	public popStoreVO getPopStoreById (int psNo);  
 	// 특정 상품(굿즈) 조회
 	public goodsVO getGoodsById (int gNo);  
+	// 특정 전시회 조회
+	public exhVO getExhById (int exhNo); 
 	// 특정 회원 조회
 	public signInVO getMembersById (String userId); 
 	
@@ -41,7 +48,9 @@ public interface AdminService {
 	public int insertPopStore(popStoreVO pvo); 
 	
 	// 팝업스토어 수정하기
-//	public int updatePopStores(popStoreVO pvo);
+	public int updatePopStore(popStoreVO pvo);
+	public pImgVO getPsImg(int psNo);
+	public pCatVO getPsCat(int psNo);
 	
 	// 굿즈 등록하기 
 	// selectbox 모든 팝업스토어 가져오기

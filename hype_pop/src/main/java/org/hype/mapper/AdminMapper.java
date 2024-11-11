@@ -27,6 +27,10 @@ public interface AdminMapper {
 	public List<goodsVO> getGList(@Param("cri") Criteria cri, @Param("searchGs") String searchGs);  
 	public int getGTotal(String searchGs);
 	
+	// 관리자 전시회 리스트 가져오기
+	public List<exhVO> getExhList(@Param("cri") Criteria cri, @Param("searchEs") String searchEs);  
+	public int getExhTotal(String searchEs);
+	
 	// 관리자 회원 리스트 가져오기
 	public List<signInVO> getMList(@Param("cri") Criteria cri, @Param("searchMs") String searchMs);  
 	public int getMTotal(String searchMs);
@@ -35,6 +39,8 @@ public interface AdminMapper {
 	public popStoreVO getPopStoreById (int psNo);
 	// 특정 굿즈(상품) 조회
 	public goodsVO getGoodsById (int gNo);  
+	// 특정 전시회 조회
+	public exhVO getExhById (int exhNo); 
 	// 특정 회원 조회
 	public signInVO getMembersById (String userId);  
 	
@@ -44,7 +50,11 @@ public interface AdminMapper {
 	public int insertPsCat(pCatVO cvo);  // 카테고리 등록
 	
 	// 팝업스토어 수정하기
-//	public int updatePopStores(popStoreVO pvo);
+	public pImgVO getPsImg(int psNo);
+	public pCatVO getPsCat(int psNo);
+	public int updatePopStore(popStoreVO pvo);
+	public int updatePsImage(pImgVO imgVo);
+	public int updatePsCat(pCatVO cvo);
 	
 	// 굿즈 등록하기
 	public List<popStoreVO> getAllPopStores();	  // select box 모든 팝업스토어 출력

@@ -11,6 +11,7 @@ import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
+import org.hype.domain.pCatVO;
 import org.hype.domain.pImgVO;
 import org.hype.domain.payVO;
 import org.hype.domain.popStoreVO;
@@ -56,6 +57,18 @@ public class AdminServiceImpl implements AdminService{
 		return mapper.getGTotal(searchGs);
 	}	
 	
+	// 전시회 영역
+	// 전시회 리스트 가져오기	
+	@Override
+	public List<exhVO> getExhList(Criteria cri, String searchEs) {
+		return mapper.getExhList(cri, searchEs);
+	}
+
+	@Override
+	public int getExhTotal(String searchEs) {
+		return mapper.getExhTotal(searchEs);
+	}
+
 	// 회원 영역
 	// 회원 리스트 가져오기 
 	@Override
@@ -79,6 +92,12 @@ public class AdminServiceImpl implements AdminService{
 	public goodsVO getGoodsById(int gNo) {
 		return mapper.getGoodsById(gNo);
 	}	
+	
+	// 특정 전시회 조회
+	@Override
+	public exhVO getExhById(int exhNo) {
+		return mapper.getExhById(exhNo);
+	}
 	
 	// 특정 회원 조회
 	@Override
@@ -108,26 +127,44 @@ public class AdminServiceImpl implements AdminService{
 	}
 	
 	// 팝업스토어 수정/삭제 페이지 영역
-	// 팝업스토어 정보 수정
-//	@Override
-//	public int updatePopStores(popStoreVO pvo) {
-//		log.info("팝업스토어 수정..." + pvo);
-//		
-//		int result1 = mapper.updatePopStores(pvo);
-//		pvo.getPsImg().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
-//		log.warn(pvo.getPsNo());
-//		int result2 = mapper.updatePsImage(pvo.getPsImg());	 // vo 가져오기
-//		
-//		pvo.getPsCat().setPsNo(pvo.getPsNo()); // 시퀀스를 xml에서 처리한 거를 갖고온 것
-//		
-//		int result3 = mapper.updatePsCat(pvo.getPsCat());	 // vo 가져오기
-//
-//		log.warn("result1의 값은 " + result1);
-//		log.warn("result2의 값은 " + result2);
-//
-//		return result1;		
-//	}
+	// 이미지 받아오기
+	@Override
+	public pImgVO getPsImg(int psNo) {
+		return mapper.getPsImg(psNo);
+	}
 	
+	// 카테고리 값 받아오기
+	@Override
+	public pCatVO getPsCat(int psNo) {
+		return mapper.getPsCat(psNo);
+	}
+
+	// 팝업스토어 정보 수정
+	@Override
+	public int updatePopStore(popStoreVO pvo) {
+		log.info("팝업스토어 수정..." + pvo);
+		
+		// 1. 기본 팝업스토어 정보 업데이트
+		int result1 = mapper.updatePopStore(pvo);
+		log.warn("기본 정보 업데이트 결과: " + result1);
+		
+		// 2. 이미지 정보 업데이트
+	    if (pvo.getPsImg() != null) {
+	        pvo.getPsImg().setPsNo(pvo.getPsNo());
+	        int result2 = mapper.updatePsImage(pvo.getPsImg());
+	        log.warn("이미지 정보 업데이트 결과: " + result2);
+	    } else {
+	        log.warn("pvo.getPsImg()가 null입니다. 이미지 정보 업데이트를 건너뜁니다.");
+	    }
+	    		
+		// 3. 카테고리 정보 업데이트
+	    int result3 = mapper.updatePsCat(pvo.getPsCat());
+	    pvo.getPsCat().setPsNo(pvo.getPsNo());
+	    log.warn("카테고리 정보 업데이트 결과: " + result3);
+	    
+		return result1;		
+	}
+
 	// 상품(굿즈) 등록 페이지 영역
 	// 상품(굿즈) 정보 등록	
 	@Override

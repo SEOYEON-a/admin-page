@@ -67,7 +67,11 @@
         <%-- <tbody>
         	<c:forEach var="qnaList" items="${qna}">
                 <tr>
-                    <td>${qna.qnaNo}</td>
+                    <td>
+                    	<a href="<c:url value='/support/noticeInfo' />?noticeNo=${qna.qnaNo}">
+                        	${qna.qnaNo}
+                    	</a>
+                    </td>
                     <td>${qna.qnaType}</td>
                     <td>${qna.qnaTitle}</td>
                     <td>${qna.qnaRegDate}</td>                    

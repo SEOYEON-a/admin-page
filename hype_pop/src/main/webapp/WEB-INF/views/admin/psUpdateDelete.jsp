@@ -34,6 +34,13 @@ input[type="text"], input[type="file"] {
     margin-bottom: 10px; /* 필드 간 여백 축소 */
 }
 
+input[type="date"] {
+	padding: 10px; /* 내부 여백 */
+    border: 1px solid #ced4da; /* 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    box-sizing: border-box; /* 패딩과 테두리 포함 */
+}
+
 /* 이미지 업로드 버튼 스타일 */
 #popUpimg {
     cursor: pointer;
@@ -119,64 +126,73 @@ input[type="text"], input[type="file"] {
 <body>
 	<jsp:include page="layout/adminHeader.jsp"/>
 	
-	<form id="deleteForm" method="POST">
+	<form id="psUpdateDeleteForm" method="POST" action="/admin/psUpdateDelete" enctype="multipart/form-data">
 		<input type="hidden" name="psNo" value="${popStore.psNo}">
-		<div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
-		<input type="file" id="fileInput" name="imageFile" style="display: none;">
-		<input type="hidden" name="imageUuid" value="${image.uuid}">
-		<div id="uploadedImages"></div>
-				
-		<div id="psLatitude">위도 <input type="text" name="latitude" value="${popStore.latitude}"></div>
-		<div id="psLongitude">경도 <input type="text" name="longitude" value="${popStore.latitude}"></div>
+		<div id="popUpimg" style="cursor: pointer;">
+			팝업스토어 이미지
+			<!-- 이미지가 있으면 보여주고, 없으면 '이미지 없음' 텍스트 표시 -->
+			<c:choose>
+				<c:when test="${not empty popStore.psImg.uploadPath}">
+					<img src="${popStore.psImg.uploadPath}/${popStore.psImg.uuid}_${popStore.psImg.fileName}" alt="팝업스토어 이미지" width="200px">
+				</c:when>
+				<c:otherwise>
+					<p>이미지가 없습니다.</p>
+				</c:otherwise>
+			</c:choose>
+		</div>
+		<!-- <div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div> -->
+	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
+	    <div id="uploadedImages"></div>
 		
 		<div id="storeName">팝업스토어 이름 <input type="text" name="psName" value="${popStore.psName}"></div>
 		<%-- <div id="storeCat">팝업스토어 이전 카테고리 <input type="text" value="${popStore.psCat}"></div>  --%>
 	    <div id="cats">팝업스토어 카테고리
 		    <div>
-			    <input type="checkbox" name="psCat.healthBeauty" value="1" 
-	            <c:if test="${categoryOne == 'healthBeauty'}">checked</c:if>>헬스/뷰티
-			    <input type="checkbox" name="psCat.game" value="1" 
-	            <c:if test="${categoryOne == 'game'}">checked</c:if>>게임
-			    <input type="checkbox" name="psCat.culture" value="1" 
-	            <c:if test="${categoryOne == 'culture'}">checked</c:if>>문화
-			    <input type="checkbox" name="psCat.shopping" value="1" 
-	            <c:if test="${categoryOne == 'shopping'}">checked</c:if>>쇼핑
-			    <input type="checkbox" name="psCat.supply" value="1" 
-	            <c:if test="${categoryOne == 'supply'}">checked</c:if>>문구
-			    <input type="checkbox" name="psCat.kids" value="1" 
-	            <c:if test="${categoryOne == 'kids'}">checked</c:if>>키즈
-			    <input type="checkbox" name="psCat.design" value="1" 
-	            <c:if test="${categoryOne == 'design'}">checked</c:if>>디자인
-			    <input type="checkbox" name="psCat.foods" value="1" 
-	            <c:if test="${categoryOne == 'foods'}">checked</c:if>>식품
-			    <input type="checkbox" name="psCat.interior" value="1" 
-	            <c:if test="${categoryOne == 'interior'}">checked</c:if>>인테리어
-			    <input type="checkbox" name="psCat.policy" value="1" 
-	            <c:if test="${categoryOne == 'policy'}">checked</c:if>>정책
-			    <input type="checkbox" name="psCat.character" value="1" 
-	            <c:if test="${categoryOne == 'character'}">checked</c:if>>캐릭터
-			    <input type="checkbox" name="psCat.experience" value="1" 
-	            <c:if test="${categoryOne == 'experience'}">checked</c:if>>체험
-			    <input type="checkbox" name="psCat.collaboration" value="1" 
-	            <c:if test="${categoryOne == 'collaboration'}">checked</c:if>>콜라보
-			    <input type="checkbox" name="psCat.entertainment" value="1" 
-	            <c:if test="${categoryOne == 'entertainment'}">checked</c:if>>방송
-			</div>
-      	</div>
-		<div id="startDate">시작일 <input type="text" name="psStartDate" value="${popStore.psStartDate}"></div>
-		<div id="endDate">종료일 <input type="text" name="psEndDate" value="${popStore.psEndDate}"></div>
+		        <input type="checkbox" name="psCat.healthBeauty" value="1" 
+		            <c:if test="${popStore.psCat.healthBeauty == '1'}">checked</c:if>>헬스/뷰티
+		        <input type="checkbox" name="psCat.game" value="1" 
+		            <c:if test="${popStore.psCat.game == '1'}">checked</c:if>>게임
+		        <input type="checkbox" name="psCat.culture" value="1" 
+		            <c:if test="${popStore.psCat.culture == '1'}">checked</c:if>>문화
+		        <input type="checkbox" name="psCat.shopping" value="1" 
+		            <c:if test="${popStore.psCat.shopping == '1'}">checked</c:if>>쇼핑
+		        <input type="checkbox" name="psCat.supply" value="1" 
+		            <c:if test="${popStore.psCat.supply == '1'}">checked</c:if>>문구
+		        <input type="checkbox" name="psCat.kids" value="1" 
+		            <c:if test="${popStore.psCat.kids == '1'}">checked</c:if>>키즈
+		        <input type="checkbox" name="psCat.design" value="1" 
+		            <c:if test="${popStore.psCat.design == '1'}">checked</c:if>>디자인
+		        <input type="checkbox" name="psCat.foods" value="1" 
+		            <c:if test="${popStore.psCat.foods == '1'}">checked</c:if>>식품
+		        <input type="checkbox" name="psCat.interior" value="1" 
+		            <c:if test="${popStore.psCat.interior == '1'}">checked</c:if>>인테리어
+		        <input type="checkbox" name="psCat.policy" value="1" 
+		            <c:if test="${popStore.psCat.policy == '1'}">checked</c:if>>정책
+		        <input type="checkbox" name="psCat.character" value="1" 
+		            <c:if test="${popStore.psCat.character == '1'}">checked</c:if>>캐릭터
+		        <input type="checkbox" name="psCat.experience" value="1" 
+		            <c:if test="${popStore.psCat.experience == '1'}">checked</c:if>>체험
+		        <input type="checkbox" name="psCat.collaboration" value="1" 
+		            <c:if test="${popStore.psCat.collaboration == '1'}">checked</c:if>>콜라보
+		        <input type="checkbox" name="psCat.entertainment" value="1" 
+		            <c:if test="${popStore.psCat.entertainment == '1'}">checked</c:if>>방송
+		    </div>
+		</div>
+		<div id="startDate">시작일 <br><input type="date" name="psStartDate" value="${popStore.psStartDate}"></div>
+		<div id="endDate">종료일 <br><input type="date" name="psEndDate" value="${popStore.psEndDate}"></div>
 		<div id="address">주소 <input type="text" name="psAddress" value="${popStore.psAddress}"></div>
 		<div id="snsAddress">SNS 주소 <input type="text" name="snsAd" value="${popStore.snsAd}"></div>
 		<div id="company">주최사 정보 <input type="text" name="comInfo" value="${popStore.comInfo}"></div>
 		<div id="transfer">교통편 <input type="text" name="transInfo" value="${popStore.transInfo}"></div>
-		<div id="parking">주차장 정보 <input type="text" name="parkinginfo" value="${popStore.parkingInfo}"></div>
+		<div id="parking">주차장 정보 <input type="text" name="parkingInfo" value="${popStore.parkingInfo}"></div>
 		<div id="storeExp">설명글 <input type="text" name="psExp" value="${popStore.psExp}"></div>
 	</form>
 
 	<button type="button" id="psCancel" >취소 및 리스트로 돌아가기</button>	
     <button type="button" id="psDelete" >삭제</button>
-    <button type="button" id="psUpdate" >수정완료</button>
+    <button type="button" id="psUpdate" onclick="popStoreUpdate();">수정완료</button>
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  
+<script type="text/javascript" src="/resources/adminJs/adminPopUp.js"></script>  
 </body>
 </html>

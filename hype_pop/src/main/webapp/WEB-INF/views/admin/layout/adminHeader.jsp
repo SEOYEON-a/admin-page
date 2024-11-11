@@ -51,6 +51,7 @@
     <div class="adminHeader"> 
         <span class="adminBox" id="popUpManage">팝업스토어 관리하기</span> 
         <span class="adminBox" id="storeManage">쇼핑몰 관리하기</span>
+        <span class="adminBox" id="exhManage">전시회 관리하기</span> 
         <span class="adminBox" id="memberManage">회원 관리하기</span> 
         <br>
         <input type="text" id="adminSearchBox" style="display: none;"> 

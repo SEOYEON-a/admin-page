@@ -69,6 +69,36 @@
 	    SELECT COUNT(*) FROM goods_info_tbl 
 	</select>
 	
+	<!-- 전시회 전체 리스트 출력 -->
+	<select id="getExhList" resultType="org.hype.domain.exhVO">
+	<![CDATA[
+		SELECT exhNo, exhName, exhStartDate, exhEndDate, exhWatchAge
+	        FROM (
+	            SELECT ROWNUM rn, exhNo, exhName, exhStartDate, exhEndDate, exhWatchAge
+	            FROM (
+	                SELECT * FROM exh_main_tbl 
+	                ]]>
+	                WHERE  
+	                <if test="searchEs != null and searchEs != ''">
+		            	exhName LIKE '%' || #{searchEs} || '%'
+		            </if>
+		            <if test="searchEs == null or searchEs == ''">
+		            	1=1
+		            </if> 
+		        <![CDATA[
+				ORDER BY exhNo asc
+	            ) a
+	            WHERE ROWNUM <= #{cri.pageNum} * #{cri.amount}	
+	        )
+	        WHERE rn > (#{cri.pageNum} - 1) * #{cri.amount}
+	   ]]>
+	</select>
+	
+	<!-- 검색 시 특정 전시회 리스트 출력 -->
+	<select id="getExhTotal" resultType="int">
+	    SELECT COUNT(*) FROM exh_main_tbl 
+	</select>
+	
 	<!-- 회원 리스트 출력 -->
 	<select id="getMList" resultType="org.hype.domain.signInVO">
 	<![CDATA[
@@ -110,6 +140,11 @@
    		SELECT gNo, gName, gPrice, sellDate FROM goods_info_tbl WHERE gNo = #{gNo}
 	</select>
 	
+	<!-- 특정 전시회 조회 -->
+	<select id="getExhById" parameterType="int" resultType="org.hype.domain.exhVO">
+   		SELECT exhNo, exhName, exhStartDate, exhEndDate, exhWatchAge FROM exh_main_tbl WHERE exhNo = #{exhNo}
+	</select>
+	
     <!-- 특정 회원 조회 -->
 	<select id="getMembersById" parameterType="String" resultType="org.hype.domain.signInVO">
    		SELECT userNo, userId, userName, userNumber, regDate, userEmail, lastLoginDate, enabled, auth 
@@ -144,8 +179,18 @@
 	</insert>
 	
 	<!-- 팝업스토어 수정/삭제 페이지 -->	
+	<!-- 이미지 받아오기 -->
+ 	<select id="getPsImg" resultType="org.hype.domain.pImgVO">
+	    SELECT * FROM pop_img_tbl WHERE psNo = #{psNo}
+	</select>
+	
+	<!-- 카테고리 받아오기 -->
+ 	<select id="getPsCat" resultType="org.hype.domain.pCatVO">
+	    SELECT * FROM pop_cat_tbl WHERE psNo = #{psNo}
+	</select>
+	
 	<!-- 수정 -->
-<!-- 	<update id="updatePopStores" parameterType="org.hype.domain.popStoreVO">
+ 	<update id="updatePopStore" parameterType="org.hype.domain.popStoreVO">
 		UPDATE pop_main_tbl
 		SET 
 			PSNAME = #{psName},
@@ -161,7 +206,38 @@
 			PARKINGINFO = #{parkingInfo}
 		WHERE 
 			psNo = #{psNo}
-	</update>	 -->
+	</update>	
+	
+	<update id="updatePsImage" parameterType="org.hype.domain.pImgVO">
+        UPDATE pop_img_tbl 
+        SET 
+        	uuid = #{uuid},
+        	uploadPath = #{uploadPath},
+        	fileName = #{fileName}
+        WHERE 
+			psNo = #{psNo}
+    </update>
+    
+    <update id="updatePsCat" parameterType="org.hype.domain.pCatVO">
+	    UPDATE pop_cat_tbl 
+        SET 
+        	healthBeauty = #{healthBeauty},
+	        game = #{game},
+	        culture = #{culture},
+	        shopping = #{shopping},
+	        supply = #{supply},
+	        kids = #{kids},
+	        design = #{design},
+	        foods = #{foods},
+	        interior = #{interior},
+	        policy = #{policy},
+	        character = #{character},
+	        experience = #{experience},
+	        collaboration = #{collaboration},
+	        entertainment = #{entertainment}
+        WHERE 
+			psNo = #{psNo}
+	</update>
 	
 	
 	<!-- 상품(굿즈) 등록하기 페이지 -->
