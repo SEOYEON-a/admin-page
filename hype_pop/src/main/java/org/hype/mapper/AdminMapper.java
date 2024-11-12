@@ -56,12 +56,19 @@ public interface AdminMapper {
 	public int updatePsImage(pImgVO imgVo);
 	public int updatePsCat(pCatVO cvo);
 	
-	// 굿즈 등록하기
+	// 상품(굿즈) 등록하기
 	public List<popStoreVO> getAllPopStores();	  // select box 모든 팝업스토어 출력
 	public int insertGoodsStore(goodsVO gvo);
 	public int insertBannerImage(gImgVO gImgVo);  // 배너 이미지 등록
 	public int insertDetailImage(gImgVO gImgVo);  // 상세 이미지 등록
 	public int insertGcat(gCatVO gvo); 			  // 카테고리 등록
+	
+	// 상품(굿즈) 수정하기
+//	public gImgVO getGImg(int gno);
+//	public gCatVO getGCat(int gno);
+//	public int updateGoodsStore(goodsVO gvo);
+//	public int updateGImage(gImgVO gImgVo);
+//	public int updateGCat(gCatVO gcatVo);
 	
 	// 전시회 등록하기
 	public int insertExhibition(exhVO evo);

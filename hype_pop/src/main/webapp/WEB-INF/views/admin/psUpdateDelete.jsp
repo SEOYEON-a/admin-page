@@ -125,27 +125,17 @@ input[type="date"] {
 </head>
 <body>
 	<jsp:include page="layout/adminHeader.jsp"/>
-	
+	<div>
+		<img id="beforeImg" width="300" height="300">
+		<input type="hidden" name="beforeFileName" value="${popStore.psImg.uuid}_${popStore.psImg.fileName}">
+	</div>
 	<form id="psUpdateDeleteForm" method="POST" action="/admin/psUpdateDelete" enctype="multipart/form-data">
 		<input type="hidden" name="psNo" value="${popStore.psNo}">
-		<div id="popUpimg" style="cursor: pointer;">
-			팝업스토어 이미지
-			<!-- 이미지가 있으면 보여주고, 없으면 '이미지 없음' 텍스트 표시 -->
-			<c:choose>
-				<c:when test="${not empty popStore.psImg.uploadPath}">
-					<img src="${popStore.psImg.uploadPath}/${popStore.psImg.uuid}_${popStore.psImg.fileName}" alt="팝업스토어 이미지" width="200px">
-				</c:when>
-				<c:otherwise>
-					<p>이미지가 없습니다.</p>
-				</c:otherwise>
-			</c:choose>
-		</div>
-		<!-- <div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div> -->
+		<div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
 	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
 	    <div id="uploadedImages"></div>
 		
 		<div id="storeName">팝업스토어 이름 <input type="text" name="psName" value="${popStore.psName}"></div>
-		<%-- <div id="storeCat">팝업스토어 이전 카테고리 <input type="text" value="${popStore.psCat}"></div>  --%>
 	    <div id="cats">팝업스토어 카테고리
 		    <div>
 		        <input type="checkbox" name="psCat.healthBeauty" value="1" 

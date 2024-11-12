@@ -3,6 +3,9 @@ package org.hype.controller;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +28,9 @@ import org.hype.domain.signInVO;
 import org.hype.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +40,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -415,7 +422,58 @@ public class AdminController {
     }
     
     // *** 팝업스토어 수정/삭제 페이지 ***
-    // 진행 중
+    @GetMapping("/getImages/{fileName:.+}/{category}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveImage(
+        @PathVariable String category,
+        @PathVariable String fileName) {
+
+        String baseFolder = "\\\\192.168.0.129\\storeGoodsImg\\";
+        String uploadFolder = "";
+
+        // 카테고리별 경로 설정
+        switch (category) {
+            case "popup":
+                uploadFolder = baseFolder + "팝업스토어 사진";
+                break;
+            case "goodsBanner":
+                uploadFolder = baseFolder + "굿즈 배너 사진";
+                break;
+            case "goodsDetail":
+                uploadFolder = baseFolder + "굿즈 상세 사진";
+                break;
+            case "exhibitionBanner":
+                uploadFolder = baseFolder + "전시 배너 사진";
+                break;
+            case "exhibitionDetail":
+                uploadFolder = baseFolder + "전시 상세 사진";
+                break;
+            default:
+                throw new RuntimeException("유효하지 않은 카테고리입니다: " + category);
+        }
+
+        // 이미지 경로
+        String imagePath = uploadFolder + File.separator + fileName;
+        Path path = Paths.get(imagePath);
+
+        // 파일 존재 여부 확인
+        if (!Files.exists(path)) {
+            throw new RuntimeException("파일이 없습니다: " + fileName);
+        }
+
+        // 파일 읽기 가능 여부 확인
+        if (!Files.isReadable(path)) {
+            throw new RuntimeException("파일을 읽을 수 없습니다: " + fileName);
+        }
+
+        // 리소스를 파일로 변환하여 반환
+        Resource file = new FileSystemResource(path.toFile());
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                .body(file);
+    }
+
+
     @PostMapping("/psUpdateDelete")
     public String updatePopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
     	

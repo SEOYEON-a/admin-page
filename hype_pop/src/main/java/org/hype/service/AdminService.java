@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
 import org.hype.domain.exhVO;
+import org.hype.domain.gCatVO;
+import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pCatVO;
 import org.hype.domain.pImgVO;
@@ -52,11 +54,16 @@ public interface AdminService {
 	public pImgVO getPsImg(int psNo);
 	public pCatVO getPsCat(int psNo);
 	
-	// 굿즈 등록하기 
+	// 상품(굿즈) 등록하기 
 	// selectbox 모든 팝업스토어 가져오기
 	public List<popStoreVO> getAllPopStores();	
-	// 굿즈 insert
+	// 상품(굿즈) insert
 	public int insertGoodsStore(goodsVO gvo);
+	
+	// 상품(굿즈) 수정하기
+//	public int updateGoodsStore(goodsVO gvo);
+//	public gImgVO getGImg(int gno);
+//	public gCatVO getGCat(int gno);
 	
 	// 전시회 등록하기
 	public int insertExhibition(exhVO evo);

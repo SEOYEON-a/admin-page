@@ -158,8 +158,8 @@ public class AdminServiceImpl implements AdminService{
 	    }
 	    		
 		// 3. 카테고리 정보 업데이트
-	    int result3 = mapper.updatePsCat(pvo.getPsCat());
 	    pvo.getPsCat().setPsNo(pvo.getPsNo());
+	    int result3 = mapper.updatePsCat(pvo.getPsCat());
 	    log.warn("카테고리 정보 업데이트 결과: " + result3);
 	    
 		return result1;		
@@ -208,6 +208,43 @@ public class AdminServiceImpl implements AdminService{
 	    return result1;
 	}
 	
+	// 상품(굿즈) 정보 수정
+//	@Override
+//	public int updateGoodsStore(goodsVO gvo) {
+//	    log.info("굿즈 수정..." + gvo);
+//
+//	    // 1. 기본 상품 정보 업데이트
+//	    int result1 = mapper.updateGoodsStore(gvo);
+//	    log.warn("기본 정보 업데이트 결과: " + result1);
+//
+//	    // 2. 이미지 정보 업데이트
+//	    if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
+//	        for (gImgVO img : gvo.getAttachList()) {
+//	            img.setGno(gvo.getGno()); // gno를 각 이미지에 설정
+//	            // 배너 이미지 업데이트
+//	            if (img.getUploadPath().contains("굿즈 배너 사진")) {
+//	                int result2 = mapper.updateBannerImage(img);
+//	                log.warn("배너 이미지 업데이트 결과: " + result2);
+//	            }
+//	            // 상세 이미지 업데이트
+//	            else if (img.getUploadPath().contains("굿즈 상세 사진")) {
+//	                int result3 = mapper.updateDetailImage(img);
+//	                log.warn("상세 이미지 업데이트 결과: " + result3);
+//	            }
+//	        }
+//	    } else {
+//	        log.warn("gvo.getAttachList()가 null이거나 비어 있습니다. 이미지 정보 업데이트를 건너뜁니다.");
+//	    }
+//
+//	    // 3. 카테고리 정보 업데이트
+//	    gvo.getGcat().setGno(gvo.getGno());
+//	    int result4 = mapper.updateGcat(gvo.getGcat());
+//	    log.warn("카테고리 정보 업데이트 결과: " + result4);
+//
+//	    return result1;
+//	}
+
+		
 	// 전시회 등록 페이지 영역
 	// 전시회 정보 등록	
 	@Transactional

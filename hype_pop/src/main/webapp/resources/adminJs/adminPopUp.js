@@ -1,5 +1,12 @@
 //**** 팝업스토어 등록 페이지 영역 ****
 // 등록하기 버튼 클릭 시 팝업스토어 등록
+// 이전 이미지 가져오기
+window.onload = function() {
+	const category = "popup";  // 예시로 'popup' 카테고리 지정
+	const fileName = document.querySelector('input[name="beforeFileName"]').value;
+    fetchImage(category, fileName);
+};
+
 // 파일 미리보기
 document.querySelector('#imageFile').addEventListener('input', function(event) {
     const files = event.target.files;
@@ -144,11 +151,51 @@ function popStoreRegister(e){
 
 }
 
+// 이미지 가져오기
+//document.getElementById('popUpimg').addEventListener("click", function() {
+//});
+
+// fetch로 이미지를 가져와서 출력하는 예시
+function fetchImage(category, fileName) {
+    const imageUrl = `/admin/getImages/${fileName}/${category}/`;
+
+    fetch(imageUrl)
+        .then(response => {
+            if (response.ok) {
+                return response.blob(); // 이미지 파일을 blob 형태로 받음
+            } else {
+                throw new Error('이미지를 불러오는 데 실패했습니다.');
+            }
+        })
+        .then(blob => {
+            const imageObjectURL = URL.createObjectURL(blob);
+            document.getElementById("beforeImg").src = imageObjectURL; // 이미지 표시
+        })
+        .catch(error => {
+            console.error('이미지 로딩 실패:', error);
+        });
+}
 
 //**** 팝업스토어 수정/삭제 페이지 영역 ****
 // 수정하기 버튼 클릭 시 업데이트
+// 신규 이미지 선택 시 미리보기
+document.getElementById("imageFile").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById("newImagePreview");
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
 function popStoreUpdate() {
 	const f = document.forms[0];
+	
+	const formData = new FormData(f);
 	
 	const fileInput = formData.get('imageFile');
 	
