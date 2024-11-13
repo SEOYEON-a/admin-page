@@ -17,6 +17,7 @@ import org.hype.domain.Criteria;
 import org.hype.domain.PageDTO;
 import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
+import org.hype.domain.gCatVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pCatVO;
@@ -259,12 +260,46 @@ public class AdminController {
 	
 	// 굿즈 이름 클릭 시 굿즈 정보 수정/삭제 페이지로 이동
 	@GetMapping("/goodsUpdate")
-	public String updateGoods(@RequestParam("gNo") int gNo, Model model) {
-	    log.info("굿즈 정보 수정 페이지로 이동: gNo = " + gNo);
+	public String updateGoods(@RequestParam("gno") int gno, Model model) {
+	    log.info("굿즈 정보 수정 페이지로 이동: gno = " + gno);
 	    
-	    // 해당 psNo에 대한 팝업스토어 정보 조회
-	    goodsVO goods = aservice.getGoodsById(gNo);
+	    // gno에 해당하는 굿즈 정보 조회
+	    goodsVO goods = aservice.getGoodsById(gno);
+	    log.info("해당 gno을 받아오나요? : " + goods.getGno());
 	    if (goods != null) {
+	    	
+	    	// 배너 및 상세 이미지 가져오기
+	        gImgVO gImgBanner = aservice.getGImgBanner(gno);
+	        gImgVO gImgDetail = aservice.getGImgDetail(gno);
+	        
+	        // attachList에 이미지 추가
+	        List<gImgVO> attachList = new ArrayList<>();
+	        if (gImgBanner != null) {
+	            attachList.add(gImgBanner);
+	        }
+	        if (gImgDetail != null) {
+	            attachList.add(gImgDetail);
+	        }
+	        goods.setAttachList(attachList);
+			
+			gCatVO gcatVO = aservice.getGCat(gno);	
+	        goods.setGcat(gcatVO);
+	        
+	        log.info("카테고리: healthBeauty = " + gcatVO.getHealthBeauty() + 
+	                ", game = " + gcatVO.getGame() + 
+	                ", culture = " + gcatVO.getCulture() + 
+	                ", shopping = " + gcatVO.getShopping() + 
+	                ", supply = " + gcatVO.getSupply() + 
+	                ", kids = " + gcatVO.getKids() + 
+	                ", design = " + gcatVO.getDesign() + 
+	                ", foods = " + gcatVO.getFoods() + 
+	                ", interior = " + gcatVO.getInterior() + 
+	                ", policy = " + gcatVO.getPolicy() + 
+	                ", character = " + gcatVO.getCharacter() + 
+	                ", experience = " + gcatVO.getExperience() + 
+	                ", collaboration = " + gcatVO.getCollaboration() + 
+	                ", entertainment = " + gcatVO.getEntertainment());
+	    	
 	        model.addAttribute("goods", goods); // JSP에서 사용하기 위해 모델에 추가
 	        return "admin/gUpdateDelete"; // JSP 파일 경로
 	    } else {
@@ -274,13 +309,27 @@ public class AdminController {
 	}
 	
 	// 전시회 이름 클릭 시 전시회 수정/삭제 페이지로 이동
-	@GetMapping("/exhUpdate")
+	@GetMapping("/exhUpdateDelete")
 	public String updateExhibitions(@RequestParam("exhNo") int exhNo, Model model) {
 		log.info("전시회 수정 페이지로 이동: exhNo = " + exhNo);
 		
 		// 해당 psNo에 대한 팝업스토어 정보 조회
 		exhVO exh = aservice.getExhById(exhNo);
 		if (exh != null) {
+			
+			exhImgVO exhImgBanner = aservice.getExhImgBanner(exhNo);
+			exhImgVO exhImgDetail = aservice.getExhImgDetail(exhNo);
+	        
+	        // attachList에 이미지 추가
+	        List<exhImgVO> attachExhList = new ArrayList<>();
+	        if (exhImgBanner != null) {
+	        	attachExhList.add(exhImgBanner);
+	        }
+	        if (exhImgDetail != null) {
+	        	attachExhList.add(exhImgDetail);
+	        }
+	        exh.setAttachExhList(attachExhList);
+	        
 			model.addAttribute("exh", exh); // JSP에서 사용하기 위해 모델에 추가
 			return "admin/exhUpdateDelete"; // JSP 파일 경로
 		} else {
@@ -421,7 +470,6 @@ public class AdminController {
     	return "redirect:/admin/adminPage";
     }
     
-    // *** 팝업스토어 수정/삭제 페이지 ***
     @GetMapping("/getImages/{fileName:.+}/{category}")
     @ResponseBody
     public ResponseEntity<Resource> serveImage(
@@ -443,10 +491,10 @@ public class AdminController {
                 uploadFolder = baseFolder + "굿즈 상세 사진";
                 break;
             case "exhibitionBanner":
-                uploadFolder = baseFolder + "전시 배너 사진";
+                uploadFolder = baseFolder + "전시회 배너 사진";
                 break;
             case "exhibitionDetail":
-                uploadFolder = baseFolder + "전시 상세 사진";
+                uploadFolder = baseFolder + "전시회 상세 사진";
                 break;
             default:
                 throw new RuntimeException("유효하지 않은 카테고리입니다: " + category);
@@ -474,9 +522,38 @@ public class AdminController {
     }
 
 
-    @PostMapping("/psUpdateDelete")
-    public String updatePopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
-    	
+    // *** 팝업스토어 수정 페이지 ***
+//    @PostMapping("/psUpdateDelete")
+//    public String updatePopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+//    	
+//    	Method[] methods = vo.getClass().getDeclaredMethods();
+//    	
+//    	for (Method method : methods) {
+//            // 메서드 이름이 'get'으로 시작하는지 확인
+//            if (method.getName().startsWith("get")) {
+//                // 메서드를 호출하여 값을 가져옴
+//                Object value = method.invoke(vo);
+//                System.out.println(method.getName().substring(3) + ": " + value);
+//            }
+//         }    	
+//    	
+//    	try {
+//            int result = aservice.updatePopStore(vo);
+//            
+//            if (result > 0) {
+//                return "redirect:/admin/adminPage"; // 리스트 페이지로 리다이렉트
+//            } else {
+//                return "redirect:/admin/popUpUpdate?error=true";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "redirect:/admin/popUpUpdate?error=true"; 
+//        }
+//    }
+    
+    @PostMapping("/psUpdate")
+    public String updatePopUpStore(@ModelAttribute popStoreVO vo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        // 객체의 모든 getter 메서드를 호출하여 값을 출력
     	Method[] methods = vo.getClass().getDeclaredMethods();
     	
     	for (Method method : methods) {
@@ -499,6 +576,23 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
             return "redirect:/admin/popUpUpdate?error=true"; 
+        }
+    }
+
+    @PostMapping("/psDelete")
+    public String deletePopStores(@RequestParam("psNo") int psNo) {
+        try {
+            // 상품 삭제 처리
+            int result = aservice.deletePopStore(psNo);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage";  // 성공 시 상품 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/popUpUpdate?error=true";  // 실패 시 수정 페이지로 돌아감
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/popUpUpdate?error=true";  // 예외 발생 시 수정 페이지로 돌아감
         }
     }
     
@@ -573,6 +667,81 @@ public class AdminController {
         return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션
     }
     
+    // *** 상품(굿즈) 수정 페이지 ***
+    // 수정/삭제 컨트롤러 통합
+//    @PostMapping("/gUpdateDelete")
+//    public String updatePopUpStore(@ModelAttribute goodsVO gvo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
+//    	
+//    	Method[] methods = gvo.getClass().getDeclaredMethods();
+//    	
+//    	for (Method method : methods) {
+//            // 메서드 이름이 'get'으로 시작하는지 확인
+//            if (method.getName().startsWith("get")) {
+//                // 메서드를 호출하여 값을 가져옴
+//                Object value = method.invoke(gvo);
+//                System.out.println(method.getName().substring(3) + ": " + value);
+//            }
+//         }    	
+//    	
+//    	try {
+//            int result = aservice.updateGoodsStore(gvo);
+//            
+//            if (result > 0) {
+//                return "redirect:/admin/adminPage"; // 리스트 페이지로 리다이렉트
+//            } else {
+//                return "redirect:/admin/goodsUpdate?error=true";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return "redirect:/admin/goodsUpdate?error=true"; 
+//        }
+//    }
+    
+    @PostMapping("/gUpdate")
+    public String updateGoods(@ModelAttribute goodsVO gvo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        // 객체의 모든 getter 메서드를 호출하여 값을 출력
+        Method[] methods = gvo.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().startsWith("get")) {
+                Object value = method.invoke(gvo);
+                System.out.println(method.getName().substring(3) + ": " + value);
+            }
+        }
+
+        try {
+            // 상품 수정 처리
+            int result = aservice.updateGoodsStore(gvo);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage";  // 성공 시 상품 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/goodsUpdate?error=true";  // 실패 시 수정 페이지로 돌아감
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/goodsUpdate?error=true";  // 예외 발생 시 수정 페이지로 돌아감
+        }
+    }
+
+	// *** 상품(굿즈) 삭제 페이지 ***
+    @PostMapping("/gDelete")
+    public String deleteGoods(@RequestParam("gno") int gno) {
+        try {
+            // 상품 삭제 처리
+            int result = aservice.deleteGoodsStore(gno);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage";  // 성공 시 상품 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/goodsUpdate?error=true";  // 실패 시 수정 페이지로 돌아감
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/goodsUpdate?error=true";  // 예외 발생 시 수정 페이지로 돌아감
+        }
+    }
+
+    
 	// *** 전시회 등록 페이지 ***
     @InitBinder("exhVO")
     public void initBinder3 (WebDataBinder binder) {
@@ -645,6 +814,51 @@ public class AdminController {
         }
 
         return "redirect:/admin/adminPage"; // 등록 후 페이지 리다이렉션
+    }
+    
+    // *** 전시회 수정 페이지 ***
+    @PostMapping("/exhUpdate")
+    public String updateExh(@ModelAttribute exhVO evo) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        // 객체의 모든 getter 메서드를 호출하여 값을 출력
+        Method[] methods = evo.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().startsWith("get")) {
+                Object value = method.invoke(evo);
+                System.out.println(method.getName().substring(3) + ": " + value);
+            }
+        }
+
+        try {
+            // 상품 수정 처리
+            int result = aservice.updateExhibition(evo);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage";  // 성공 시 상품 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/exhUpdateDelete?error=true";  // 실패 시 수정 페이지로 돌아감
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/exhUpdateDelete?error=true";  // 예외 발생 시 수정 페이지로 돌아감
+        }
+    }
+    
+    // *** 전시회 삭제 페이지 ***
+    @PostMapping("/exhDelete")
+    public String deleteExh(@RequestParam("exhNo") int exhNo) {
+        try {
+            // 상품 삭제 처리
+            int result = aservice.deleteExhibition(exhNo);
+            
+            if (result > 0) {
+                return "redirect:/admin/adminPage";  // 성공 시 상품 리스트 페이지로 리다이렉트
+            } else {
+                return "redirect:/admin/exhUpdateDelete?error=true";  // 실패 시 수정 페이지로 돌아감
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/admin/exhUpdateDelete?error=true";  // 예외 발생 시 수정 페이지로 돌아감
+        }
     }
     
     // *** 문의 리스트 확인 페이지 ***

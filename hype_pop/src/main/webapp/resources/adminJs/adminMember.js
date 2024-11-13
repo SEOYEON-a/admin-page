@@ -61,7 +61,7 @@ function updateMemberList() {
 
 // 취소 및 리스트로 돌아가기 버튼
 function backtoMList() {
-	window.location.href = "/admin/adminPage";  // 수정 완료 후 이동	
+	window.location.href = "/admin/adminPage"; 
 }
 
 //function hideMemInfo() {

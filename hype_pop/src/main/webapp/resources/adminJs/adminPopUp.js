@@ -192,6 +192,7 @@ document.getElementById("imageFile").addEventListener("change", function(event) 
     }
 });
 
+// 팝업스토어 수정
 function popStoreUpdate() {
 	const f = document.forms[0];
 	
@@ -247,28 +248,20 @@ function popStoreUpdate() {
 		return;
 	}
 	
-	f.submit();
+	document.getElementById("psUpdateDeleteForm").action = "/admin/psUpdate";  // 수정 요청 경로
+    document.getElementById("psUpdateDeleteForm").submit();  // 폼 제출
 }
 
-// 에러 발생 중이라 주석 처리
-//document.querySelector('#psDelete').addEventListener('click', popupDelete);
-//
-//function popupDelete() {
-//	if (confirm('정말로 삭제하시겠습니까?')) {
-//		
-//		// 카테고리 정보를 가져오기 (예시)
-//        const psCat = document.querySelector('input[name="psCat"]').value;
-//
-//        // 카테고리 정보를 hidden input에 추가
-//        document.querySelector('input[name="psCat"]').value = psCat;
-//
-//        // 이미지 UUID를 가져와서 hidden input에 추가
-//        const imageUuid = document.querySelector('input[name="imageUuid"]').value;
-//
-//        // 제출할 폼에 추가 정보 설정
-//        document.querySelector('input[name="imageUuid"]').value = imageUuid;
-//
-//        // 폼 제출
-//        document.querySelector('#deleteForm').submit();
-//    }
-//}
+// 팝업스토어 삭제
+function popStoreDelete () {
+	if (confirm("정말 삭제하시겠습니까?")) {
+        // 삭제 작업을 위한 폼 액션 설정
+        document.getElementById("psUpdateDeleteForm").action = "/admin/psDelete";  // 삭제 요청 경로
+        document.getElementById("psUpdateDeleteForm").submit();  // 폼 제출
+    }
+}
+
+// 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
+function backtoPsList() {
+	window.location.href = "/admin/adminPage";
+}

@@ -1,3 +1,40 @@
+window.onload = function() {
+    // 예시로 두 카테고리와 이미지 파일명을 설정
+    const category1 = "exhibitionBanner"; // 전시회 배너 이미지
+    const category2 = "exhibitionDetail"; // 전시회 상세 이미지
+    
+    // 서버에서 파일명을 가져옴 (popStore 객체에서 가져오는 방식)
+    const fileName1 = document.querySelector('input[name="beforeFileName1"]').value;
+    const fileName2 = document.querySelector('input[name="beforeFileName2"]').value;
+    
+    // fetchImage 함수 호출하여 두 이미지를 각각 불러오기
+    fetchImage(category1, fileName1, "beforeImg1");
+    fetchImage(category2, fileName2, "beforeImg2");
+//    console.log(fileName1, fileName2);
+};
+
+function fetchImage(category, fileName, imgElementId) {
+    const imageUrl = `/admin/getImages/${fileName}/${category}/`;    
+
+    fetch(imageUrl)
+        .then(response => {
+            if (response.ok) {
+                return response.blob(); // 이미지 파일을 blob 형태로 받음
+            } else {
+                throw new Error('이미지를 불러오는 데 실패했습니다.');
+            }
+        })
+        .then(blob => {
+            const imageObjectURL = URL.createObjectURL(blob);
+            document.getElementById(imgElementId).src = imageObjectURL;
+//            document.getElementById("beforeImg1").src = imageObjectURL; // 해당 ID의 이미지에 표시
+//            document.getElementById("beforeImg2").src = imageObjectURL; // 해당 ID의 이미지에 표시
+        })
+        .catch(error => {
+            console.error('이미지 로딩 실패:', error);
+        });
+}
+
 // *** 전시회 등록 페이지 영역 ***
 // 등록하기 버튼 클릭 시 전시회 등록     
 // 파일 검증
@@ -136,4 +173,111 @@ function exhRegister() {
     form.submit();
 }
 
+// **** 전시회 수정/삭제 페이지 영역 ****
+// 수정하기 버튼 클릭 시 업데이트
+// 신규 이미지 선택 시 미리보기
+document.getElementById("exhBannerImageFile").addEventListener("change", function(event) {
+	const file = event.target.files[0];
+	if (file) {
+	  const reader = new FileReader();
+	  reader.onload = function(e) {
+	 	 const previewContainer = document.getElementById("uploadedBannerImages");
+	      previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
+	      const img = document.createElement('img');
+	      img.src = e.target.result;
+	      img.width = 400; // 이미지 크기 조정 (필요시)
+	      img.height = 500; // 이미지 크기 조정 (필요시)
+	      previewContainer.appendChild(img); // 새로운 이미지 요소 추가
+	  };
+	  reader.readAsDataURL(file);
+	}
+});
+
+document.getElementById("exhDetailImageFile").addEventListener("change", function(event) {
+	const file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+     reader.onload = function(e) {
+         const previewContainer = document.getElementById("uploadedDetailImages");
+         previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
+         const img = document.createElement('img');
+         img.src = e.target.result;
+         img.width = 400; // 이미지 크기 조정 (필요시)
+         img.height = 500; // 이미지 크기 조정 (필요시)
+         previewContainer.appendChild(img); // 새로운 이미지 요소 추가
+     };
+		reader.readAsDataURL(file);
+	}
+});
+
+function exhUpdate() {
+	
+	const f = document.forms[0];
+	
+	const formData = new FormData(f);
+		
+    const exhBannerImageFile = document.getElementById('exhBannerImageFile');
+    const exhDetailImageFile = document.getElementById('exhDetailImageFile');
+    
+	// 예외처리
+    if (exhBannerImageFile.files.length === 0) {
+        alert('상품 배너 이미지를 입력해주세요');
+        return;  // 배너 이미지가 없으면 폼 제출하지 않음
+    }
+    
+    if (exhDetailImageFile.files.length === 0) {
+        alert('상품 상세 이미지를 입력해주세요');
+        return;  // 상세 이미지가 없으면 폼 제출하지 않음
+    }
+    if (f.exhName.value == '') {
+        alert('전시회 이름을 입력해주세요');
+        return;
+    }
+    if (f.exhLocation.value == '') {
+        alert('전시회 주소를 입력해주세요');
+        return;
+    }
+    if (f.exhStartDate.value == '') {
+        alert('전시회 시작일을 입력해주세요');
+        return;
+    }
+    if (f.exhEndDate.value == '') {
+        alert('전시회 종료일을 입력해주세요');
+        return;
+    }
+    if (f.exhWatchTime.value == '') {
+    	alert('전시회 러닝타임을 입력해주세요');
+    	return;
+    }
+    if (f.exhWatchAge.value == '') {
+    	alert('전시회 연령가를 입력해주세요');
+    	return;
+    }
+    if (f.exhPrice.value == '') {
+    	alert('전시회 가격을 입력해주세요');
+    	return;
+    }
+    if (f.exhInfo.value == '') {
+    	alert('전시회 설명글을 입력해주세요');
+    	return;
+    }
+    
+    document.getElementById("exhForm").action = "/admin/exhUpdate";  // 수정 요청 경로
+    document.getElementById("exhForm").submit();  // 폼 제출
+	
+}
+
+// 삭제하기 버튼 클릭 시 업데이트
+function exhDelete() {
+	if (confirm("정말 삭제하시겠습니까?")) {
+     // 삭제 작업을 위한 폼 액션 설정
+     document.getElementById("exhForm").action = "/admin/exhDelete";  // 삭제 요청 경로
+     document.getElementById("exhForm").submit();  // 폼 제출
+	}
+}
+
+// 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
+function backtoExhList() {
+	window.location.href = "/admin/adminPage";
+}
 

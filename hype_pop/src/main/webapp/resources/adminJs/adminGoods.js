@@ -48,11 +48,53 @@
 //// 페이지 로드 후 호출
 //window.onload = fetchPurchaseList;
 
+window.onload = function() {
+    // 예시로 두 카테고리와 이미지 파일명을 설정
+    const category1 = "goodsBanner"; // 굿즈 배너 이미지
+    const category2 = "goodsDetail"; // 굿즈 상세 이미지
+    
+    // 서버에서 파일명을 가져옴 (popStore 객체에서 가져오는 방식)
+    const fileName1 = document.querySelector('input[name="beforeFileName1"]').value;
+    const fileName2 = document.querySelector('input[name="beforeFileName2"]').value;
+    
+    // fetchImage 함수 호출하여 두 이미지를 각각 불러오기
+    fetchImage(category1, fileName1, "beforeImg1");
+    fetchImage(category2, fileName2, "beforeImg2");
+//    console.log(fileName1, fileName2);
+};
+
+function fetchImage(category, fileName, imgElementId) {
+    const imageUrl = `/admin/getImages/${fileName}/${category}/`;    
+
+    fetch(imageUrl)
+        .then(response => {
+            if (response.ok) {
+                return response.blob(); // 이미지 파일을 blob 형태로 받음
+            } else {
+                throw new Error('이미지를 불러오는 데 실패했습니다.');
+            }
+        })
+        .then(blob => {
+            const imageObjectURL = URL.createObjectURL(blob);
+            document.getElementById(imgElementId).src = imageObjectURL;
+//            document.getElementById("beforeImg1").src = imageObjectURL; // 해당 ID의 이미지에 표시
+//            document.getElementById("beforeImg2").src = imageObjectURL; // 해당 ID의 이미지에 표시
+        })
+        .catch(error => {
+            console.error('이미지 로딩 실패:', error);
+        });
+}
+
 
 // *** 상품(굿즈) 등록 페이지 영역 ***
 // 등록하기 버튼 클릭 시 상품(굿즈) 등록
 // psNo 가져오기
-document.getElementById('storeList').addEventListener('change', setStorePsNo);
+document.addEventListener('DOMContentLoaded', function() {
+    const storeList = document.getElementById('storeList');
+    if (storeList) {
+        storeList.addEventListener('change', setStorePsNo);
+    }
+});
 
 function setStorePsNo() {
     const storeList = document.getElementById("storeList");
@@ -196,4 +238,104 @@ function goodsRegister() {
     form.submit();
 }
 
+// **** 상품(굿즈) 수정/삭제 페이지 영역 ****
+// 수정하기 버튼 클릭 시 업데이트
+// 신규 이미지 선택 시 미리보기
+document.getElementById("gBannerImageFile").addEventListener("change", function(event) {
+ const file = event.target.files[0];
+ if (file) {
+     const reader = new FileReader();
+     reader.onload = function(e) {
+    	 const previewContainer = document.getElementById("uploadedBannerImages");
+         previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
+         const img = document.createElement('img');
+         img.src = e.target.result;
+         img.width = 400; // 이미지 크기 조정 (필요시)
+         img.height = 500; // 이미지 크기 조정 (필요시)
+         previewContainer.appendChild(img); // 새로운 이미지 요소 추가
+     };
+     reader.readAsDataURL(file);
+ }
+});
+document.getElementById("gDetailImageFile").addEventListener("change", function(event) {
+	const file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+        reader.onload = function(e) {
+            const previewContainer = document.getElementById("uploadedDetailImages");
+            previewContainer.innerHTML = ''; // 이전 미리보기 내용 초기화
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.width = 400; // 이미지 크기 조정 (필요시)
+            img.height = 500; // 이미지 크기 조정 (필요시)
+            previewContainer.appendChild(img); // 새로운 이미지 요소 추가
+        };
+		reader.readAsDataURL(file);
+	}
+});
+
+function goodsUpdate() {
+	const f = document.forms[0];
+	
+	const formData = new FormData(f);
+		
+    const gBannerImageFile = document.getElementById('gBannerImageFile');
+    const gDetailImageFile = document.getElementById('gDetailImageFile');
+    
+	// 예외처리
+    const checkboxes = f.querySelectorAll('input[type="checkbox"][name^="gcat"]');
+    const selectedCategories = Array.from(checkboxes).filter(checkbox => checkbox.checked);
+    if (selectedCategories.length === 0) {
+        alert('최소 한 개의 카테고리를 선택해야 합니다.');
+        return;
+    }
+    if (selectedCategories.length > 3) {
+        alert('최대 세 개의 카테고리만 선택할 수 있습니다.');
+        return;
+    }
+    
+    if (gBannerImageFile.files.length === 0) {
+        alert('상품 배너 이미지를 입력해주세요');
+        return;  // 배너 이미지가 없으면 폼 제출하지 않음
+    }
+    
+    if (gDetailImageFile.files.length === 0) {
+        alert('상품 상세 이미지를 입력해주세요');
+        return;  // 상세 이미지가 없으면 폼 제출하지 않음
+    }
+    
+    if (f.gname.value == '') {
+        alert('상품 이름을 입력해주세요');
+        return;
+    }
+    if (f.gprice.value == '') {
+        alert('상품 가격을 입력해주세요');
+        return;
+    }
+    if (f.sellDate.value == '') {
+        alert('상품 판매 종료일을 입력해주세요');
+        return;
+    }
+    if (f.gexp.value == '') {
+        alert('설명글을 입력해주세요');
+        return;
+    }
+    
+    document.getElementById("goodsForm").action = "/admin/gUpdate";  // 수정 요청 경로
+    document.getElementById("goodsForm").submit();  // 폼 제출
+//    f.submit();
+}
+
+// 삭제하기 버튼 클릭 시 업데이트
+function goodsDelete() {
+	if (confirm("정말 삭제하시겠습니까?")) {
+        // 삭제 작업을 위한 폼 액션 설정
+        document.getElementById("goodsForm").action = "/admin/gDelete";  // 삭제 요청 경로
+        document.getElementById("goodsForm").submit();  // 폼 제출
+    }
+}
+// 취소 및 리스트로 돌아가기 버튼 클릭시 메인페이지로 이동
+function backtoGList() {
+	window.location.href = "/admin/adminPage";
+}
 

@@ -38,7 +38,8 @@ public interface AdminMapper {
 	// 특정 팝업스토어 조회
 	public popStoreVO getPopStoreById (int psNo);
 	// 특정 굿즈(상품) 조회
-	public goodsVO getGoodsById (int gNo);  
+	public goodsVO getGoodsById (int gno);  
+//	public goodsVO getGoodsById (int gNo);  
 	// 특정 전시회 조회
 	public exhVO getExhById (int exhNo); 
 	// 특정 회원 조회
@@ -56,6 +57,11 @@ public interface AdminMapper {
 	public int updatePsImage(pImgVO imgVo);
 	public int updatePsCat(pCatVO cvo);
 	
+	// 팝업스토어 삭제하기
+	public int deletePopStore(int psNo);
+	public int deletePsImage(int psNo);
+	public int deletePsCat(int psNo);
+	
 	// 상품(굿즈) 등록하기
 	public List<popStoreVO> getAllPopStores();	  // select box 모든 팝업스토어 출력
 	public int insertGoodsStore(goodsVO gvo);
@@ -64,18 +70,42 @@ public interface AdminMapper {
 	public int insertGcat(gCatVO gvo); 			  // 카테고리 등록
 	
 	// 상품(굿즈) 수정하기
-//	public gImgVO getGImg(int gno);
-//	public gCatVO getGCat(int gno);
-//	public int updateGoodsStore(goodsVO gvo);
-//	public int updateGImage(gImgVO gImgVo);
-//	public int updateGCat(gCatVO gcatVo);
-	
+	public gImgVO getGImgBanner(int gno);
+	public gImgVO getGImgDetail(int gno);
+	public gCatVO getGCat(int gno);
+	public int updateGoodsStore(goodsVO gvo);
+	public int updateGImgBanner(gImgVO gImgVo);	  // 배너 이미지 수정
+    public int updateGImgDetail(gImgVO gImgVo);   // 상세 이미지 수정
+    public int updateGCat(gCatVO gcatVo);
+    
+    // 상품(굿즈) 삭제하기
+    // 11.13 테스트 예정
+    public int deleteGoodsStore(int gno);
+    public int deleteGImgBanner(int gno);
+    public int deleteGImgDetail(int gno);
+    public int deleteGCat(int gno);
+    public int deleteGCart(int gno);
+    public int deleteGPay(int gno);
+    public int deleteGLike(int gno);
+    public int deleteGReply(int gno);
+    
 	// 전시회 등록하기
 	public int insertExhibition(exhVO evo);
 	public int insertExhBannerImage(exhImgVO exhImgVo);  // 배너 이미지 등록
 	public int insertExhDetailImage(exhImgVO exhImgVo);  // 상세 이미지 등록
 	
+	// 전시회 수정하기
+	public exhImgVO getExhImgBanner(int exhNo);
+    public exhImgVO getExhImgDetail(int exhNo);
+	public int updateExhibition(exhVO evo);
+	public int updateExhBannerImage(exhImgVO exhImgVo);  // 배너 이미지 수정
+	public int updateExhDetailImage(exhImgVO exhImgVo);  // 상세 이미지 수정
 	
+	// 전시회 삭제하기
+	public int deleteExhibition(int exhNo);
+    public int deleteExhImgBanner(int exhNo);
+    public int deleteExhImgDetail(int exhNo);
+    
 	// 관리자 문의 리스트 가져오기	
 	public List<qnaVO> getQnaListByType(@Param("qnaType") String qnaType, @Param("qnaAnswer") String qnaAnswer); 	
 //	public List<qnaVO> getQList(@Param("cri") Criteria cri, @Param("qnaType") String qnaType);  // 페이징O

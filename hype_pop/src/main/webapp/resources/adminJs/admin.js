@@ -354,7 +354,7 @@ function GoodsLists(goods) {
     goods.forEach(store => {	
     	// 굿즈(상품) 이름 클릭 시 링크로 이동
         const link = document.createElement('a');
-        link.href = `goodsUpdate?gNo=${store.gno}`;
+        link.href = `goodsUpdate?gno=${store.gno}`;
         link.style.color = 'black'; 
         link.style.textDecoration = 'none';
         link.style.display = 'block';
@@ -426,7 +426,7 @@ function ExhibitionLists(exhibitions) {
     exhibitions.forEach(store => {  
         // 해당 팝업스토어 클릭 시 수정/삭제 페이지로 이동
         const link = document.createElement('a');
-        link.href = `exhUpdate?exhNo=${store.exhNo}`;
+        link.href = `exhUpdateDelete?exhNo=${store.exhNo}`;
         link.style.color = 'black'; 
         link.style.textDecoration = 'none'; 
         link.style.display = 'block';

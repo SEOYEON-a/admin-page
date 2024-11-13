@@ -9,6 +9,7 @@ import java.util.List;
 import org.hype.domain.Criteria;
 import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
+import org.hype.domain.gCatVO;
 import org.hype.domain.gImgVO;
 import org.hype.domain.goodsVO;
 import org.hype.domain.pCatVO;
@@ -89,9 +90,13 @@ public class AdminServiceImpl implements AdminService{
 	
 	// 특정 굿즈(상품) 조회
 	@Override
-	public goodsVO getGoodsById(int gNo) {
-		return mapper.getGoodsById(gNo);
+	public goodsVO getGoodsById(int gno) {
+		return mapper.getGoodsById(gno);
 	}	
+//	@Override
+//	public goodsVO getGoodsById(int gNo) {
+//		return mapper.getGoodsById(gNo);
+//	}	
 	
 	// 특정 전시회 조회
 	@Override
@@ -126,7 +131,8 @@ public class AdminServiceImpl implements AdminService{
 		return result1;		
 	}
 	
-	// 팝업스토어 수정/삭제 페이지 영역
+	// 팝업스토어 수정 페이지 영역
+	// 팝업스토어 정보 수정
 	// 이미지 받아오기
 	@Override
 	public pImgVO getPsImg(int psNo) {
@@ -165,13 +171,26 @@ public class AdminServiceImpl implements AdminService{
 		return result1;		
 	}
 
+	// 팝업스토어 삭제 페이지 영역
+	// 팝업스토어 정보 삭제	
+	@Override
+	public int deletePopStore(int psNo) {
+		int result = mapper.deletePsCat(psNo);
+		
+        result += mapper.deletePsImage(psNo);
+
+        result += mapper.deletePopStore(psNo);;
+
+        return result;
+	}	
+	
 	// 상품(굿즈) 등록 페이지 영역
 	// 상품(굿즈) 정보 등록	
 	@Override
 	public List<popStoreVO> getAllPopStores() {
 		return mapper.getAllPopStores();
 	}
-	
+
 	@Transactional
 	@Override
 	public int insertGoodsStore(goodsVO gvo) {
@@ -208,43 +227,79 @@ public class AdminServiceImpl implements AdminService{
 	    return result1;
 	}
 	
-	// 상품(굿즈) 정보 수정
-//	@Override
-//	public int updateGoodsStore(goodsVO gvo) {
-//	    log.info("굿즈 수정..." + gvo);
-//
-//	    // 1. 기본 상품 정보 업데이트
-//	    int result1 = mapper.updateGoodsStore(gvo);
-//	    log.warn("기본 정보 업데이트 결과: " + result1);
-//
-//	    // 2. 이미지 정보 업데이트
-//	    if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
-//	        for (gImgVO img : gvo.getAttachList()) {
-//	            img.setGno(gvo.getGno()); // gno를 각 이미지에 설정
-//	            // 배너 이미지 업데이트
-//	            if (img.getUploadPath().contains("굿즈 배너 사진")) {
-//	                int result2 = mapper.updateBannerImage(img);
-//	                log.warn("배너 이미지 업데이트 결과: " + result2);
-//	            }
-//	            // 상세 이미지 업데이트
-//	            else if (img.getUploadPath().contains("굿즈 상세 사진")) {
-//	                int result3 = mapper.updateDetailImage(img);
-//	                log.warn("상세 이미지 업데이트 결과: " + result3);
-//	            }
-//	        }
-//	    } else {
-//	        log.warn("gvo.getAttachList()가 null이거나 비어 있습니다. 이미지 정보 업데이트를 건너뜁니다.");
-//	    }
-//
-//	    // 3. 카테고리 정보 업데이트
-//	    gvo.getGcat().setGno(gvo.getGno());
-//	    int result4 = mapper.updateGcat(gvo.getGcat());
-//	    log.warn("카테고리 정보 업데이트 결과: " + result4);
-//
-//	    return result1;
-//	}
+	// 상품(굿즈) 수정 페이지 영역
+	// 상품(굿즈) 정보 수정	
+	@Override
+	public gImgVO getGImgBanner(int gno) {
+		return mapper.getGImgBanner(gno);
+	}
+	
+	@Override
+	public gImgVO getGImgDetail(int gno) {
+		return mapper.getGImgDetail(gno);
+	}
+	
+	@Override
+	public gCatVO getGCat(int gno) {
+		return mapper.getGCat(gno);
+	}
+	
+	@Transactional
+	@Override
+	public int updateGoodsStore(goodsVO gvo) {
 
+	    // 1. 기본 상품 정보 업데이트
+	    int result = mapper.updateGoodsStore(gvo);
+
+	    // 2. 카테고리 정보 업데이트
+	    if (gvo.getGcat() != null) {
+	        gvo.getGcat().setGno(gvo.getGno());  // 상품 번호 설정
+	        result += mapper.updateGCat(gvo.getGcat());
+	    }
+
+	    // 3. 이미지 리스트가 존재할 경우 배너와 상세 이미지 구분하여 업데이트 수행
+	    if (gvo.getAttachList() != null && !gvo.getAttachList().isEmpty()) {
+	        for (gImgVO img : gvo.getAttachList()) {
+	            img.setGno(gvo.getGno());  // 상품 번호 설정
+	            if (img.getUploadPath().contains("굿즈 배너 사진")) {
+	                result += mapper.updateGImgBanner(img);  // 배너 이미지 업데이트
+	            } else if (img.getUploadPath().contains("굿즈 상세 사진")) {
+	                result += mapper.updateGImgDetail(img);  // 상세 이미지 업데이트
+	            }
+	        }
+	    }
+
+	    return result;
+	}
+	
+	// 상품(굿즈) 삭제 페이지 영역
+	// 상품(굿즈) 정보 삭제
+	@Transactional
+	@Override
+	public int deleteGoodsStore(int gno) {
+			    
+		int result = mapper.deleteGCart(gno);
 		
+		result += mapper.deleteGPay(gno);
+		
+		result += mapper.deleteGLike(gno);
+		
+		result += mapper.deleteGReply(gno);
+		
+		result += mapper.deleteGCat(gno);
+		
+        // 상품 배너 이미지 삭제
+        result += mapper.deleteGImgBanner(gno);
+
+        // 상품 상세 이미지 삭제
+        result += mapper.deleteGImgDetail(gno);
+
+        result += mapper.deleteGoodsStore(gno);
+        
+
+        return result; 
+	}
+
 	// 전시회 등록 페이지 영역
 	// 전시회 정보 등록	
 	@Transactional
@@ -279,6 +334,53 @@ public class AdminServiceImpl implements AdminService{
 	    return result1;
 	}
 
+	// 전시회 정보 수정 페이지 영역	
+	@Override
+	public exhImgVO getExhImgBanner(int exhNo) {
+		return mapper.getExhImgBanner(exhNo);
+	}
+	
+	@Override
+	public exhImgVO getExhImgDetail(int exhNo) {
+		return mapper.getExhImgDetail(exhNo);
+	}
+	
+	@Override
+	public int updateExhibition(exhVO evo) {
+		// 1. 기본 상품 정보 업데이트
+	    int result = mapper.updateExhibition(evo);
+
+	    // 2. 이미지 리스트가 존재할 경우 배너와 상세 이미지 구분하여 업데이트 수행
+	    if (evo.getAttachExhList() != null && !evo.getAttachExhList().isEmpty()) {
+	        for (exhImgVO img : evo.getAttachExhList()) {
+	            img.setExhNo(evo.getExhNo());  // 전시회 번호 설정
+	            if (img.getUploadPath().contains("전시회 배너 사진")) {
+	                result += mapper.updateExhBannerImage(img);  // 배너 이미지 업데이트
+	            } else if (img.getUploadPath().contains("전시회 상세 사진")) {
+	                result += mapper.updateExhDetailImage(img);  // 상세 이미지 업데이트
+	            }
+	        }
+	    }
+
+	    return result;
+	}
+
+	// 전시회 삭제 페이지 영역
+	// 전시회 정보 삭제
+	@Transactional
+	@Override
+	public int deleteExhibition(int exhNo) {
+		
+		int result = mapper.deleteExhImgBanner(exhNo);
+		
+        // 상품 상세 이미지 삭제
+        result += mapper.deleteExhImgDetail(exhNo);
+
+        result += mapper.deleteExhibition(exhNo);;
+
+        return result; 
+	}
+		
 	// 문의 리스트 확인 페이지 영역
 	// 문의 리스트 가져오기
 	// 페이징 X

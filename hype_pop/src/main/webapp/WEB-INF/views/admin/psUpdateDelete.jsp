@@ -126,10 +126,10 @@ input[type="date"] {
 <body>
 	<jsp:include page="layout/adminHeader.jsp"/>
 	<div>
-		<img id="beforeImg" width="300" height="300">
+		<img id="beforeImg" width="400" height="400">
 		<input type="hidden" name="beforeFileName" value="${popStore.psImg.uuid}_${popStore.psImg.fileName}">
 	</div>
-	<form id="psUpdateDeleteForm" method="POST" action="/admin/psUpdateDelete" enctype="multipart/form-data">
+	<form id="psUpdateDeleteForm" method="POST"enctype="multipart/form-data">
 		<input type="hidden" name="psNo" value="${popStore.psNo}">
 		<div id="popUpimg" style="cursor: pointer;">팝업스토어 이미지</div>
 	    <input type="file" id="imageFile" name="imageFile" style="display: none;">
@@ -178,8 +178,8 @@ input[type="date"] {
 		<div id="storeExp">설명글 <input type="text" name="psExp" value="${popStore.psExp}"></div>
 	</form>
 
-	<button type="button" id="psCancel" >취소 및 리스트로 돌아가기</button>	
-    <button type="button" id="psDelete" >삭제</button>
+	<button type="button" id="psCancel" onclick="backtoPsList();">취소 및 리스트로 돌아가기</button>	
+    <button type="button" id="psDelete" onclick="popStoreDelete()">삭제</button>
     <button type="button" id="psUpdate" onclick="popStoreUpdate();">수정완료</button>
 	
 <script type="text/javascript" src="/resources/adminJs/admin.js"></script>  

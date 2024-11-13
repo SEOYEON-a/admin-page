@@ -12,11 +12,25 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LikedGoodsImgVO {
-	private int userNo;
-	private int gNo;
-	private Date likeDate;
-	private String gName;
-	private String uuid;
-	private String uploadPath;
-	private String fileName;
+	
+	private int userNo; // 사용자 번호
+    private int gno; // 상품 번호
+    private Date likeDate; // 좋아요 날짜
+    private String gname; // 상품명
+    private String uuid; // uuid
+    private String uploadPath; // 파일 경로
+    private String fileName; // 파일 이름
+
+    @Override
+    public String toString() {
+        return "LikedGoodsImgVO{" +
+                "userNo=" + userNo +
+                ", gNo=" + gno +
+                ", likeDate=" + likeDate +
+                ", gName='" + gname + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", uploadPath='" + uploadPath + '\'' +
+                ", fileName='" + fileName + '\'' +
+                '}';
+    }
 }

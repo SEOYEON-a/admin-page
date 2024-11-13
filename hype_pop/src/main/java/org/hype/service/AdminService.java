@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 import org.hype.domain.Criteria;
+import org.hype.domain.exhImgVO;
 import org.hype.domain.exhVO;
 import org.hype.domain.gCatVO;
 import org.hype.domain.gImgVO;
@@ -40,7 +41,8 @@ public interface AdminService {
 	// 특정 팝업스토어 조회
 	public popStoreVO getPopStoreById (int psNo);  
 	// 특정 상품(굿즈) 조회
-	public goodsVO getGoodsById (int gNo);  
+	public goodsVO getGoodsById (int gno);  
+//	public goodsVO getGoodsById (int gNo);  
 	// 특정 전시회 조회
 	public exhVO getExhById (int exhNo); 
 	// 특정 회원 조회
@@ -54,6 +56,9 @@ public interface AdminService {
 	public pImgVO getPsImg(int psNo);
 	public pCatVO getPsCat(int psNo);
 	
+	// 팝업스토어 삭제하기
+	public int deletePopStore(int psNo);
+	
 	// 상품(굿즈) 등록하기 
 	// selectbox 모든 팝업스토어 가져오기
 	public List<popStoreVO> getAllPopStores();	
@@ -61,13 +66,28 @@ public interface AdminService {
 	public int insertGoodsStore(goodsVO gvo);
 	
 	// 상품(굿즈) 수정하기
-//	public int updateGoodsStore(goodsVO gvo);
-//	public gImgVO getGImg(int gno);
-//	public gCatVO getGCat(int gno);
+	public int updateGoodsStore(goodsVO gvo);
+	// 배너 이미지와 상세 이미지 가져오기
+    public gImgVO getGImgBanner(int gno);
+    public gImgVO getGImgDetail(int gno);
+    // 카테고리 가져오기
+    public gCatVO getGCat(int gno);
+    
+    // 상품(굿즈) 삭제하기
+    public int deleteGoodsStore(int gno);
 	
 	// 전시회 등록하기
 	public int insertExhibition(exhVO evo);
 	
+	// 전시회 수정하기
+	public int updateExhibition(exhVO evo);
+	// 배너 이미지와 상세 이미지 가져오기
+    public exhImgVO getExhImgBanner(int exhNo);
+    public exhImgVO getExhImgDetail(int exhNo);
+	
+    // 전시회 삭제하기
+    public int deleteExhibition(int exhNo);
+    
 	// 문의 리스트 확인 페이지 영역
 	// 문의 리스트 가져오기	
 	public List<qnaVO> getQnaListByType(String qnaType, String qnaAnswer);
